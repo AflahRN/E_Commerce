@@ -1,8 +1,8 @@
-import Category from "../models/category.js";
+import Cart from "../models/cart.js";
 
-export const ShowCategory = async (req, res) => {
+export const ShowCart = async (req, res) => {
   try {
-    const response = await Category.findAll();
+    const response = await Cart.findAll();
     console.log(response);
     res.status(200).json(response);
   } catch (error) {
@@ -10,10 +10,10 @@ export const ShowCategory = async (req, res) => {
   }
 };
 
-export const ShowCategoryById = async (req, res) => {
+export const ShowCartById = async (req, res) => {
   const { id } = req.params;
   try {
-    const response = await Category.findOne({ where: { category_id: id } });
+    const response = await Cart.findOne({ where: { cart_id: id } });
     console.log(response);
     res.status(200).json(response);
   } catch (error) {
@@ -21,30 +21,32 @@ export const ShowCategoryById = async (req, res) => {
   }
 };
 
-export const AddCategory = async (req, res) => {
-  const { category_name } = req.body;
+export const AddCart = async (req, res) => {
+  const { product_id, quantity } = req.body;
   try {
     const request = {
-      category_name: category_name,
+      product_id: product_id,
+      quantity: quantity,
     };
-    await Category.create(request);
+    await Cart.create(request);
     res.status(200).json({ msg: "Data berhasil dikirim" });
   } catch (error) {
     res.json({ msg: Error });
   }
 };
 
-export const UpdateCategory = async (req, res) => {
+export const UpdateCart = async (req, res) => {
   const { id } = req.params;
-  const { category_name } = req.body;
+  const { product_id, quantity } = req.body;
   try {
     const request = {
-      category_name: category_name,
+      product_id: product_id,
+      quantity: quantity,
     };
-    const isExist = await Category.findOne({ where: { category_id: id } });
+    const isExist = await Cart.findOne({ where: { cart_id: id } });
     if (isExist) {
-      await Category.update(request, {
-        where: { category_id: id },
+      await Cart.update(request, {
+        where: { cart_id: id },
       });
       res.status(200).json({ msg: "Data berhasil diupdate" });
     } else {
@@ -55,13 +57,13 @@ export const UpdateCategory = async (req, res) => {
   }
 };
 
-export const DeleteCategory = async (req, res) => {
+export const DeleteCart = async (req, res) => {
   const { id } = req.params;
   try {
-    const isExist = await Category.findOne({ where: { category_id: id } });
+    const isExist = await Cart.findOne({ where: { cart_id: id } });
     if (isExist) {
-      await Category.destroy({
-        where: { category_id: id },
+      await Cart.destroy({
+        where: { cart_id: id },
       });
       res.status(200).json({ msg: "Data berhasil dikirim" });
     } else {
