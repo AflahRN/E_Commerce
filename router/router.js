@@ -27,6 +27,13 @@ import {
   ShowWishlistById,
   UpdateWishlist,
 } from "../controllers/wishlistController.js";
+import {
+  AddReview,
+  DeleteReview,
+  ShowReview,
+  ShowReviewById,
+  UpdateReview,
+} from "../controllers/reviewController.js";
 
 const router = express.Router();
 
@@ -57,5 +64,12 @@ router.get("/wishlist/:id", ShowWishlistById);
 router.post("/wishlist/", AddWishlist);
 router.patch("/wishlist/:id", UpdateWishlist);
 router.delete("/wishlist/:id", DeleteWishlist);
+
+//Review
+router.get("/review", ShowReview);
+router.get("/review/:id", ShowReviewById);
+router.post("/review/", AddReview);
+router.patch("/review/:id", UpdateReview);
+router.delete("/review/:id", DeleteReview);
 
 export default router;
