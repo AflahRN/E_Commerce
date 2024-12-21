@@ -34,6 +34,14 @@ import {
   ShowReviewById,
   UpdateReview,
 } from "../controllers/reviewController.js";
+import {
+  AddAccount,
+  DeleteAccount,
+  ShowAccount,
+  ShowAccountById,
+  UpdateAccount,
+} from "../controllers/accountController.js";
+import { login } from "../controllers/loginController.js";
 
 const router = express.Router();
 
@@ -72,4 +80,13 @@ router.post("/review/", AddReview);
 router.patch("/review/:id", UpdateReview);
 router.delete("/review/:id", DeleteReview);
 
+//Account
+router.get("/account", ShowAccount);
+router.get("/account/:id", ShowAccountById);
+router.post("/account/", AddAccount);
+router.patch("/account/:id", UpdateAccount);
+router.delete("/account/:id", DeleteAccount);
+
+//Login
+router.post("/login", login);
 export default router;
