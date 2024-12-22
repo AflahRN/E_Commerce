@@ -1,3 +1,4 @@
+import Account from "../models/account.js";
 import Wishlist from "../models/wishlist.js";
 
 export const ShowWishlist = async (req, res) => {
@@ -22,14 +23,25 @@ export const ShowWishlistById = async (req, res) => {
 };
 
 export const AddWishlist = async (req, res) => {
-  const { product_id, quantity } = req.body;
+  const { product_id, quantity, account_id } = req.body;
   try {
-    const request = {
-      product_id: product_id,
-      quantity: quantity,
-    };
-    await Wishlist.create(request);
-    res.status(200).json({ msg: "Data berhasil dikirim" });
+    const isCustomer = await Account.findOne({
+      where: { account_id: account_id },
+    }).then((element) => element.type == "customer");
+
+    if (isCustomer) {
+      const request = {
+        product_id: product_id,
+        quantity: quantity,
+        account_id: account_id,
+      };
+      await Wishlist.create(request);
+      res.status(200).json({ msg: "Data berhasil dikirim" });
+    } else {
+      res.json({
+        msg: "Hanya akun customer yang diperbolehkan melakukan action ini",
+      });
+    }
   } catch (error) {
     res.json({ msg: Error });
   }

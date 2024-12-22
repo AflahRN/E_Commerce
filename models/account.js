@@ -10,7 +10,7 @@ const Account = db.define("account", {
   username: DataTypes.STRING,
   email: DataTypes.STRING,
   password: DataTypes.STRING,
-  type: DataTypes.ENUM("saler", "buyer"),
+  type: DataTypes.ENUM("saler", "customer"),
 });
 
 export default Account;

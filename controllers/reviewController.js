@@ -1,3 +1,4 @@
+import Account from "../models/account.js";
 import Review from "../models/review.js";
 
 export const ShowReview = async (req, res) => {
@@ -22,15 +23,26 @@ export const ShowReviewById = async (req, res) => {
 };
 
 export const AddReview = async (req, res) => {
-  const { review_text, review_skor, product_id } = req.body;
+  const { review_text, review_skor, product_id, account_id } = req.body;
   try {
-    const request = {
-      review_text: review_text,
-      review_skor: review_skor,
-      product_id: product_id,
-    };
-    await Review.create(request);
-    res.status(200).json({ msg: "Data berhasil dikirim" });
+    const isCustomer = await Account.findOne({
+      where: { account_id: account_id },
+    }).then((element) => element.type == "customer");
+
+    if (isCustomer) {
+      const request = {
+        review_text: review_text,
+        review_skor: review_skor,
+        product_id: product_id,
+        account_id: account_id,
+      };
+      await Review.create(request);
+      res.status(200).json({ msg: "Data berhasil dikirim" });
+    } else {
+      res.json({
+        msg: "Hanya akun customer yang diperbolehkan melakukan action ini",
+      });
+    }
   } catch (error) {
     res.json({ msg: Error });
   }

@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import db from "../config/config.js";
 import Category from "./category.js";
+import Account from "./account.js";
 
 const Product = db.define(
   "products",
@@ -23,6 +24,13 @@ const Product = db.define(
         key: "category_id",
       },
     },
+    account_id: {
+      type: DataTypes.UUID,
+      references: {
+        model: Account,
+        key: "account_id",
+      },
+    },
   },
   {
     freezeTableName: true,
@@ -31,6 +39,10 @@ const Product = db.define(
 
 Product.belongsTo(Category, {
   foreignKey: "category_id",
+  onDelete: "CASCADE",
+});
+Product.belongsTo(Account, {
+  foreignKey: "account_id",
   onDelete: "CASCADE",
 });
 

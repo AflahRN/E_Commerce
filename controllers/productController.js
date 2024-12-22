@@ -1,3 +1,4 @@
+import Account from "../models/account.js";
 import Product from "../models/product.js";
 
 export const ShowProduct = async (req, res) => {
@@ -30,19 +31,31 @@ export const AddProduct = async (req, res) => {
     product_picture,
     product_varian,
     category_id,
+    account_id,
   } = req.body;
   try {
-    const request = {
-      product_name: product_name,
-      product_description: product_description,
-      product_price: product_price,
-      product_stock: product_stock,
-      product_picture: product_picture,
-      product_varian: product_varian,
-      category_id: category_id,
-    };
-    await Product.create(request);
-    res.status(200).json({ msg: "Data berhasil dikirim" });
+    const isCustomer = await Account.findOne({
+      where: { account_id: account_id },
+    }).then((element) => element.type == "saler");
+
+    if (isCustomer) {
+      const request = {
+        product_name: product_name,
+        product_description: product_description,
+        product_price: product_price,
+        product_stock: product_stock,
+        product_picture: product_picture,
+        product_varian: product_varian,
+        category_id: category_id,
+        account_id: account_id,
+      };
+      await Product.create(request);
+      res.status(200).json({ msg: "Data berhasil dikirim" });
+    } else {
+      res.json({
+        msg: "Hanya akun saler yang diperbolehkan melakukan action ini",
+      });
+    }
   } catch (error) {
     res.json({ msg: Error });
   }

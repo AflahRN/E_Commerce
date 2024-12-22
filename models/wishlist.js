@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import db from "../config/config.js";
 import Product from "./product.js";
+import Account from "./account.js";
 
 const Wishlist = db.define(
   "wishlists",
@@ -17,6 +18,13 @@ const Wishlist = db.define(
         key: "product_id",
       },
     },
+    account_id: {
+      type: DataTypes.UUID,
+      references: {
+        model: Account,
+        key: "account_id",
+      },
+    },
     quantity: DataTypes.INTEGER,
   },
   {
@@ -26,6 +34,10 @@ const Wishlist = db.define(
 
 Wishlist.belongsTo(Product, {
   foreignKey: "product_id",
+  onDelete: "CASCADE",
+});
+Wishlist.belongsTo(Account, {
+  foreignKey: "account_id",
   onDelete: "CASCADE",
 });
 
