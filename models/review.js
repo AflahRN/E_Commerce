@@ -13,20 +13,6 @@ const Review = db.define(
     },
     review_text: DataTypes.TEXT,
     review_skor: DataTypes.DOUBLE,
-    product_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Product,
-        key: "product_id",
-      },
-    },
-    account_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Account,
-        key: "account_id",
-      },
-    },
   },
   {
     freezeTableName: true,

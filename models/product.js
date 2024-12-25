@@ -17,20 +17,6 @@ const Product = db.define(
     product_stock: DataTypes.STRING,
     product_picture: DataTypes.STRING,
     product_varian: DataTypes.STRING,
-    category_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Category,
-        key: "category_id",
-      },
-    },
-    account_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Account,
-        key: "account_id",
-      },
-    },
   },
   {
     freezeTableName: true,

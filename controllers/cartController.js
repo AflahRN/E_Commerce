@@ -23,7 +23,7 @@ export const ShowCartById = async (req, res) => {
 };
 
 export const AddCart = async (req, res) => {
-  const { product_id, quantity, account_id } = req.body;
+  const { productId, quantity, accountId } = req.body;
   try {
     const isCustomer = await Account.findOne({
       where: { account_id: account_id },
@@ -31,9 +31,9 @@ export const AddCart = async (req, res) => {
 
     if (isCustomer) {
       const request = {
-        product_id: product_id,
+        product_id: productId,
         quantity: quantity,
-        account_id: account_id,
+        account_id: accountId,
       };
       await Cart.create(request);
       res.status(200).json({ msg: "Data berhasil dikirim" });
@@ -49,10 +49,10 @@ export const AddCart = async (req, res) => {
 
 export const UpdateCart = async (req, res) => {
   const { id } = req.params;
-  const { product_id, quantity } = req.body;
+  const { productId, quantity } = req.body;
   try {
     const request = {
-      product_id: product_id,
+      product_id: productId,
       quantity: quantity,
     };
     const isExist = await Cart.findOne({ where: { cart_id: id } });

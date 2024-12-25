@@ -23,7 +23,7 @@ export const ShowReviewById = async (req, res) => {
 };
 
 export const AddReview = async (req, res) => {
-  const { review_text, review_skor, product_id, account_id } = req.body;
+  const { reviewText, ReviewSkor, ProductId, AccountId } = req.body;
   try {
     const isCustomer = await Account.findOne({
       where: { account_id: account_id },
@@ -31,10 +31,10 @@ export const AddReview = async (req, res) => {
 
     if (isCustomer) {
       const request = {
-        review_text: review_text,
-        review_skor: review_skor,
-        product_id: product_id,
-        account_id: account_id,
+        review_text: reviewText,
+        review_skor: ReviewSkor,
+        product_id: ProductId,
+        account_id: AccountId,
       };
       await Review.create(request);
       res.status(200).json({ msg: "Data berhasil dikirim" });
@@ -50,12 +50,12 @@ export const AddReview = async (req, res) => {
 
 export const UpdateReview = async (req, res) => {
   const { id } = req.params;
-  const { review_text, review_skor, product_id } = req.body;
+  const { reviewText, reviewSkor, productId } = req.body;
   try {
     const request = {
-      review_text: review_text,
-      review_skor: review_skor,
-      product_id: product_id,
+      review_text: reviewText,
+      review_skor: reviewSkor,
+      product_id: productId,
     };
     const isExist = await Review.findOne({ where: { review_id: id } });
     if (isExist) {

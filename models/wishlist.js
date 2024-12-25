@@ -11,20 +11,6 @@ const Wishlist = db.define(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    product_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Product,
-        key: "product_id",
-      },
-    },
-    account_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Account,
-        key: "account_id",
-      },
-    },
     quantity: DataTypes.INTEGER,
   },
   {

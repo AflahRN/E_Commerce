@@ -2,14 +2,14 @@ import Account from "../models/account.js";
 import bcrpyt from "bcrypt";
 
 export const login = async (req, res) => {
-  const { usernameEmail, password } = req.body;
+  const { loginData, password } = req.body;
   try {
     let isExist = await Account.findOne({
-      where: { username: usernameEmail },
+      where: { username: loginData },
     });
     if (!isExist) {
       isExist = await Account.findOne({
-        where: { email: usernameEmail },
+        where: { email: loginData },
       });
     }
 

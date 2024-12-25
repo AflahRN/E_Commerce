@@ -42,13 +42,7 @@ import {
   UpdateAccount,
 } from "../controllers/accountController.js";
 import { login } from "../controllers/loginController.js";
-import {
-  AddTransaction,
-  DeleteTransaction,
-  ShowTransaction,
-  ShowTransactionById,
-  UpdateTransaction,
-} from "../controllers/transactionController.js";
+import { ShowTransaction } from "../controllers/transactionController.js";
 
 const router = express.Router();
 
@@ -99,8 +93,8 @@ router.post("/login", login);
 
 //Transaction
 router.get("/transaction", ShowTransaction);
-router.get("/transaction/:id", ShowTransactionById);
-router.post("/transaction/", AddTransaction);
-router.patch("/transaction/:id", UpdateTransaction);
-router.delete("/transaction/:id", DeleteTransaction);
+// router.get("/transaction/:id", ShowTransactionById);
+// router.post("/transaction/", AddTransaction);
+// router.patch("/transaction/:id", UpdateTransaction);
+// router.delete("/transaction/:id", DeleteTransaction);
 export default router;

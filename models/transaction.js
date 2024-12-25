@@ -1,7 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
-import db from "../config/config";
-import Product from "./product";
-import Account from "./account";
+import db from "../config/config.js";
+import Account from "./account.js";
 
 const Transaction = db.define("transactions", {
   transaction_id: {
@@ -9,26 +8,11 @@ const Transaction = db.define("transactions", {
     defaultValue: Sequelize.UUIDV4,
     primaryKey: true,
   },
-  product_id: {
-    type: DataTypes.UUID,
-    references: {
-      key: "product_id",
-      model: Product,
-    },
+  transaction_date: {
+    type: DataTypes.DATEONLY,
+    defaultValue: Sequelize.fn("now"),
   },
-  quantity: DataTypes.INTEGER,
-  account_id: {
-    type: DataTypes.UUID,
-    references: {
-      key: "account_id",
-      model: Account,
-    },
-  },
-});
-
-Transaction.belongsTo(Product, {
-  foreignKey: "product_id",
-  onDelete: "CASCADE",
+  gross_amount: DataTypes.INTEGER,
 });
 
 Transaction.belongsTo(Account, {

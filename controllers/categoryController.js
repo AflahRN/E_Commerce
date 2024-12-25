@@ -22,10 +22,10 @@ export const ShowCategoryById = async (req, res) => {
 };
 
 export const AddCategory = async (req, res) => {
-  const { category_name } = req.body;
+  const { categoryName } = req.body;
   try {
     const request = {
-      category_name: category_name,
+      category_name: categoryName,
     };
     await Category.create(request);
     res.status(200).json({ msg: "Data berhasil dikirim" });
@@ -36,10 +36,10 @@ export const AddCategory = async (req, res) => {
 
 export const UpdateCategory = async (req, res) => {
   const { id } = req.params;
-  const { category_name } = req.body;
+  const { categoryName } = req.body;
   try {
     const request = {
-      category_name: category_name,
+      category_name: categoryName,
     };
     const isExist = await Category.findOne({ where: { category_id: id } });
     if (isExist) {

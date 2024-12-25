@@ -24,14 +24,14 @@ export const ShowProductById = async (req, res) => {
 
 export const AddProduct = async (req, res) => {
   const {
-    product_name,
-    product_description,
-    product_price,
-    product_stock,
-    product_picture,
-    product_varian,
-    category_id,
-    account_id,
+    productName,
+    ProductDescription,
+    ProductPrice,
+    ProductStock,
+    ProductPicture,
+    ProductVarian,
+    categoryId,
+    AccountId,
   } = req.body;
   try {
     const isCustomer = await Account.findOne({
@@ -40,14 +40,14 @@ export const AddProduct = async (req, res) => {
 
     if (isCustomer) {
       const request = {
-        product_name: product_name,
-        product_description: product_description,
-        product_price: product_price,
-        product_stock: product_stock,
-        product_picture: product_picture,
-        product_varian: product_varian,
-        category_id: category_id,
-        account_id: account_id,
+        product_name: productName,
+        product_description: ProductDescription,
+        product_price: ProductPrice,
+        product_stock: ProductStock,
+        product_picture: ProductPicture,
+        product_varian: ProductVarian,
+        category_id: categoryId,
+        account_id: AccountId,
       };
       await Product.create(request);
       res.status(200).json({ msg: "Data berhasil dikirim" });
@@ -64,23 +64,23 @@ export const AddProduct = async (req, res) => {
 export const UpdateProduct = async (req, res) => {
   const { id } = req.params;
   const {
-    product_name,
-    product_description,
-    product_price,
-    product_stock,
-    product_picture,
-    product_varian,
-    category_id,
+    productName,
+    ProductDescription,
+    ProductPrice,
+    ProductStock,
+    ProductPicture,
+    ProductVarian,
+    categoryId,
   } = req.body;
   try {
     const request = {
-      product_name: product_name,
-      product_description: product_description,
-      product_price: product_price,
-      product_stock: product_stock,
-      product_picture: product_picture,
-      product_varian: product_varian,
-      category_id: category_id,
+      product_name: productName,
+      product_description: ProductDescription,
+      product_price: ProductPrice,
+      product_stock: ProductStock,
+      product_picture: ProductPicture,
+      product_varian: ProductVarian,
+      category_id: categoryId,
     };
     const isExist = await Product.findOne({ where: { product_id: id } });
     if (isExist) {

@@ -11,21 +11,7 @@ const Cart = db.define(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    product_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Product,
-        key: "product_id",
-      },
-    },
     quantity: DataTypes.INTEGER,
-    account_id: {
-      type: DataTypes.UUID,
-      references: {
-        model: Account,
-        key: "account_id",
-      },
-    },
   },
   {
     freezeTableName: true,
