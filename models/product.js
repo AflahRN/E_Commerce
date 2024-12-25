@@ -15,7 +15,7 @@ const Product = db.define(
     product_description: DataTypes.STRING,
     product_price: DataTypes.STRING,
     product_stock: DataTypes.STRING,
-    product_picture: DataTypes.STRING,
+    product_image: DataTypes.BLOB,
     product_varian: DataTypes.STRING,
   },
   {

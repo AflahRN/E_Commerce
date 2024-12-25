@@ -1,5 +1,6 @@
 import Account from "../models/account.js";
 import Product from "../models/product.js";
+import fs from "fs";
 
 export const ShowProduct = async (req, res) => {
   try {
@@ -26,35 +27,43 @@ export const AddProduct = async (req, res) => {
     productDescription,
     productPrice,
     productStock,
-    productPicture,
     productVarian,
     categoryId,
     accountId,
   } = req.body;
-  try {
-    const isCustomer = await Account.findOne({
-      where: { account_id: accountId },
-    }).then((element) => element.type == "saler");
+  const file = req.file;
+  if (file["size"] >= 100000) {
+    res.json({
+      status: "Error",
+      message: "Maximal image size 100kb",
+    });
+  } else {
+    const imageData = fs.readFileSync(file.path);
+    try {
+      const isCustomer = await Account.findOne({
+        where: { account_id: accountId },
+      }).then((element) => element.type == "saler");
 
-    if (isCustomer) {
-      await Product.create({
-        product_name: productName,
-        product_description: productDescription,
-        product_price: productPrice,
-        product_stock: productStock,
-        product_picture: productPicture,
-        product_varian: productVarian,
-        category_id: categoryId,
-        account_id: accountId,
-      });
-      res.status(200).json({ msg: "Data berhasil dikirim" });
-    } else {
-      res.json({
-        msg: "Hanya akun saler yang diperbolehkan melakukan action ini",
-      });
+      if (isCustomer) {
+        await Product.create({
+          product_name: productName,
+          product_description: productDescription,
+          product_price: productPrice,
+          product_stock: productStock,
+          product_image: imageData,
+          product_varian: productVarian,
+          category_id: categoryId,
+          account_id: accountId,
+        });
+        res.status(200).json({ msg: "Data berhasil dikirim" });
+      } else {
+        res.json({
+          msg: "Hanya akun saler yang diperbolehkan melakukan action ini",
+        });
+      }
+    } catch (error) {
+      res.json({ msg: Error });
     }
-  } catch (error) {
-    res.json({ msg: Error });
   }
 };
 
@@ -65,31 +74,41 @@ export const UpdateProduct = async (req, res) => {
     productDescription,
     productPrice,
     productStock,
-    productPicture,
     productVarian,
     categoryId,
   } = req.body;
-  try {
-    const request = {
-      product_name: productName,
-      product_description: productDescription,
-      product_price: productPrice,
-      product_stock: productStock,
-      product_picture: productPicture,
-      product_varian: productVarian,
-      category_id: categoryId,
-    };
-    const isExist = await Product.findOne({ where: { product_id: id } });
-    if (isExist) {
-      await Product.update(request, {
-        where: { product_id: id },
-      });
-      res.status(200).json({ msg: "Data berhasil diupdate" });
-    } else {
-      res.json({ msg: "data tidak tersedia" });
+  const file = req.file;
+  if (file["size"] >= 100000) {
+    res.json({
+      status: "Error",
+      message: "Maximal image size 100kb",
+    });
+  } else {
+    try {
+      const productImage = fs.readFileSync(file.path);
+      const isExist = await Product.findOne({ where: { product_id: id } });
+      if (isExist) {
+        await Product.update(
+          {
+            product_name: productName,
+            product_description: productDescription,
+            product_price: productPrice,
+            product_stock: productStock,
+            product_image: productImage,
+            product_varian: productVarian,
+            category_id: categoryId,
+          },
+          {
+            where: { product_id: id },
+          }
+        );
+        res.status(200).json({ msg: "Data berhasil diupdate" });
+      } else {
+        res.json({ msg: "data tidak tersedia" });
+      }
+    } catch (error) {
+      res.json({ msg: Error });
     }
-  } catch (error) {
-    res.json({ msg: Error });
   }
 };
 

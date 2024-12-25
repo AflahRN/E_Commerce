@@ -49,8 +49,10 @@ import {
   ShowTransactionById,
 } from "../controllers/transactionController.js";
 import { payment } from "../controllers/paymentController.js";
+import multer from "multer";
 
 const router = express.Router();
+const upload = multer({ dest: "/products" });
 
 //category
 router.get("/category", ShowCategory);
@@ -62,8 +64,8 @@ router.delete("/category/:id", DeleteCategory);
 //Product
 router.get("/product", ShowProduct);
 router.get("/product/:id", ShowProductById);
-router.post("/product/", AddProduct);
-router.patch("/product/:id", UpdateProduct);
+router.post("/product/", upload.single("productImage"), AddProduct);
+router.patch("/product/:id", upload.single("productImage"), UpdateProduct);
 router.delete("/product/:id", DeleteProduct);
 
 //Cart
@@ -106,4 +108,6 @@ router.delete("/transaction/:id", DeleteTransaction);
 
 // Payment (Sementara)
 router.post("/payment", payment);
+// router.post("/payment/notification", getStatusPayment());
+
 export default router;
