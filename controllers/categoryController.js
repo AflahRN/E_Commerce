@@ -3,7 +3,6 @@ import Category from "../models/category.js";
 export const ShowCategory = async (req, res) => {
   try {
     const response = await Category.findAll();
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -14,7 +13,6 @@ export const ShowCategoryById = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await Category.findOne({ where: { category_id: id } });
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });

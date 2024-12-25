@@ -4,7 +4,6 @@ import Product from "../models/product.js";
 export const ShowProduct = async (req, res) => {
   try {
     const response = await Product.findAll();
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -15,7 +14,6 @@ export const ShowProductById = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await Product.findOne({ where: { product_id: id } });
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });

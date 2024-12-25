@@ -4,7 +4,6 @@ import Wishlist from "../models/wishlist.js";
 export const ShowWishlist = async (req, res) => {
   try {
     const response = await Wishlist.findAll();
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -15,7 +14,6 @@ export const ShowWishlistById = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await Wishlist.findOne({ where: { wishlist_id: id } });
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });

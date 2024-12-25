@@ -6,7 +6,6 @@ import Account from "../models/account.js";
 export const ShowTransaction = async (req, res) => {
   try {
     const response = await Transaction.findAll();
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -19,7 +18,6 @@ export const ShowTransactionById = async (req, res) => {
     const response = await Transaction.findOne({
       where: { transaction_id: id },
     });
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -28,8 +26,6 @@ export const ShowTransactionById = async (req, res) => {
 
 export const AddTransaction = async (req, res) => {
   const { grossAmount, item, accountId } = req.body;
-
-  console.log(grossAmount, item);
 
   const orderId = `TRE-${nanoid(4)}-${nanoid(8)}`;
   const transactionDate = new Date().toISOString();
@@ -47,7 +43,6 @@ export const AddTransaction = async (req, res) => {
         account_id: accountId,
       }).then(async (response) =>
         item.forEach(async (element) => {
-          console.log(element);
           await TransactionDetail.create({
             transaction_id: response.transaction_id,
             quantity: element["quantity"],

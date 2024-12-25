@@ -4,7 +4,6 @@ import Cart from "../models/cart.js";
 export const ShowCart = async (req, res) => {
   try {
     const response = await Cart.findAll();
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -15,7 +14,6 @@ export const ShowCartById = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await Cart.findOne({ where: { cart_id: id } });
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });

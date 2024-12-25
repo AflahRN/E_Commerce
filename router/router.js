@@ -48,6 +48,7 @@ import {
   ShowTransaction,
   ShowTransactionById,
 } from "../controllers/transactionController.js";
+import { payment } from "../controllers/paymentController.js";
 
 const router = express.Router();
 
@@ -102,4 +103,7 @@ router.get("/transaction/:id", ShowTransactionById);
 router.post("/transaction", AddTransaction);
 // router.patch("/transaction/:id", UpdateTransaction);
 router.delete("/transaction/:id", DeleteTransaction);
+
+// Payment (Sementara)
+router.post("/payment", payment);
 export default router;

@@ -4,7 +4,6 @@ import Review from "../models/review.js";
 export const ShowReview = async (req, res) => {
   try {
     const response = await Review.findAll();
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
@@ -15,7 +14,6 @@ export const ShowReviewById = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await Review.findOne({ where: { review_id: id } });
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
