@@ -10,7 +10,6 @@ const TransactionDetail = db.define("transaction_details", {
     primaryKey: true,
   },
   quantity: DataTypes.INTEGER,
-  subtotal: DataTypes.INTEGER,
 });
 
 TransactionDetail.belongsTo(Transaction, {

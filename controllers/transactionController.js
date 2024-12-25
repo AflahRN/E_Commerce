@@ -1,58 +1,70 @@
+import { nanoid } from "nanoid";
 import Transaction from "../models/transaction.js";
 import TransactionDetail from "../models/transaction_details.js";
+import Account from "../models/account.js";
 
 export const ShowTransaction = async (req, res) => {
-  const response = await TransactionDetail.findAll();
-  res.status(200).json(response);
+  try {
+    const response = await Transaction.findAll();
+    console.log(response);
+    res.status(200).json(response);
+  } catch (error) {
+    res.json({ msg: Error });
+  }
 };
 
-// export const ShowTransaction = async (req, res) => {
-//   try {
-//     const response = await Transaction.findAll();
-//     console.log(response);
-//     res.status(200).json(response);
-//   } catch (error) {
-//     res.json({ msg: Error });
-//   }
-// };
+export const ShowTransactionById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await Transaction.findOne({
+      where: { transaction_id: id },
+    });
+    console.log(response);
+    res.status(200).json(response);
+  } catch (error) {
+    res.json({ msg: Error });
+  }
+};
 
-// export const ShowTransactionById = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const response = await Transaction.findOne({
-//       where: { transaction_id: id },
-//     });
-//     console.log(response);
-//     res.status(200).json(response);
-//   } catch (error) {
-//     res.json({ msg: Error });
-//   }
-// };
+export const AddTransaction = async (req, res) => {
+  const { grossAmount, item, accountId } = req.body;
 
-// export const AddTransaction = async (req, res) => {
-//   const { product_id, quantity, account_id } = req.body;
-//   try {
-//     const isCustomer = await Account.findOne({
-//       where: { account_id: account_id },
-//     }).then((element) => element.type == "customer");
+  console.log(grossAmount, item);
 
-//     if (isCustomer) {
-//       const request = {
-//         product_id: product_id,
-//         quantity: quantity,
-//         account_id: account_id,
-//       };
-//       await Transaction.create(request);
-//       res.status(200).json({ msg: "Data berhasil dikirim" });
-//     } else {
-//       res.json({
-//         msg: "Hanya akun customer yang diperbolehkan melakukan action ini",
-//       });
-//     }
-//   } catch (error) {
-//     res.json({ msg: Error });
-//   }
-// };
+  const orderId = `TRE-${nanoid(4)}-${nanoid(8)}`;
+  const transactionDate = new Date().toISOString();
+
+  try {
+    const isCustomer = await Account.findOne({
+      where: { account_id: accountId },
+    }).then((element) => element.type == "customer");
+
+    if (isCustomer) {
+      await Transaction.create({
+        order_id: orderId,
+        transaction_date: transactionDate,
+        gross_amount: grossAmount,
+        account_id: accountId,
+      }).then(async (response) =>
+        item.forEach(async (element) => {
+          console.log(element);
+          await TransactionDetail.create({
+            transaction_id: response.transaction_id,
+            quantity: element["quantity"],
+            product_id: element["productId"],
+          });
+        })
+      );
+      res.status(200).json({ msg: "Data berhasil dikirim" });
+    } else {
+      res.json({
+        msg: "Hanya akun customer yang diperbolehkan melakukan action ini",
+      });
+    }
+  } catch (error) {
+    res.json({ msg: Error });
+  }
+};
 
 // export const UpdateTransaction = async (req, res) => {
 //   const { id } = req.params;
@@ -78,21 +90,21 @@ export const ShowTransaction = async (req, res) => {
 //   }
 // };
 
-// export const DeleteTransaction = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const isExist = await Transaction.findOne({
-//       where: { transaction_id: id },
-//     });
-//     if (isExist) {
-//       await Transaction.destroy({
-//         where: { transaction_id: id },
-//       });
-//       res.status(200).json({ msg: "Data berhasil dikirim" });
-//     } else {
-//       res.json({ msg: "Data tidak tersedia" });
-//     }
-//   } catch (error) {
-//     res.json({ msg: Error });
-//   }
-// };
+export const DeleteTransaction = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const isExist = await Transaction.findOne({
+      where: { transaction_id: id },
+    });
+    if (isExist) {
+      await Transaction.destroy({
+        where: { transaction_id: id },
+      });
+      res.status(200).json({ msg: "Data berhasil dihapus" });
+    } else {
+      res.json({ msg: "Data tidak tersedia" });
+    }
+  } catch (error) {
+    res.json({ msg: Error });
+  }
+};

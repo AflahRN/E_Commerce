@@ -8,9 +8,11 @@ const Transaction = db.define("transactions", {
     defaultValue: Sequelize.UUIDV4,
     primaryKey: true,
   },
+  order_id: {
+    type: DataTypes.STRING,
+  },
   transaction_date: {
     type: DataTypes.DATEONLY,
-    defaultValue: Sequelize.fn("now"),
   },
   gross_amount: DataTypes.INTEGER,
 });
