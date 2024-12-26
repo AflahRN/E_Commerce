@@ -41,7 +41,7 @@ import {
   ShowAccountById,
   UpdateAccount,
 } from "../controllers/accountController.js";
-import { login } from "../controllers/loginController.js";
+import { Login, Logout, Refresh } from "../controllers/loginController.js";
 import {
   AddTransaction,
   DeleteTransaction,
@@ -50,64 +50,72 @@ import {
 } from "../controllers/transactionController.js";
 import { payment } from "../controllers/paymentController.js";
 import multer from "multer";
+import { tokenAuth } from "../middleware/tokenAuth.js";
 
 const router = express.Router();
 const upload = multer({ dest: "/products" });
 
 //category
-router.get("/category", ShowCategory);
-router.get("/category/:id", ShowCategoryById);
-router.post("/category/", AddCategory);
-router.patch("/category/:id", UpdateCategory);
-router.delete("/category/:id", DeleteCategory);
+router.get("/category", tokenAuth, ShowCategory);
+router.get("/category/:id", tokenAuth, ShowCategoryById);
+router.post("/category/", tokenAuth, AddCategory);
+router.patch("/category/:id", tokenAuth, UpdateCategory);
+router.delete("/category/:id", tokenAuth, DeleteCategory);
 
 //Product
-router.get("/product", ShowProduct);
-router.get("/product/:id", ShowProductById);
-router.post("/product/", upload.single("productImage"), AddProduct);
-router.patch("/product/:id", upload.single("productImage"), UpdateProduct);
-router.delete("/product/:id", DeleteProduct);
+router.get("/product", tokenAuth, ShowProduct);
+router.get("/product/:id", tokenAuth, ShowProductById);
+router.post("/product/", tokenAuth, upload.single("productImage"), AddProduct);
+router.patch(
+  "/product/:id",
+  tokenAuth,
+  upload.single("productImage"),
+  UpdateProduct
+);
+router.delete("/product/:id", tokenAuth, DeleteProduct);
 
 //Cart
-router.get("/cart", ShowCart);
-router.get("/cart/:id", ShowCartById);
-router.post("/cart/", AddCart);
-router.patch("/cart/:id", UpdateCart);
-router.delete("/cart/:id", DeleteCart);
+router.get("/cart", tokenAuth, ShowCart);
+router.get("/cart/:id", tokenAuth, ShowCartById);
+router.post("/cart/", tokenAuth, AddCart);
+router.patch("/cart/:id", tokenAuth, UpdateCart);
+router.delete("/cart/:id", tokenAuth, DeleteCart);
 
 //Wishlist
-router.get("/wishlist", ShowWishlist);
-router.get("/wishlist/:id", ShowWishlistById);
-router.post("/wishlist/", AddWishlist);
-router.patch("/wishlist/:id", UpdateWishlist);
-router.delete("/wishlist/:id", DeleteWishlist);
+router.get("/wishlist", tokenAuth, ShowWishlist);
+router.get("/wishlist/:id", tokenAuth, ShowWishlistById);
+router.post("/wishlist/", tokenAuth, AddWishlist);
+router.patch("/wishlist/:id", tokenAuth, UpdateWishlist);
+router.delete("/wishlist/:id", tokenAuth, DeleteWishlist);
 
 //Review
-router.get("/review", ShowReview);
-router.get("/review/:id", ShowReviewById);
-router.post("/review/", AddReview);
-router.patch("/review/:id", UpdateReview);
-router.delete("/review/:id", DeleteReview);
+router.get("/review", tokenAuth, ShowReview);
+router.get("/review/:id", tokenAuth, ShowReviewById);
+router.post("/review/", tokenAuth, AddReview);
+router.patch("/review/:id", tokenAuth, UpdateReview);
+router.delete("/review/:id", tokenAuth, DeleteReview);
 
 //Account
-router.get("/account", ShowAccount);
-router.get("/account/:id", ShowAccountById);
-router.post("/account/", AddAccount);
-router.patch("/account/:id", UpdateAccount);
-router.delete("/account/:id", DeleteAccount);
+router.get("/account", tokenAuth, ShowAccount);
+router.get("/account/:id", tokenAuth, ShowAccountById);
+router.post("/account/", tokenAuth, AddAccount);
+router.patch("/account/:id", tokenAuth, UpdateAccount);
+router.delete("/account/:id", tokenAuth, DeleteAccount);
 
 //Login
-router.post("/login", login);
+router.post("/login", Login);
+router.get("/refresh", Refresh);
+router.post("/logout", Logout);
 
 //Transaction
-router.get("/transaction", ShowTransaction);
-router.get("/transaction/:id", ShowTransactionById);
-router.post("/transaction", AddTransaction);
+router.get("/transaction", tokenAuth, ShowTransaction);
+router.get("/transaction/:id", tokenAuth, ShowTransactionById);
+router.post("/transaction", tokenAuth, AddTransaction);
 // router.patch("/transaction/:id", UpdateTransaction);
-router.delete("/transaction/:id", DeleteTransaction);
+router.delete("/transaction/:id", tokenAuth, DeleteTransaction);
 
 // Payment (Sementara)
-router.post("/payment", payment);
+router.post("/payment", tokenAuth, payment);
 // router.post("/payment/notification", getStatusPayment());
 
 export default router;
