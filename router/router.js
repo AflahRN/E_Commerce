@@ -56,7 +56,7 @@ const router = express.Router();
 const upload = multer({ dest: "/products" });
 
 //category
-router.get("/category", tokenAuth, ShowCategory);
+router.get("/category", ShowCategory);
 router.get("/category/:id", tokenAuth, ShowCategoryById);
 router.post("/category/", tokenAuth, AddCategory);
 router.patch("/category/:id", tokenAuth, UpdateCategory);
@@ -115,7 +115,7 @@ router.post("/transaction", tokenAuth, AddTransaction);
 router.delete("/transaction/:id", tokenAuth, DeleteTransaction);
 
 // Payment (Sementara)
-router.post("/payment", tokenAuth, payment);
+router.post("/payment", payment);
 // router.post("/payment/notification", getStatusPayment());
 
 export default router;

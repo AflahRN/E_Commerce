@@ -1,76 +1,95 @@
+import crypto from "crypto";
+import axios from "axios";
+import Account from "../models/account.js";
 import dotenv from "dotenv";
-import Midtrans from "midtrans-client";
-import Product from "../models/product.js";
 import { nanoid } from "nanoid";
+import Product from "../models/product.js";
+import Category from "../models/category.js";
+import { error } from "console";
 
 dotenv.config();
 
-const snap = new Midtrans.Snap();
-snap.apiConfig.set({
-  isProduction: false,
-  serverKey: process.env.MIDTRANS_SERVER_KEY,
-  clientKey: process.env.MIDTRANS_CLIENT_KEY,
-});
-
 export const payment = async (req, res) => {
   const { item } = req.body;
-  const orderId = `TKR-${nanoid(4)}-${nanoid(8)}`;
-  let grossAmount = 0;
+  const requestTarget = "/checkout/v1/payment";
+  const requestTimestamp = new Date().toISOString().slice(0, 19) + "Z";
+  const requestId = `EC-${nanoid(4)}-${nanoid(8)}`;
 
-  let requestData = [];
+  const id = req.body.id; //Id nanti ganti dari cookies
+  const userCredential = await Account.findOne({
+    where: { account_id: id },
+  });
 
-  for (let i = 0; i < item.length; i++) {
-    const response = await Product.findOne({
-      where: { product_id: item[i]["productId"] },
-      attributes: ["product_name", "product_price"],
-    });
-    grossAmount += parseInt(response["product_price"]) * item[i]["quantity"];
-    requestData.push({
-      name: response["product_name"],
-      price: response["product_price"],
-      quantity: item[i]["quantity"],
-      id: item[i]["productId"],
-    });
-  }
-
-  let parameter = {
-    transaction_details: {
-      order_id: orderId,
-      gross_amount: grossAmount,
+  let requestItem = {
+    order: {
+      amount: 0,
+      invoice_number: requestId,
+      line_item: [],
     },
-    item_details: requestData,
-    callbacks: {
-      finish: `${process.env.FRONT_END_FINISH_URL}/${orderId}`,
-      error: process.env.FRONT_END_ERROR_URL,
-      pending: process.env.FRONT_END_PENDING_URL,
+    payment: {
+      payment_due_date: 60,
     },
   };
+  for (let i = 0; i < item.length; i++) {
+    const response = await Product.findOne({
+      where: { product_id: item[i].product_id },
+      include: [{ model: Category, attributes: ["category_name"] }],
+    });
+    requestItem.order.line_item.push({
+      id: item[i].product_id,
+      name: response.dataValues.product_name,
+      quantity: item[i].quantity,
+      price: response.dataValues.product_price,
+      category: response.dataValues.category.category_name,
+    });
+    requestItem.order.amount +=
+      response.dataValues.product_price * item[i].quantity;
+  }
 
-  snap
-    .createTransaction(parameter)
-    .then((transaction) => {
-      let transactionToken = transaction.token;
-      let transactionRedirectUrl = transaction.redirect_url;
-      res.json({
-        transactionToken: transactionToken,
-        transactionRedirectUrl: transactionRedirectUrl,
+  const generateDigest = (item) => {
+    const data = JSON.stringify(item);
+    const itemHash = crypto.createHash("sha256").update(data, "utf-8").digest();
+    const buffer = Buffer.from(itemHash);
+    return buffer.toString("base64");
+  };
+
+  const digest = generateDigest(requestItem);
+  const generateSignature = () => {
+    const componentSignature = `Client-Id:${process.env.DOKU_CLIENT_ID}\nRequest-Id:${requestId}\nRequest-Timestamp:${requestTimestamp}\nRequest-Target:${requestTarget}\nDigest:${digest}`;
+    const hmac = crypto
+      .createHmac("sha256", process.env.DOKU_SECRET_KEY)
+      .update(componentSignature.toString())
+      .digest();
+    const signature = Buffer.from(hmac).toString("base64");
+    return `HMACSHA256=${signature}`;
+  };
+
+  const signature = generateSignature();
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: process.env.DOKU_APP_URL + requestTarget,
+    headers: {
+      "Client-Id": process.env.DOKU_CLIENT_ID,
+      "Request-Id": requestId,
+      "Request-Timestamp": requestTimestamp,
+      Signature: signature,
+      "Content-Type": "application/json",
+    },
+    data: requestItem,
+  };
+
+  axios
+    .request(config)
+    .then((response) => {
+      //   return res.json(response.data);
+      return res.json({
+        message: response.data.message[0],
+        token: response.data.response.payment.token_id,
+        redirect_url: response.data.response.payment.url,
       });
     })
-    .catch((e) => console.log("error", e.message));
-};
-
-export const getStatusPayment = async (trxnotif) => {
-  const { orderId } = req.params;
-
-  const notificationJson = await snap.transaction.status(orderId);
-  snap.transaction.notification(notificationJson).then((statusResponse) => {
-    let orderId = statusResponse.order_id;
-    let transactionStatus = statusResponse.transaction_status;
-    let fraudStatus = statusResponse.fraud_status;
-    res.json({
-      orderId: orderId,
-      transactionStatus: transactionStatus,
-      fraudStatus: fraudStatus,
+    .catch((error) => {
+      res.json(error);
     });
-  });
 };
