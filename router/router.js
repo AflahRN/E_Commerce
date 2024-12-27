@@ -48,7 +48,7 @@ import {
   ShowTransaction,
   ShowTransactionById,
 } from "../controllers/transactionController.js";
-import { payment } from "../controllers/paymentController.js";
+import { checkPayment, payment } from "../controllers/paymentController.js";
 import multer from "multer";
 import { tokenAuth } from "../middleware/tokenAuth.js";
 
@@ -116,6 +116,7 @@ router.delete("/transaction/:id", tokenAuth, DeleteTransaction);
 
 // Payment (Sementara)
 router.post("/payment", payment);
+router.get("/payment/notification", checkPayment);
 // router.post("/payment/notification", getStatusPayment());
 
 export default router;

@@ -1,24 +1,17 @@
 import crypto from "crypto";
 import axios from "axios";
-import Account from "../models/account.js";
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
 import Product from "../models/product.js";
 import Category from "../models/category.js";
-import { error } from "console";
 
 dotenv.config();
 
+const requestTarget = "/checkout/v1/payment";
+const requestId = `EC-${nanoid(4)}-${nanoid(8)}`;
+const requestTimestamp = new Date().toISOString().slice(0, 19) + "Z";
 export const payment = async (req, res) => {
   const { item } = req.body;
-  const requestTarget = "/checkout/v1/payment";
-  const requestTimestamp = new Date().toISOString().slice(0, 19) + "Z";
-  const requestId = `EC-${nanoid(4)}-${nanoid(8)}`;
-
-  const id = req.body.id; //Id nanti ganti dari cookies
-  const userCredential = await Account.findOne({
-    where: { account_id: id },
-  });
 
   let requestItem = {
     order: {
@@ -88,6 +81,51 @@ export const payment = async (req, res) => {
         token: response.data.response.payment.token_id,
         redirect_url: response.data.response.payment.url,
       });
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+};
+
+export const checkPayment = async (req, res) => {
+  const invoice_number = "EC-at2a-XfGezBV5"; // change with your invoice number
+  const url = "/orders/v1/status/" + invoice_number;
+
+  const digest = "";
+  function generateSignature() {
+    // Prepare Signature Component
+    const componentSignature = `Client-Id:${process.env.DOKU_CLIENT_ID}\nRequest-Id:${invoice_number}\nRequest-Timestamp:${requestTimestamp}\nRequest-Target:/orders/v1/status/${invoice_number}`;
+
+    // Calculate HMAC-SHA256 base64 from all the components above
+    let hmac256Value = crypto
+      .createHmac("sha256", process.env.DOKU_SECRET_KEY)
+      .update(componentSignature.toString())
+      .digest();
+
+    let bufferFromHmac256Value = Buffer.from(hmac256Value);
+    let signature = bufferFromHmac256Value.toString("base64");
+    return "HMACSHA256=" + signature;
+  }
+
+  // Generate Header Signature
+  let headerSignature = generateSignature();
+
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: process.env.DOKU_APP_URL + url,
+    headers: {
+      "Client-Id": process.env.DOKU_CLIENT_ID,
+      "Request-Id": invoice_number,
+      "Request-Timestamp": requestTimestamp,
+      Signature: headerSignature,
+    },
+  };
+
+  axios
+    .request(config)
+    .then((response) => {
+      return res.json(response.data);
     })
     .catch((error) => {
       res.json(error);
