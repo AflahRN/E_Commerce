@@ -1,11 +1,27 @@
 import Account from "../models/account.js";
+import Category from "../models/category.js";
 import Product from "../models/product.js";
 import fs from "fs";
 
 export const ShowProduct = async (req, res) => {
   try {
-    const response = await Product.findAll();
+    const response = await Product.findAll({
+      include: [{ model: Category, attributes: ["category_name"] }],
+    });
     res.status(200).json(response);
+  } catch (error) {
+    res.json({ msg: Error });
+  }
+};
+
+export const ShowProductImage = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const response = await Product.findOne({
+      where: { product_id: id },
+      attributes: ["product_image"],
+    });
+    res.status(200).json({ buffer: response["product_image"] });
   } catch (error) {
     res.json({ msg: Error });
   }

@@ -2,6 +2,7 @@ import Account from "../models/account.js";
 import bcrpyt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { Sequelize } from "sequelize";
 
 dotenv.config();
 
@@ -42,13 +43,21 @@ export const Login = async (req, res) => {
           { expiresIn: "1h" }
         );
 
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          sameSite: "None",
-          secure: true,
-          maxAge: 10 * 60 * 1000,
-        });
-        res.json({ token: accessToken });
+        await Account.update(
+          {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          },
+          {
+            where: {
+              [Sequelize.Op.or]: [
+                { username: loginData },
+                { email: loginData },
+              ],
+            },
+          }
+        );
+        res.json({ token: accessToken, userId: userData.account_id });
       }
     } else {
       res.send("Email atau username salah");
@@ -63,7 +72,7 @@ export const Refresh = async (req, res) => {
   if (req.cookies?.refreshToken) {
     const refreshToken = req.cookies.refreshToken;
 
-    jwt.verify(refreshToken, process.env.SECRET_KEY, (err, decoded) => {
+    jwt.verify(refreshToken, process.env.SECRET_KEY, async (err, decoded) => {
       if (err) {
         return res.status(406).json({ message: "Unauthorized" });
       } else {
@@ -74,7 +83,11 @@ export const Refresh = async (req, res) => {
             email: decoded.email,
           },
           process.env.SECRET_KEY,
-          { expiresIn: "60s" }
+          { expiresIn: "60s" },
+          await Account.update(
+            { access_token: accessToken },
+            { where: { account_id: id } }
+          )
         );
         return res.json({ token: accessToken });
       }
@@ -83,8 +96,20 @@ export const Refresh = async (req, res) => {
 };
 
 export const Logout = async (req, res) => {
+  const { id } = req.body;
   try {
     res.clearCookie("refreshToken");
+    await Account.update(
+      {
+        refresh_token: null,
+        access_token: null,
+      },
+      {
+        where: {
+          account_id: id,
+        },
+      }
+    );
     res.json({ message: "Berhasil Logout" });
   } catch (error) {
     console.log(error);

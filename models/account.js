@@ -10,6 +10,8 @@ const Account = db.define("account", {
   username: DataTypes.STRING,
   email: DataTypes.STRING,
   password: DataTypes.STRING,
+  access_token: DataTypes.STRING,
+  refresh_token: DataTypes.STRING,
   type: DataTypes.ENUM("saler", "customer"),
 });
 

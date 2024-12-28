@@ -20,6 +20,7 @@ export const ShowReviewById = async (req, res) => {
   }
 };
 
+// Customer Side
 export const AddReview = async (req, res) => {
   const { reviewText, ReviewSkor, ProductId, AccountId } = req.body;
   try {
@@ -83,5 +84,20 @@ export const DeleteReview = async (req, res) => {
     }
   } catch (error) {
     res.json({ msg: Error });
+  }
+};
+
+// Saler Side
+export const reviewResponse = async (req, res) => {
+  const { reviewResponse } = req.body;
+  const { id } = req.params;
+
+  try {
+    await Review.update(
+      { review_respose: reviewResponse },
+      { where: { review_id: id } }
+    );
+  } catch (error) {
+    console.log(error);
   }
 };

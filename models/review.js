@@ -13,6 +13,7 @@ const Review = db.define(
     },
     review_text: DataTypes.TEXT,
     review_skor: DataTypes.DOUBLE,
+    review_response: DataTypes.TEXT,
   },
   {
     freezeTableName: true,

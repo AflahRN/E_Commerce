@@ -11,6 +11,7 @@ import {
   DeleteProduct,
   ShowProduct,
   ShowProductById,
+  ShowProductImage,
   UpdateProduct,
 } from "../controllers/productController.js";
 import {
@@ -30,6 +31,7 @@ import {
 import {
   AddReview,
   DeleteReview,
+  reviewResponse,
   ShowReview,
   ShowReviewById,
   UpdateReview,
@@ -56,7 +58,7 @@ const router = express.Router();
 const upload = multer({ dest: "/products" });
 
 //category
-router.get("/category", ShowCategory);
+router.get("/category", tokenAuth, ShowCategory);
 router.get("/category/:id", tokenAuth, ShowCategoryById);
 router.post("/category/", tokenAuth, AddCategory);
 router.patch("/category/:id", tokenAuth, UpdateCategory);
@@ -64,6 +66,7 @@ router.delete("/category/:id", tokenAuth, DeleteCategory);
 
 //Product
 router.get("/product", tokenAuth, ShowProduct);
+router.get("/product/image", tokenAuth, ShowProductImage);
 router.get("/product/:id", tokenAuth, ShowProductById);
 router.post("/product/", tokenAuth, upload.single("productImage"), AddProduct);
 router.patch(
@@ -94,18 +97,22 @@ router.get("/review/:id", tokenAuth, ShowReviewById);
 router.post("/review/", tokenAuth, AddReview);
 router.patch("/review/:id", tokenAuth, UpdateReview);
 router.delete("/review/:id", tokenAuth, DeleteReview);
+router.post("/review/response", tokenAuth, reviewResponse);
 
 //Account
 router.get("/account", tokenAuth, ShowAccount);
 router.get("/account/:id", tokenAuth, ShowAccountById);
-router.post("/account/", tokenAuth, AddAccount);
-router.patch("/account/:id", tokenAuth, UpdateAccount);
+router.post("/account/", AddAccount);
+router.patch("/account/:id", UpdateAccount);
 router.delete("/account/:id", tokenAuth, DeleteAccount);
 
 //Login
 router.post("/login", Login);
 router.get("/refresh", Refresh);
 router.post("/logout", Logout);
+router.get("/cookie", async (req, res) => {
+  res.json({ cookie: req.cookies });
+});
 
 //Transaction
 router.get("/transaction", tokenAuth, ShowTransaction);
@@ -115,8 +122,8 @@ router.post("/transaction", tokenAuth, AddTransaction);
 router.delete("/transaction/:id", tokenAuth, DeleteTransaction);
 
 // Payment (Sementara)
-router.post("/payment", payment);
-router.get("/payment/notification", checkPayment);
+router.post("/payment", tokenAuth, payment);
+router.get("/payment/notification", tokenAuth, checkPayment);
 // router.post("/payment/notification", getStatusPayment());
 
 export default router;
