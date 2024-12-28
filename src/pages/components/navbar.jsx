@@ -1,6 +1,10 @@
 import "../../assets/css/slick-theme.css";
+import "../../assets/css/bootstrap.min.css";
+import "../../assets/css/font-awesome.min.css";
+import "../../assets/css/nouislider.min.css";
 import "../../assets/css/slick.css";
 import "../../assets/css/style.css";
+import "../../assets/css/index.css";
 
 export const Navbar = () => {
   return (

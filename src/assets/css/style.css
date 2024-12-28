@@ -2184,6 +2184,14 @@ textarea.input {
   margin: 15px 0px;
 }
 
+#responsive-nav > ul > li {
+  padding-left: 30px;
+}
+
+#responsive-nav > ul > li:nth-child(1) {
+  padding-left: 0;
+}
+
 /*=========================================================
 	13 -> RESPONSIVE
 ===========================================================*/
