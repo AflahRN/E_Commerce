@@ -1,20 +1,10 @@
-import "../assets/css/slick-theme.css";
-import "../assets/css/slick.css";
-import "../assets/css/style.css";
-import "../assets/css/index.css";
-import "../assets/css/bootstrap.min.css";
-import "../assets/css/font-awesome.min.css";
-import "../assets/css/nouislider.min.css";
 import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io";
 import { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Tooltip from "rc-tooltip";
 import { Header } from "./components/header";
 import { Navbar } from "./components/navbar";
 import { Footer } from "./components/footer";
 import Carousel from "react-bootstrap/Carousel";
-import Card from "react-bootstrap/Card";
 
 // Bisa dihapus
 import "../assets/fonts/fontawesome-webfont.ttf";

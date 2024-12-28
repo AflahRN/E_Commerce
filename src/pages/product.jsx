@@ -1,10 +1,3 @@
-import "../assets/css/slick-theme.css";
-import "../assets/css/slick.css";
-import "../assets/css/style.css";
-import "../assets/css/bootstrap.min.css";
-import "../assets/css/font-awesome.min.css";
-import "../assets/css/nouislider.min.css";
-import "../assets/css/product.css";
 import { Header } from "./components/header";
 import { Navbar } from "./components/navbar";
 import { Footer } from "./components/footer";
@@ -18,14 +11,8 @@ import product01 from "../assets/images/product01.png";
 import product02 from "../assets/images/product02.png";
 import product03 from "../assets/images/product03.png";
 import product04 from "../assets/images/product04.png";
-import product05 from "../assets/images/product05.png";
 import product06 from "../assets/images/product06.png";
-import product07 from "../assets/images/product07.png";
 import product08 from "../assets/images/product08.png";
-import product09 from "../assets/images/product09.png";
-import shop01 from "../assets/images/shop01.png";
-import shop02 from "../assets/images/shop02.png";
-import shop03 from "../assets/images/shop03.png";
 
 export const Product = () => {
   return (
