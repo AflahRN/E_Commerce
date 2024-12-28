@@ -22,65 +22,24 @@ import product09 from "../assets/images/product09.png";
 import shop01 from "../assets/images/shop01.png";
 import shop02 from "../assets/images/shop02.png";
 import shop03 from "../assets/images/shop03.png";
+import { getProduct } from "../controller/productController";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);
   const [itemPerTopSellingPage, setItemPerTopSellingPage] = useState(8);
 
-  //   Data dummy
-  const topSellingItem = [
-    {
-      image: product01,
-      name: "Laptop",
-      price: 5500000,
-    },
-    {
-      image: product02,
-      name: "Headphone",
-      price: 250000,
-    },
-    {
-      image: product03,
-      name: "Smartphone",
-      price: 3000000,
-    },
-    {
-      image: product04,
-      name: "Smartwatch",
-      price: 1500000,
-    },
-    {
-      image: product05,
-      name: "Keyboard",
-      price: 500000,
-    },
-    {
-      image: product06,
-      name: "Mouse",
-      price: 200000,
-    },
-    {
-      image: product07,
-      name: "Monitor",
-      price: 2000000,
-    },
-    {
-      image: product08,
-      name: "Speaker",
-      price: 750000,
-    },
-    {
-      image: product09,
-      name: "Printer",
-      price: 1200000,
-    },
-    {
-      image: product01,
-      name: "Tablet",
-      price: 2500000,
-    },
-  ];
+  const [topSellingItem, setTopSellingItem] = useState([]);
 
+  const RefreshData = () => {
+    getProduct().then((response) => setTopSellingItem(response));
+  };
+
+  useEffect(() => {
+    RefreshData();
+  }, []);
+
+  console.log(topSellingItem);
   const [maxPageTopSelling, setMaxPageTopSelling] = useState([]);
   useEffect(() => {
     const loopMaxPageTopSelling = [];
@@ -337,19 +296,33 @@ export const Dashboard = () => {
                     <div className="col-md-3 col-xs-6">
                       <div className="product">
                         <div className="product-img">
-                          <img src={product01} alt="" />
-                          <div className="product-label">
+                          <img src={""} alt="" />
+                          {/* <div className="product-label">
                             <span className="sale">-30%</span>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="product-body">
-                          <p className="product-category">Category</p>
+                          <p className="product-category">
+                            {element.category.category_name}
+                          </p>
                           <h3 className="product-name">
-                            <a href="#">product name goes here</a>
+                            {/* <a href={`/product/${element.product_id}`}>
+                              {element.product_name}
+                            </a> */}
+                            <Link
+                              to={`/product/${element.product_id}`}
+                              onClick={() => {
+                                window.scrollTo({ top: 0 });
+                              }}
+                            >
+                              {element.product_name}
+                            </Link>
                           </h3>
                           <h4 className="product-price">
-                            $980.00{" "}
-                            <del className="product-old-price">$990.00</del>
+                            Rp{" "}
+                            {Intl.NumberFormat("id-ID", {}).format(
+                              element.product_price
+                            )}
                           </h4>
                           <div className="product-rating"></div>
                           <div className="product-btns">

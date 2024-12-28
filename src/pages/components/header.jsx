@@ -121,7 +121,7 @@ export const Header = () => {
                       <div className="cart-list">
                         {[1, 2, 3, 4].map((element, index) => {
                           return (
-                            <div className="product-widget">
+                            <div className="product-widget" key={index}>
                               <div className="product-img">
                                 <img src={product01} alt="" />
                               </div>

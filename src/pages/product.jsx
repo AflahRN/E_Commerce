@@ -1,3 +1,5 @@
+import "../assets/css/index.css";
+import "../assets/css/product.css";
 import { Header } from "./components/header";
 import { Navbar } from "./components/navbar";
 import { Footer } from "./components/footer";
@@ -13,8 +15,23 @@ import product03 from "../assets/images/product03.png";
 import product04 from "../assets/images/product04.png";
 import product06 from "../assets/images/product06.png";
 import product08 from "../assets/images/product08.png";
+import { useParams } from "react-router-dom";
+import { getProductById } from "../controller/productController";
+import { useEffect, useState } from "react";
 
 export const Product = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const refresh = () => {
+    getProductById(id).then((response) => setProduct(response));
+  };
+
+  console.log(product);
   return (
     <>
       <Header />
@@ -91,7 +108,7 @@ export const Product = () => {
             {/* <!-- Product details --> */}
             <div className="col-md-5">
               <div className="product-details">
-                <h2 className="product-name">product name goes here</h2>
+                <h2 className="product-name">{product.product_name}</h2>
                 <div>
                   <div className="product-rating">
                     <i className="fa fa-star"></i>
@@ -106,16 +123,20 @@ export const Product = () => {
                 </div>
                 <div>
                   <h3 className="product-price">
-                    $980.00 <del className="product-old-price">$990.00</del>
+                    Rp{" "}
+                    {Intl.NumberFormat("id-ID").format(product.product_price)}
                   </h3>
-                  <span className="product-available">In Stock</span>
+                  <span className="product-available">
+                    {product.product_stock > 0
+                      ? `${
+                          product.product_stock > 999
+                            ? "999+"
+                            : product.product_stock
+                        } In Stock`
+                      : "Out of Stock"}
+                  </span>
                 </div>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
+                <p>{product.product_description}</p>
 
                 <div className="product-options">
                   <label>
@@ -225,17 +246,7 @@ export const Product = () => {
                   <div id="tab1" className="tab-pane fade in active">
                     <div className="row">
                       <div className="col-md-12">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris nisi ut aliquip
-                          ex ea commodo consequat. Duis aute irure dolor in
-                          reprehenderit in voluptate velit esse cillum dolore eu
-                          fugiat nulla pariatur. Excepteur sint occaecat
-                          cupidatat non proident, sunt in culpa qui officia
-                          deserunt mollit anim id est laborum.
-                        </p>
+                        <p>{product.product_description}</p>
                       </div>
                     </div>
                   </div>

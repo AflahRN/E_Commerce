@@ -14,12 +14,18 @@ import loginBanner from "../../assets/images/login.png";
 import logo from "../../assets/logo/elegant-logo.png";
 import IconifyIcon from "../components/IconifyIcon";
 import Image from "../components/Image";
-import "../../assets/css/login.css";
+import {
+  CheckCookie,
+  Login as LoginController,
+} from "../../controller/loginController";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const [loginData, setLoginData] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div
@@ -50,6 +56,7 @@ export const Login = () => {
               <TextField
                 placeholder="Enter your email"
                 id="email"
+                onChange={(value) => setLoginData(value.target.value)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -68,6 +75,9 @@ export const Login = () => {
                 placeholder="********"
                 type={showPassword ? "text" : "password"}
                 id="password"
+                onChange={(value) => {
+                  setPassword(value.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -108,7 +118,16 @@ export const Login = () => {
                 Forget password
               </Link>
             </Typography>
-            <Button variant="contained" fullWidth>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() => {
+                LoginController(loginData, password, navigate);
+              }}
+              onDoubleClick={() => {
+                CheckCookie();
+              }}
+            >
               Log in
             </Button>
             <Typography variant="body2" color="text.secondary">
