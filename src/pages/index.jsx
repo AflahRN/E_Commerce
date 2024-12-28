@@ -13,6 +13,8 @@ import Tooltip from "rc-tooltip";
 import { Header } from "./components/header";
 import { Navbar } from "./components/navbar";
 import { Footer } from "./components/footer";
+import Carousel from "react-bootstrap/Carousel";
+import Card from "react-bootstrap/Card";
 
 // Bisa dihapus
 import "../assets/fonts/fontawesome-webfont.ttf";
@@ -30,8 +32,6 @@ import product09 from "../assets/images/product09.png";
 import shop01 from "../assets/images/shop01.png";
 import shop02 from "../assets/images/shop02.png";
 import shop03 from "../assets/images/shop03.png";
-import Carousel from "react-bootstrap/Carousel";
-import Card from "react-bootstrap/Card";
 
 export const Index = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);

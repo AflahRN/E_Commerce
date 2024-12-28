@@ -4,216 +4,34 @@ import "../assets/css/style.css";
 import "../assets/css/bootstrap.min.css";
 import "../assets/css/font-awesome.min.css";
 import "../assets/css/nouislider.min.css";
+import "../assets/css/product.css";
+import { Header } from "./components/header";
+import { Navbar } from "./components/navbar";
+import { Footer } from "./components/footer";
+import Carousel from "react-bootstrap/Carousel";
 
 // Bisa dihapus
 import "../assets/fonts/fontawesome-webfont.ttf";
 import "../assets/fonts/FontAwesome.otf";
 import "../assets/fonts/slick.ttf";
+import product01 from "../assets/images/product01.png";
+import product02 from "../assets/images/product02.png";
+import product03 from "../assets/images/product03.png";
+import product04 from "../assets/images/product04.png";
+import product05 from "../assets/images/product05.png";
+import product06 from "../assets/images/product06.png";
+import product07 from "../assets/images/product07.png";
+import product08 from "../assets/images/product08.png";
+import product09 from "../assets/images/product09.png";
+import shop01 from "../assets/images/shop01.png";
+import shop02 from "../assets/images/shop02.png";
+import shop03 from "../assets/images/shop03.png";
 
 export const Product = () => {
   return (
     <>
-      {/* <!-- HEADER --> */}
-      <header>
-        {/* <!-- TOP HEADER --> */}
-        <div id="top-header">
-          <div className="container">
-            <ul className="header-links pull-left">
-              <li>
-                <a href="#">
-                  <i className="fa fa-phone"></i> +021-95-51-84
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="fa fa-envelope-o"></i> email@email.com
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="fa fa-map-marker"></i> 1734 Stonecoal Road
-                </a>
-              </li>
-            </ul>
-            <ul className="header-links pull-right">
-              <li>
-                <a href="#">
-                  <i className="fa fa-dollar"></i> USD
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="fa fa-user-o"></i> My Account
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        {/* <!-- /TOP HEADER --> */}
-
-        {/* <!-- MAIN HEADER --> */}
-        <div id="header">
-          {/* <!-- container --> */}
-          <div className="container">
-            {/* <!-- row --> */}
-            <div className="row">
-              {/* <!-- LOGO --> */}
-              <div className="col-md-3">
-                <div className="header-logo">
-                  <a href="#" className="logo">
-                    <img src="./img/logo.png" alt="" />
-                  </a>
-                </div>
-              </div>
-              {/* <!-- /LOGO --> */}
-
-              {/* <!-- SEARCH BAR --> */}
-              <div className="col-md-6">
-                <div className="header-search">
-                  <form>
-                    <select className="input-select">
-                      <option value="0">All Categories</option>
-                      <option value="1">Category 01</option>
-                      <option value="1">Category 02</option>
-                    </select>
-                    <input className="input" placeholder="Search here" />
-                    <button className="search-btn">Search</button>
-                  </form>
-                </div>
-              </div>
-              {/* <!-- /SEARCH BAR --> */}
-
-              {/* <!-- ACCOUNT --> */}
-              <div className="col-md-3 clearfix">
-                <div className="header-ctn">
-                  {/* <!-- Wishlist --> */}
-                  <div>
-                    <a href="#">
-                      <i className="fa fa-heart-o"></i>
-                      <span>Your Wishlist</span>
-                      <div className="qty">2</div>
-                    </a>
-                  </div>
-                  {/* <!-- /Wishlist --> */}
-
-                  {/* <!-- Cart --> */}
-                  <div className="dropdown">
-                    <a
-                      className="dropdown-toggle"
-                      data-toggle="dropdown"
-                      aria-expanded="true"
-                    >
-                      <i className="fa fa-shopping-cart"></i>
-                      <span>Your Cart</span>
-                      <div className="qty">3</div>
-                    </a>
-                    <div className="cart-dropdown">
-                      <div className="cart-list">
-                        <div className="product-widget">
-                          <div className="product-img">
-                            <img src="./img/product01.png" alt="" />
-                          </div>
-                          <div className="product-body">
-                            <h3 className="product-name">
-                              <a href="#">product name goes here</a>
-                            </h3>
-                            <h4 className="product-price">
-                              <span className="qty">1x</span>$980.00
-                            </h4>
-                          </div>
-                          <button className="delete">
-                            <i className="fa fa-close"></i>
-                          </button>
-                        </div>
-
-                        <div className="product-widget">
-                          <div className="product-img">
-                            <img src="./img/product02.png" alt="" />
-                          </div>
-                          <div className="product-body">
-                            <h3 className="product-name">
-                              <a href="#">product name goes here</a>
-                            </h3>
-                            <h4 className="product-price">
-                              <span className="qty">3x</span>$980.00
-                            </h4>
-                          </div>
-                          <button className="delete">
-                            <i className="fa fa-close"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <div className="cart-summary">
-                        <small>3 Item(s) selected</small>
-                        <h5>SUBTOTAL: $2940.00</h5>
-                      </div>
-                      <div className="cart-btns">
-                        <a href="#">View Cart</a>
-                        <a href="#">
-                          Checkout <i className="fa fa-arrow-circle-right"></i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  {/* <!-- /Cart --> */}
-
-                  {/* <!-- Menu Toogle --> */}
-                  <div className="menu-toggle">
-                    <a href="#">
-                      <i className="fa fa-bars"></i>
-                      <span>Menu</span>
-                    </a>
-                  </div>
-                  {/* <!-- /Menu Toogle --> */}
-                </div>
-              </div>
-              {/* <!-- /ACCOUNT --> */}
-            </div>
-            {/* <!-- row --> */}
-          </div>
-          {/* <!-- container --> */}
-        </div>
-        {/* <!-- /MAIN HEADER --> */}
-      </header>
-      {/* <!-- /HEADER --> */}
-
-      {/* <!-- NAVIGATION --> */}
-      <nav id="navigation">
-        {/* <!-- container --> */}
-        <div className="container">
-          {/* <!-- responsive-nav --> */}
-          <div id="responsive-nav">
-            {/* <!-- NAV --> */}
-            <ul className="main-nav nav navbar-nav">
-              <li className="active">
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Hot Deals</a>
-              </li>
-              <li>
-                <a href="#">Categories</a>
-              </li>
-              <li>
-                <a href="#">Laptops</a>
-              </li>
-              <li>
-                <a href="#">Smartphones</a>
-              </li>
-              <li>
-                <a href="#">Cameras</a>
-              </li>
-              <li>
-                <a href="#">Accessories</a>
-              </li>
-            </ul>
-            {/* <!-- /NAV --> */}
-          </div>
-          {/* <!-- /responsive-nav --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </nav>
-      {/* <!-- /NAVIGATION --> */}
+      <Header />
+      <Navbar />
       {/* <!-- BREADCRUMB --> */}
       <div id="breadcrumb" className="section">
         {/* <!-- container --> */}
@@ -249,49 +67,60 @@ export const Product = () => {
         {/* <!-- container --> */}
         <div className="container">
           {/* <!-- row --> */}
-          <div className="row">
+          <div className="row justify-content-center">
             {/* <!-- Product main img --> */}
-            <div className="col-md-5 col-md-push-2">
-              <div id="product-main-img">
-                <div className="product-preview">
-                  <img src="./img/product01.png" alt="" />
+            <Carousel
+              className="carouselItem"
+              nextIcon={
+                <span className="fa fa-sharp fa-chevron-right carousel-icon"></span>
+              }
+              prevIcon={
+                <span className="fa fa-sharp fa-chevron-left carousel-icon"></span>
+              }
+            >
+              <Carousel.Item>
+                <div className="">
+                  <img src={product01} alt="" />
                 </div>
-
-                <div className="product-preview">
-                  <img src="./img/product03.png" alt="" />
+              </Carousel.Item>
+              <Carousel.Item>
+                <div className="">
+                  <img src={product03} alt="" />
                 </div>
-
-                <div className="product-preview">
-                  <img src="./img/product06.png" alt="" />
+              </Carousel.Item>
+              <Carousel.Item>
+                <div className="">
+                  <img src={product06} alt="" />
                 </div>
-
-                <div className="product-preview">
-                  <img src="./img/product08.png" alt="" />
+              </Carousel.Item>
+              <Carousel.Item>
+                <div className="">
+                  <img src={product08} alt="" />
                 </div>
-              </div>
-            </div>
+              </Carousel.Item>
+            </Carousel>
             {/* <!-- /Product main img --> */}
 
             {/* <!-- Product thumb imgs --> */}
-            <div className="col-md-2  col-md-pull-5">
+            {/* <div className="col-md-2  col-md-pull-5">
               <div id="product-imgs">
                 <div className="product-preview">
-                  <img src="./img/product01.png" alt="" />
+                  <img src={product01} alt="" />
                 </div>
 
                 <div className="product-preview">
-                  <img src="./img/product03.png" alt="" />
+                  <img src={product03} alt="" />
                 </div>
 
                 <div className="product-preview">
-                  <img src="./img/product06.png" alt="" />
+                  <img src={product06} alt="" />
                 </div>
 
                 <div className="product-preview">
-                  <img src="./img/product08.png" alt="" />
+                  <img src={product08} alt="" />
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* <!-- /Product thumb imgs --> */}
 
             {/* <!-- Product details --> */}
@@ -733,7 +562,7 @@ export const Product = () => {
             <div className="col-md-3 col-xs-6">
               <div className="product">
                 <div className="product-img">
-                  <img src="./img/product01.png" alt="" />
+                  <img src={product01} alt="" />
                   <div className="product-label">
                     <span className="sale">-30%</span>
                   </div>
@@ -775,7 +604,7 @@ export const Product = () => {
             <div className="col-md-3 col-xs-6">
               <div className="product">
                 <div className="product-img">
-                  <img src="./img/product02.png" alt="" />
+                  <img src={product02} alt="" />
                   <div className="product-label">
                     <span className="new">NEW</span>
                   </div>
@@ -825,7 +654,7 @@ export const Product = () => {
             <div className="col-md-3 col-xs-6">
               <div className="product">
                 <div className="product-img">
-                  <img src="./img/product03.png" alt="" />
+                  <img src={product03} alt="" />
                 </div>
                 <div className="product-body">
                   <p className="product-category">Category</p>
@@ -870,7 +699,7 @@ export const Product = () => {
             <div className="col-md-3 col-xs-6">
               <div className="product">
                 <div className="product-img">
-                  <img src="./img/product04.png" alt="" />
+                  <img src={product04} alt="" />
                 </div>
                 <div className="product-body">
                   <p className="product-category">Category</p>
@@ -962,176 +791,7 @@ export const Product = () => {
       </div>
       {/* <!-- /NEWSLETTER --> */}
 
-      {/* <!-- FOOTER --> */}
-      <footer id="footer">
-        {/* <!-- top footer --> */}
-        <div className="section">
-          {/* <!-- container --> */}
-          <div className="container">
-            {/* <!-- row --> */}
-            <div className="row">
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">About Us</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut.
-                  </p>
-                  <ul className="footer-links">
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-map-marker"></i>1734 Stonecoal Road
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-phone"></i>+021-95-51-84
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-envelope-o"></i>email@email.com
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">Categories</h3>
-                  <ul className="footer-links">
-                    <li>
-                      <a href="#">Hot deals</a>
-                    </li>
-                    <li>
-                      <a href="#">Laptops</a>
-                    </li>
-                    <li>
-                      <a href="#">Smartphones</a>
-                    </li>
-                    <li>
-                      <a href="#">Cameras</a>
-                    </li>
-                    <li>
-                      <a href="#">Accessories</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="clearfix visible-xs"></div>
-
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">Information</h3>
-                  <ul className="footer-links">
-                    <li>
-                      <a href="#">About Us</a>
-                    </li>
-                    <li>
-                      <a href="#">Contact Us</a>
-                    </li>
-                    <li>
-                      <a href="#">Privacy Policy</a>
-                    </li>
-                    <li>
-                      <a href="#">Orders and Returns</a>
-                    </li>
-                    <li>
-                      <a href="#">Terms & Conditions</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">Service</h3>
-                  <ul className="footer-links">
-                    <li>
-                      <a href="#">My Account</a>
-                    </li>
-                    <li>
-                      <a href="#">View Cart</a>
-                    </li>
-                    <li>
-                      <a href="#">Wishlist</a>
-                    </li>
-                    <li>
-                      <a href="#">Track My Order</a>
-                    </li>
-                    <li>
-                      <a href="#">Help</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            {/* <!-- /row --> */}
-          </div>
-          {/* <!-- /container --> */}
-        </div>
-        {/* <!-- /top footer --> */}
-
-        {/* <!-- bottom footer --> */}
-        <div id="bottom-footer" className="section">
-          <div className="container">
-            {/* <!-- row --> */}
-            <div className="row">
-              <div className="col-md-12 text-center">
-                <ul className="footer-payments">
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-cc-visa"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-credit-card"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-cc-paypal"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-cc-mastercard"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-cc-discover"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-cc-amex"></i>
-                    </a>
-                  </li>
-                </ul>
-                <span className="copyright">
-                  {/* <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> */}
-                  Copyright &copy;
-                  <script>document.write(new Date().getFullYear());</script> All
-                  rights reserved | This template is made with{" "}
-                  <i className="fa fa-heart-o" aria-hidden="true"></i> by{" "}
-                  <a href="https://colorlib.com" target="_blank">
-                    Colorlib
-                  </a>
-                  {/* <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> */}
-                </span>
-              </div>
-            </div>
-            {/* <!-- /row --> */}
-          </div>
-          {/* <!-- /container --> */}
-        </div>
-        {/* <!-- /bottom footer --> */}
-      </footer>
-      {/* <!-- /FOOTER --> */}
+      <Footer />
     </>
   );
 };
