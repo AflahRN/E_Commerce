@@ -10,11 +10,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import loginBanner from "../assets/images/login.png";
-import logo from "../assets/logo/elegant-logo.png";
-import IconifyIcon from "./components/IconifyIcon";
-import Image from "./components/Image";
-import "../assets/css/login.css";
+import loginBanner from "../../assets/images/login.png";
+import logo from "../../assets/logo/elegant-logo.png";
+import IconifyIcon from "../components/IconifyIcon";
+import Image from "../components/Image";
+import "../../assets/css/login.css";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +43,9 @@ export const Login = () => {
             <Image src={logo} width={82.6} />
           </Link>
           <Stack alignItems="center" gap={2.5} width={330} mx="auto">
-            <Typography variant="h3">Login</Typography>
+            <Typography variant="h3" style={{ fontWeight: "bold" }}>
+              Login
+            </Typography>
             <FormControl variant="standard" fullWidth>
               <TextField
                 placeholder="Enter your email"

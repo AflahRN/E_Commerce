@@ -8,11 +8,11 @@ import { Index } from "./pages/index.jsx";
 import { Product } from "./pages/product.jsx";
 import { Store } from "./pages/store.jsx";
 import { Checkout } from "./pages/checkout.jsx";
-import { Login } from "./pages/login.jsx";
-import { SignUp } from "./pages/signup.jsx";
+import { ForgotPassword } from "./pages/login/forgot_password.jsx";
+import { VerificationCode } from "./pages/login/verification_code.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <SignUp />
+    <VerificationCode />
   </StrictMode>
 );
