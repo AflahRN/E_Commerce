@@ -23,7 +23,7 @@ import shop01 from "../assets/images/shop01.png";
 import shop02 from "../assets/images/shop02.png";
 import shop03 from "../assets/images/shop03.png";
 
-export const Index = () => {
+export const Dashboard = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);
   const [itemPerTopSellingPage, setItemPerTopSellingPage] = useState(8);
 

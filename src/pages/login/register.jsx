@@ -15,7 +15,7 @@ import IconifyIcon from "../components/IconifyIcon";
 import logo from "../../assets/logo/elegant-logo.png";
 import Image from "../components/Image";
 
-export const SignUp = () => {
+export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
