@@ -6,9 +6,11 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "nouislider/dist/nouislider.min.css";
 import "rc-tooltip/assets/bootstrap.css";
 import { Index } from "./pages/index.jsx";
+import { Product } from "./pages/product.jsx";
+import { Cek } from "./pages/cek.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Index />
+    <Product />
   </StrictMode>
 );
