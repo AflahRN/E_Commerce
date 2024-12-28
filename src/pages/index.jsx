@@ -342,119 +342,50 @@ export const Index = () => {
                 return index >=
                   0 + (topSellingPage - 1) * itemPerTopSellingPage &&
                   index < topSellingPage * itemPerTopSellingPage ? (
-                  <Col key={index}>
-                    <Card className="m-3 p-3 itemCard">
-                      <Card.Img
-                        variant="top"
-                        src={element.image}
-                        sizes="100vh"
-                      />
-                      <Card.Body>
-                        <p
-                          className="m-0 text-center"
-                          style={{
-                            color: "#8d99ae",
-                            fontSize: 18,
-                          }}
-                        >
-                          Category
-                        </p>
-                        <h3 className="m-0 text-center">
-                          <a
-                            style={{
-                              fontWeight: "bold",
-                              color: "#2b2d42",
-                              fontSize: 20,
-                            }}
-                          >
-                            {element.name}
-                          </a>
-                        </h3>
-                        <h4
-                          className="text-center"
-                          style={{
-                            color: "#d10024",
-                            fontWeight: "bold",
-                            fontSize: 20,
-                          }}
-                        >
-                          Rp {Intl.NumberFormat("id-ID").format(element.price)}
-                        </h4>
-                        <div className="product-rating text-center divider">
-                          <i
-                            className="fa fa-star"
-                            style={{ color: "red" }}
-                          ></i>
-                          <i
-                            className="fa fa-star"
-                            style={{ color: "red" }}
-                          ></i>
-                          <i
-                            className="fa fa-star"
-                            style={{ color: "red" }}
-                          ></i>
-                          <i
-                            className="fa fa-star"
-                            style={{ color: "red" }}
-                          ></i>
-                          <i
-                            className="fa fa-star"
-                            style={{ color: "red" }}
-                          ></i>
+                  <>
+                    {/* <!-- product --> */}
+                    <div className="col-md-3 col-xs-6">
+                      <div className="product">
+                        <div className="product-img">
+                          <img src={product01} alt="" />
+                          <div className="product-label">
+                            <span className="sale">-30%</span>
+                          </div>
                         </div>
-                        <div className="product-btns text-center mt-4 d-flex justify-content-center">
-                          <Tooltip
-                            placement="top"
-                            styles={{ body: { backgroundColor: "#1e1f29" } }}
-                            trigger={["hover"]}
-                            motion={{
-                              motionName: "motion-tooltip",
-                            }}
-                            overlay={
-                              <span
-                                style={{
-                                  color: "white",
-                                  fontSize: 15,
-                                }}
-                              >
-                                Add to wishlist
-                              </span>
-                            }
-                          >
-                            <i
-                              className="fa fa-heart-o mx-2 card-icon"
-                              style={{ cursor: "pointer", fontSize: 20 }}
-                              onClick={() => console.log("A")}
-                            />
-                          </Tooltip>
-                          <Tooltip
-                            placement="top"
-                            styles={{ body: { backgroundColor: "#1e1f29" } }}
-                            trigger={["hover"]}
-                            motion={{
-                              motionName: "motion-tooltip",
-                            }}
-                            overlay={
-                              <span
-                                style={{
-                                  color: "white",
-                                  fontSize: 15,
-                                }}
-                              >
-                                Add to wishlist
-                              </span>
-                            }
-                          >
-                            <i
-                              className="fa fa-eye mx-2 card-icon"
-                              style={{ cursor: "pointer", fontSize: 20 }}
-                              onClick={() => console.log("A")}
-                            ></i>
-                          </Tooltip>
+                        <div className="product-body">
+                          <p className="product-category">Category</p>
+                          <h3 className="product-name">
+                            <a href="#">product name goes here</a>
+                          </h3>
+                          <h4 className="product-price">
+                            $980.00{" "}
+                            <del className="product-old-price">$990.00</del>
+                          </h4>
+                          <div className="product-rating"></div>
+                          <div className="product-btns">
+                            <button className="add-to-wishlist">
+                              <i className="fa fa-heart-o"></i>
+                              <span className="tooltipp">add to wishlist</span>
+                            </button>
+                            <button className="add-to-compare">
+                              <i className="fa fa-exchange"></i>
+                              <span className="tooltipp">add to compare</span>
+                            </button>
+                            <button className="quick-view">
+                              <i className="fa fa-eye"></i>
+                              <span className="tooltipp">quick view</span>
+                            </button>
+                          </div>
                         </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
+                        <div className="add-to-cart">
+                          <button className="add-to-cart-btn">
+                            <i className="fa fa-shopping-cart"></i> add to cart
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    {/* <!-- /product --> */}
+                  </>
                 ) : (
                   <></>
                 );

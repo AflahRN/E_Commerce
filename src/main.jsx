@@ -11,6 +11,6 @@ import { Cek } from "./pages/cek.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Product />
+    <Index />
   </StrictMode>
 );

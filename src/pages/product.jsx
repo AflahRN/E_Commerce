@@ -101,28 +101,6 @@ export const Product = () => {
             </Carousel>
             {/* <!-- /Product main img --> */}
 
-            {/* <!-- Product thumb imgs --> */}
-            {/* <div className="col-md-2  col-md-pull-5">
-              <div id="product-imgs">
-                <div className="product-preview">
-                  <img src={product01} alt="" />
-                </div>
-
-                <div className="product-preview">
-                  <img src={product03} alt="" />
-                </div>
-
-                <div className="product-preview">
-                  <img src={product06} alt="" />
-                </div>
-
-                <div className="product-preview">
-                  <img src={product08} alt="" />
-                </div>
-              </div>
-            </div> */}
-            {/* <!-- /Product thumb imgs --> */}
-
             {/* <!-- Product details --> */}
             <div className="col-md-5">
               <div className="product-details">
