@@ -14,11 +14,18 @@ import signupBanner from "../../assets/images/signup.png";
 import IconifyIcon from "../components/IconifyIcon";
 import logo from "../../assets/logo/elegant-logo.png";
 import Image from "../components/Image";
+import { useNavigate } from "react-router-dom";
+import { Register as RegisterController } from "../../controller/loginController";
+import "../../assets/css/style.css";
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [type, setType] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div
@@ -49,6 +56,9 @@ export const Register = () => {
               <TextField
                 placeholder="Enter your full name"
                 id="name"
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -66,6 +76,9 @@ export const Register = () => {
               <TextField
                 placeholder="Enter your email"
                 id="email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -84,6 +97,9 @@ export const Register = () => {
                 placeholder="********"
                 type={showPassword ? "text" : "password"}
                 id="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -114,13 +130,45 @@ export const Register = () => {
                 }}
               />
             </FormControl>
-            <Button variant="contained" fullWidth>
+            <div>
+              <button
+                className={
+                  type == "customer"
+                    ? "type-select-button active"
+                    : "type-select-button"
+                }
+                onClick={() => {
+                  setType("customer");
+                }}
+              >
+                Customer
+              </button>
+              <button
+                className={
+                  type == "saler"
+                    ? "type-select-button active"
+                    : "type-select-button"
+                }
+                onClick={() => {
+                  setType("saler");
+                }}
+              >
+                Saler
+              </button>
+            </div>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() => {
+                RegisterController(username, email, password, type, navigate);
+              }}
+            >
               Sign up
             </Button>
             <Typography variant="body2" color="text.secondary">
               Already have an account?{" "}
               <Link
-                href="/authentication/login"
+                href="/"
                 underline="hover"
                 fontSize={(theme) => theme.typography.body1.fontSize}
               >

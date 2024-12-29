@@ -10,12 +10,17 @@ import product01 from "../../assets/images/product01.png";
 import { useEffect, useState } from "react";
 import { deleteCart, getCart } from "../../controller/cartController";
 import { generatePaymentUrl } from "../../controller/paymentController";
+import { getUserdata } from "../../controller/userController";
 import { useNavigate } from "react-router-dom";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [grossPayment, setGrossPayment] = useState(0);
+  const [username, setUsername] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const navigate = useNavigate();
+
   const checkoutItem = [];
 
   const refresh = () => {
@@ -23,6 +28,13 @@ export const Header = ({ refreshChart }) => {
       setCartItem(response);
     });
   };
+
+  useEffect(() => {
+    refresh();
+    getUserdata().then((response) => {
+      setUsername(response.username);
+    });
+  }, []);
 
   useEffect(() => {
     refresh();
@@ -68,7 +80,7 @@ export const Header = ({ refreshChart }) => {
               </li>
               <li>
                 <a href="#">
-                  <i className="fa fa-user-o"></i> My Account
+                  <i className="fa fa-user-o"></i> {username}
                 </a>
               </li>
             </ul>
@@ -101,8 +113,31 @@ export const Header = ({ refreshChart }) => {
                       <option value="1">Category 01</option>
                       <option value="1">Category 02</option>
                     </select>
-                    <input className="input" placeholder="Search here" />
-                    <button className="search-btn">Search</button>
+                    <input
+                      className="input"
+                      placeholder="Search here"
+                      onChange={(e) => setSearchText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          navigate({
+                            pathname: "/store",
+                            search: `?search=${searchText}`,
+                          });
+                        }
+                      }}
+                    />
+                    <input
+                      type="button"
+                      className="search-btn"
+                      value="Search"
+                      onClick={() => {
+                        navigate({
+                          pathname: "/store",
+                          search: `?search=${searchText}`,
+                        });
+                      }}
+                    />
                   </form>
                 </div>
               </div>

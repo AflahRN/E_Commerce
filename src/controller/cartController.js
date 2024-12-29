@@ -6,18 +6,14 @@ const token = splitData[0].split("=")[1];
 const accountId = splitData[1].split("=")[1];
 
 export const getCart = async () => {
-  if (token) {
-    const response = await axios.get(`${url}/cart`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.status === 200) {
-      return response.data;
-    }
-  } else {
-    console.error("Token is required");
+  const response = await axios.get(`${url}/cart`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log(response);
+  if (response.status === 200) {
+    return response.data;
   }
 };
 
@@ -36,8 +32,11 @@ export const addCart = async (productId, quantity) => {
         },
       }
     );
+    console.log(response);
     if (response.status === 200) {
       return response.data;
+    } else {
+      console.error("Error adding product to cart");
     }
   }
 };

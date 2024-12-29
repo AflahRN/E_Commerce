@@ -19,6 +19,7 @@ import { useParams } from "react-router-dom";
 import { getProductById } from "../controller/productController";
 import { useEffect, useState } from "react";
 import { addCart } from "../controller/cartController";
+import { Breadcrumb } from "./components/breadcrumb";
 
 export const Product = () => {
   const { id } = useParams();
@@ -39,35 +40,13 @@ export const Product = () => {
     <>
       <Header refreshChart={refreshCart} />
       <Navbar />
-      {/* <!-- BREADCRUMB --> */}
-      <div id="breadcrumb" className="section">
-        {/* <!-- container --> */}
-        <div className="container">
-          {/* <!-- row --> */}
-          <div className="row">
-            <div className="col-md-12">
-              <ul className="breadcrumb-tree">
-                <li>
-                  <a href="#">Home</a>
-                </li>
-                <li>
-                  <a href="#">All Categories</a>
-                </li>
-                <li>
-                  <a href="#">Accessories</a>
-                </li>
-                <li>
-                  <a href="#">Headphones</a>
-                </li>
-                <li className="active">Product name goes here</li>
-              </ul>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </div>
-      {/* <!-- /BREADCRUMB --> */}
+      <Breadcrumb
+        path={[
+          "All Category",
+          product.category?.category_name,
+          product.product_name,
+        ]}
+      />
 
       {/* <!-- SECTION --> */}
       <div className="section">

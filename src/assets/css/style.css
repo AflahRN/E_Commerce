@@ -569,7 +569,7 @@ textarea.input {
   background: #fff;
   padding: 15px;
   -webkit-box-shadow: 0px 0px 0px 2px #e4e7ed;
-  box-shadow: 0px 0px 0px 2px #e4e7ed;
+  box-shadow: 0px 0px 8px 0px #727477;
   z-index: 99;
   right: 0;
   opacity: 0;
@@ -2179,6 +2179,10 @@ textarea.input {
   margin: 15px 0px;
 }
 
+/*=========================================================
+	13 -> CUSTOM
+===========================================================*/
+
 #responsive-nav > ul > li {
   padding-left: 30px;
 }
@@ -2187,8 +2191,49 @@ textarea.input {
   padding-left: 0;
 }
 
+.type-select-button {
+  width: 100%;
+  padding: 5px;
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 20;
+  font-family: sans-serif;
+}
+
+.type-select-button.active {
+  width: 100%;
+  padding: 5px;
+  background-color: #ff8e29;
+  border: none;
+}
+
+.type-select-button:first-child {
+  width: 100%;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.type-select-button:last-child {
+  width: 100%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#root > div > div > div > div > div:nth-child(5) > button.active {
+  width: 100%;
+  color: white;
+  transition-duration: 0.3s;
+}
+
+#root > div > div > div > div > div:nth-child(5) {
+  width: 100%;
+  display: flex;
+  border: 1px solid #e0dada;
+  border-radius: 5px;
+}
+
 /*=========================================================
-	13 -> RESPONSIVE
+	14 -> RESPONSIVE
 ===========================================================*/
 
 @media only screen and (max-width: 1201px) {

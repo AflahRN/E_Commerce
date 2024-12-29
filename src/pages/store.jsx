@@ -7,53 +7,38 @@ import product02 from "../assets/images/product02.png";
 import product03 from "../assets/images/product03.png";
 import { useEffect, useState } from "react";
 import { getProduct } from "../controller/productController";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { addCart } from "../controller/cartController";
+import { Breadcrumb } from "./components/breadcrumb";
+import { getCategory } from "../controller/categoryController";
 
 export const Store = () => {
   const [product, setProduct] = useState([]);
   const [refreshCart, setRefreshCart] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [filterCategory, setFilterCategory] = useState([]);
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [search]);
 
   const refresh = () => {
-    getProduct().then((response) => setProduct(response));
+    getProduct()
+      .then((response) =>
+        response.filter((element) =>
+          element.product_name.toLowerCase().includes(search.toLowerCase())
+        )
+      )
+      .then((value) => setProduct(value));
+    getCategory().then((response) => setCategory(response));
   };
-
-  console.log(product);
   return (
     <>
       <Header refreshChart={refreshCart} />
       <Navbar />
-
-      {/* <!-- BREADCRUMB --> */}
-      <div id="breadcrumb" class="section">
-        {/* <!-- container --> */}
-        <div class="container">
-          {/* <!-- row --> */}
-          <div class="row">
-            <div class="col-md-12">
-              <ul class="breadcrumb-tree">
-                <li>
-                  <a href="#">Home</a>
-                </li>
-                <li>
-                  <a href="#">All Categories</a>
-                </li>
-                <li>
-                  <a href="#">Accessories</a>
-                </li>
-                <li class="active">Headphones (227,490 Results)</li>
-              </ul>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </div>
-      {/* <!-- /BREADCRUMB --> */}
+      <Breadcrumb path={["All Categories", search]} />
 
       {/* <!-- SECTION --> */}
       <div class="section">
@@ -67,59 +52,37 @@ export const Store = () => {
               <div class="aside">
                 <h3 class="aside-title">Categories</h3>
                 <div class="checkbox-filter">
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="category-1" />
-                    <label for="category-1">
-                      <span></span>
-                      Laptops
-                      <small>(120)</small>
-                    </label>
-                  </div>
-
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="category-2" />
-                    <label for="category-2">
-                      <span></span>
-                      Smartphones
-                      <small>(740)</small>
-                    </label>
-                  </div>
-
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="category-3" />
-                    <label for="category-3">
-                      <span></span>
-                      Cameras
-                      <small>(1450)</small>
-                    </label>
-                  </div>
-
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="category-4" />
-                    <label for="category-4">
-                      <span></span>
-                      Accessories
-                      <small>(578)</small>
-                    </label>
-                  </div>
-
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="category-5" />
-                    <label for="category-5">
-                      <span></span>
-                      Laptops
-                      <small>(120)</small>
-                    </label>
-                  </div>
-
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="category-6" />
-                    <label for="category-6">
-                      <span></span>
-                      Smartphones
-                      <small>(740)</small>
-                    </label>
-                  </div>
+                  {category.map((element, index) => {
+                    return (
+                      <>
+                        <div class="input-checkbox">
+                          <input
+                            type="checkbox"
+                            value={element.category_id}
+                            id={element.category_id}
+                            onChange={(e) => {
+                              console.log(e.target.value);
+                            }}
+                          />
+                          <label for={element.category_id}>
+                            <span></span>
+                            {element.category_name}
+                            <small>
+                              {" "}
+                              (
+                              {
+                                product.filter(
+                                  (data) =>
+                                    data.category_id === element.category_id
+                                ).length
+                              }
+                              )
+                            </small>
+                          </label>
+                        </div>
+                      </>
+                    );
+                  })}
                 </div>
               </div>
               {/* <!-- /aside Widget --> */}

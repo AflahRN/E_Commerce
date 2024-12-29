@@ -56,7 +56,7 @@ export const Dashboard = () => {
       <Navbar></Navbar>
       {/* <!-- Products tab & slick --> */}
       <Carousel
-        style={{ backgroundColor: "#d10024" }}
+        style={{ backgroundColor: "#15161d" }}
         pause="hover"
         interval={5000}
       >
@@ -340,6 +340,7 @@ export const Dashboard = () => {
                           <button
                             className="add-to-cart-btn"
                             onClick={() => {
+                              // console.log(element.product_id);
                               addCart(element.product_id, 1).then(() => {
                                 setRefreshCart(!refreshCart);
                               });

@@ -14,10 +14,7 @@ import loginBanner from "../../assets/images/login.png";
 import logo from "../../assets/logo/elegant-logo.png";
 import IconifyIcon from "../components/IconifyIcon";
 import Image from "../components/Image";
-import {
-  CheckCookie,
-  Login as LoginController,
-} from "../../controller/loginController";
+import { Login as LoginController } from "../../controller/loginController";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
@@ -133,7 +130,7 @@ export const Login = () => {
             <Typography variant="body2" color="text.secondary">
               Don't have an account ?{" "}
               <Link
-                href="/authentication/sign-up"
+                href="/register"
                 underline="hover"
                 fontSize={(theme) => theme.typography.body1.fontSize}
               >
