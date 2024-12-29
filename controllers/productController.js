@@ -30,7 +30,10 @@ export const ShowProductImage = async (req, res) => {
 export const ShowProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const response = await Product.findOne({ where: { product_id: id } });
+    const response = await Product.findOne({
+      where: { product_id: id },
+      include: [{ model: Category, attributes: ["category_name"] }],
+    });
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });

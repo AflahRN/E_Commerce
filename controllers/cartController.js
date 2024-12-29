@@ -1,9 +1,14 @@
 import Account from "../models/account.js";
 import Cart from "../models/cart.js";
+import Product from "../models/product.js";
 
 export const ShowCart = async (req, res) => {
   try {
-    const response = await Cart.findAll();
+    const response = await Cart.findAll({
+      include: [
+        { model: Product, attributes: ["product_name", "product_price"] },
+      ],
+    });
     res.status(200).json(response);
   } catch (error) {
     res.json({ msg: Error });
