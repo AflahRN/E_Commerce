@@ -9,11 +9,14 @@ import logo from "../../assets/images/logo.png";
 import product01 from "../../assets/images/product01.png";
 import { useEffect, useState } from "react";
 import { deleteCart, getCart } from "../../controller/cartController";
+import { generatePaymentUrl } from "../../controller/paymentController";
+import { useNavigate } from "react-router-dom";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [grossPayment, setGrossPayment] = useState(0);
+  const checkoutItem = [];
 
   const refresh = () => {
     getCart().then((response) => {
@@ -33,7 +36,6 @@ export const Header = ({ refreshChart }) => {
     setGrossPayment(total);
   }, [cartItem]);
 
-  console.log(grossPayment);
   return (
     <>
       {/* <!-- HEADER --> */}
@@ -143,6 +145,10 @@ export const Header = ({ refreshChart }) => {
                     >
                       <div className="cart-list">
                         {cartItem.map((element, index) => {
+                          checkoutItem.push({
+                            product_id: element.product_id,
+                            quantity: element.quantity,
+                          });
                           return (
                             <div className="product-widget" key={index}>
                               <div className="product-img">
@@ -184,8 +190,12 @@ export const Header = ({ refreshChart }) => {
                           {Intl.NumberFormat("id-ID").format(grossPayment)}
                         </h5>
                       </div>
-                      <div className="cart-btns">
-                        <a href="#">
+                      <div className="cart-btns" style={{ cursor: "pointer" }}>
+                        <a
+                          onClick={() => {
+                            generatePaymentUrl(checkoutItem);
+                          }}
+                        >
                           Checkout <i className="fa fa-arrow-circle-right"></i>
                         </a>
                       </div>
