@@ -185,7 +185,6 @@ export const Header = ({ refreshChart }) => {
                         </h5>
                       </div>
                       <div className="cart-btns">
-                        <a href="#">View Cart</a>
                         <a href="#">
                           Checkout <i className="fa fa-arrow-circle-right"></i>
                         </a>

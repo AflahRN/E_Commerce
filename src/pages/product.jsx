@@ -18,23 +18,26 @@ import product08 from "../assets/images/product08.png";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../controller/productController";
 import { useEffect, useState } from "react";
+import { addCart } from "../controller/cartController";
 
 export const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
-
-  useEffect(() => {
-    refresh();
-  }, []);
+  const [quantity, setQuantity] = useState(0);
+  const [refreshCart, setRefreshCart] = useState(false);
 
   const refresh = () => {
     getProductById(id).then((response) => setProduct(response));
   };
 
-  console.log(product);
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  console.log(product.category?.category_name);
   return (
     <>
-      <Header />
+      <Header refreshChart={refreshCart} />
       <Navbar />
       {/* <!-- BREADCRUMB --> */}
       <div id="breadcrumb" className="section">
@@ -138,31 +141,49 @@ export const Product = () => {
                 </div>
                 <p>{product.product_description}</p>
 
-                <div className="product-options">
-                  <label>
-                    Size
-                    <select className="input-select">
-                      <option value="0">X</option>
-                    </select>
-                  </label>
-                  <label>
-                    Color
-                    <select className="input-select">
-                      <option value="0">Red</option>
-                    </select>
-                  </label>
-                </div>
-
                 <div className="add-to-cart">
                   <div className="qty-label">
                     Qty
-                    <div className="input-number">
-                      <input type="number" />
-                      <span className="qty-up">+</span>
-                      <span className="qty-down">-</span>
+                    <div className="input-number mx-2">
+                      <input
+                        type="number"
+                        value={quantity}
+                        onChange={(value) => {
+                          setQuantity(value.target.value);
+                        }}
+                      />
+                      <span
+                        className="qty-up"
+                        onClick={() => {
+                          if (quantity < product.product_stock) {
+                            setQuantity(quantity + 1);
+                          }
+                        }}
+                      >
+                        +
+                      </span>
+                      <span
+                        className="qty-down"
+                        onClick={() => {
+                          if (quantity > 0) {
+                            setQuantity(quantity - 1);
+                          }
+                        }}
+                      >
+                        -
+                      </span>
                     </div>
                   </div>
-                  <button className="add-to-cart-btn">
+                  <button
+                    className="add-to-cart-btn"
+                    onClick={() => {
+                      if (quantity > 0) {
+                        addCart(product.product_id, quantity).then(() => {
+                          setRefreshCart(!refreshCart);
+                        });
+                      }
+                    }}
+                  >
                     <i className="fa fa-shopping-cart"></i> add to cart
                   </button>
                 </div>
@@ -183,10 +204,7 @@ export const Product = () => {
                 <ul className="product-links">
                   <li>Category:</li>
                   <li>
-                    <a href="#">Headphones</a>
-                  </li>
-                  <li>
-                    <a href="#">Accessories</a>
+                    <a href="#">{product.category?.category_name}</a>
                   </li>
                 </ul>
 

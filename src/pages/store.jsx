@@ -7,9 +7,12 @@ import product02 from "../assets/images/product02.png";
 import product03 from "../assets/images/product03.png";
 import { useEffect, useState } from "react";
 import { getProduct } from "../controller/productController";
+import { Link } from "react-router-dom";
+import { addCart } from "../controller/cartController";
 
 export const Store = () => {
   const [product, setProduct] = useState([]);
+  const [refreshCart, setRefreshCart] = useState(false);
 
   useEffect(() => {
     refresh();
@@ -22,7 +25,7 @@ export const Store = () => {
   console.log(product);
   return (
     <>
-      <Header />
+      <Header refreshChart={refreshCart} />
       <Navbar />
 
       {/* <!-- BREADCRUMB --> */}
@@ -304,7 +307,14 @@ export const Store = () => {
                               {element.category.category_name}
                             </p>
                             <h3 class="product-name">
-                              <a href="#">{element.product_name}</a>
+                              <Link
+                                to={`/product/${element.product_id}`}
+                                onClick={() => {
+                                  window.scrollTo({ top: 0 });
+                                }}
+                              >
+                                {element.product_name}
+                              </Link>
                             </h3>
                             <h4 class="product-price">
                               Rp{" "}
@@ -335,7 +345,14 @@ export const Store = () => {
                             </div>
                           </div>
                           <div class="add-to-cart">
-                            <button class="add-to-cart-btn">
+                            <button
+                              class="add-to-cart-btn"
+                              onClick={() => {
+                                addCart(element.product_id, 1).then(() => {
+                                  setRefreshCart(!refreshCart);
+                                });
+                              }}
+                            >
                               <i class="fa fa-shopping-cart"></i> add to cart
                             </button>
                           </div>

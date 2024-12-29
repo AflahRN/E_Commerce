@@ -106,7 +106,7 @@ export const Dashboard = () => {
                     <br />
                     Collection
                   </h3>
-                  <a href="/store" className="cta-btn">
+                  <a href="#" className="cta-btn">
                     Shop now <i className="fa fa-arrow-circle-right"></i>
                   </a>
                 </div>
@@ -195,7 +195,7 @@ export const Dashboard = () => {
                 </ul>
                 <h2 className="text-uppercase">hot deal this week</h2>
                 <p>New Collection Up to 50% OFF</p>
-                <a className="primary-btn cta-btn" href="#">
+                <a className="primary-btn cta-btn" href="/store">
                   Shop now
                 </a>
               </div>
