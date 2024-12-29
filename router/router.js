@@ -60,7 +60,7 @@ const upload = multer({ dest: "/products" });
 //category
 router.get("/category", tokenAuth, ShowCategory);
 router.get("/category/:id", tokenAuth, ShowCategoryById);
-router.post("/category/", tokenAuth, AddCategory);
+router.post("/category", tokenAuth, AddCategory);
 router.patch("/category/:id", tokenAuth, UpdateCategory);
 router.delete("/category/:id", tokenAuth, DeleteCategory);
 
@@ -68,7 +68,7 @@ router.delete("/category/:id", tokenAuth, DeleteCategory);
 router.get("/product", tokenAuth, ShowProduct);
 router.get("/product/image", tokenAuth, ShowProductImage);
 router.get("/product/:id", tokenAuth, ShowProductById);
-router.post("/product/", tokenAuth, upload.single("productImage"), AddProduct);
+router.post("/product", tokenAuth, upload.single("productImage"), AddProduct);
 router.patch(
   "/product/:id",
   tokenAuth,
@@ -80,21 +80,21 @@ router.delete("/product/:id", tokenAuth, DeleteProduct);
 //Cart
 router.get("/cart", tokenAuth, ShowCart);
 router.get("/cart/:id", tokenAuth, ShowCartById);
-router.post("/cart/", tokenAuth, AddCart);
+router.post("/cart", tokenAuth, AddCart);
 router.patch("/cart/:id", tokenAuth, UpdateCart);
 router.delete("/cart/:id", tokenAuth, DeleteCart);
 
 //Wishlist
 router.get("/wishlist", tokenAuth, ShowWishlist);
 router.get("/wishlist/:id", tokenAuth, ShowWishlistById);
-router.post("/wishlist/", tokenAuth, AddWishlist);
+router.post("/wishlist", tokenAuth, AddWishlist);
 router.patch("/wishlist/:id", tokenAuth, UpdateWishlist);
 router.delete("/wishlist/:id", tokenAuth, DeleteWishlist);
 
 //Review
 router.get("/review", tokenAuth, ShowReview);
 router.get("/review/:id", tokenAuth, ShowReviewById);
-router.post("/review/", tokenAuth, AddReview);
+router.post("/review", tokenAuth, AddReview);
 router.patch("/review/:id", tokenAuth, UpdateReview);
 router.delete("/review/:id", tokenAuth, DeleteReview);
 router.post("/review/response", tokenAuth, reviewResponse);

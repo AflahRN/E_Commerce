@@ -43,7 +43,6 @@ export const AddProduct = async (req, res) => {
     productDescription,
     productPrice,
     productStock,
-    productVarian,
     categoryId,
     accountId,
   } = req.body;
@@ -67,7 +66,6 @@ export const AddProduct = async (req, res) => {
           product_price: productPrice,
           product_stock: productStock,
           product_image: imageData,
-          product_varian: productVarian,
           category_id: categoryId,
           account_id: accountId,
         });
@@ -90,7 +88,6 @@ export const UpdateProduct = async (req, res) => {
     productDescription,
     productPrice,
     productStock,
-    productVarian,
     categoryId,
   } = req.body;
   const file = req.file;
@@ -111,7 +108,6 @@ export const UpdateProduct = async (req, res) => {
             product_price: productPrice,
             product_stock: productStock,
             product_image: productImage,
-            product_varian: productVarian,
             category_id: categoryId,
           },
           {

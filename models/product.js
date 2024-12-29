@@ -11,12 +11,15 @@ const Product = db.define(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    product_name: DataTypes.STRING,
+    product_name: DataTypes.STRING(80),
     product_description: DataTypes.STRING,
     product_price: DataTypes.STRING,
     product_stock: DataTypes.STRING,
     product_image: DataTypes.BLOB,
-    product_varian: DataTypes.STRING,
+    product_sold: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   },
   {
     freezeTableName: true,

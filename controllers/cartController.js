@@ -24,7 +24,7 @@ export const AddCart = async (req, res) => {
   const { productId, quantity, accountId } = req.body;
   try {
     const isCustomer = await Account.findOne({
-      where: { account_id: account_id },
+      where: { account_id: accountId },
     }).then((element) => element.type == "customer");
 
     if (isCustomer) {
