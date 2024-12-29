@@ -33,12 +33,22 @@ export const AddCart = async (req, res) => {
     }).then((element) => element.type == "customer");
 
     if (isCustomer) {
-      const request = {
-        product_id: productId,
-        quantity: quantity,
-        account_id: accountId,
-      };
-      await Cart.create(request);
+      const isExist = await Cart.findOne({
+        where: { product_id: productId, account_id: accountId },
+      });
+      if (isExist) {
+        await Cart.update(
+          { quantity: isExist.quantity + quantity },
+          { where: { product_id: productId, account_id: accountId } }
+        );
+      } else {
+        const request = {
+          product_id: productId,
+          quantity: quantity,
+          account_id: accountId,
+        };
+        await Cart.create(request);
+      }
       res.status(200).json({ msg: "Data berhasil dikirim" });
     } else {
       res.json({

@@ -2,7 +2,7 @@ import Account from "../models/account.js";
 import bcrpyt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { Sequelize } from "sequelize";
+import { json, Sequelize } from "sequelize";
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ export const Login = async (req, res) => {
 
     if (isExist) {
       let userData = isExist;
-      const validation = bcrpyt.compareSync(password, userData.password);
+      const validation = bcrpyt.compare(password, userData.password);
       if (!validation) {
         res.json({ msg: "Wrong Password" });
       } else {
@@ -33,20 +33,10 @@ export const Login = async (req, res) => {
           process.env.SECRET_KEY,
           { expiresIn: "60h" }
         );
-        const refreshToken = jwt.sign(
-          {
-            userId: userData.account_id,
-            username: userData.username,
-            email: userData.email,
-          },
-          process.env.SECRET_KEY,
-          { expiresIn: "1h" }
-        );
 
         await Account.update(
           {
-            access_token: accessToken,
-            refresh_token: refreshToken,
+            token: accessToken,
           },
           {
             where: {
@@ -57,7 +47,11 @@ export const Login = async (req, res) => {
             },
           }
         );
-        res.json({ token: accessToken, userId: userData.account_id });
+        res.json({
+          token: accessToken,
+          userId: userData.account_id,
+          type: userData.type,
+        });
       }
     } else {
       res.send("Email atau username salah");

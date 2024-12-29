@@ -7,11 +7,10 @@ const Account = db.define("account", {
     defaultValue: Sequelize.UUIDV4,
     primaryKey: true,
   },
-  username: DataTypes.STRING,
-  email: DataTypes.STRING,
-  password: DataTypes.STRING,
-  access_token: DataTypes.STRING,
-  refresh_token: DataTypes.STRING,
+  username: DataTypes.STRING(50),
+  email: DataTypes.STRING(40),
+  password: DataTypes.STRING(20),
+  token: DataTypes.STRING,
   type: DataTypes.ENUM("saler", "customer"),
 });
 

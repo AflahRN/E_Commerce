@@ -11,7 +11,7 @@ const Category = db.define(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    category_name: DataTypes.STRING(255),
+    category_name: DataTypes.STRING(30),
   },
   { freezeTableName: true }
 );

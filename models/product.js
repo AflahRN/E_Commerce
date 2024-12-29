@@ -11,10 +11,10 @@ const Product = db.define(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    product_name: DataTypes.STRING(80),
+    product_name: DataTypes.STRING(50),
     product_description: DataTypes.STRING,
-    product_price: DataTypes.STRING,
-    product_stock: DataTypes.STRING,
+    product_price: DataTypes.INTEGER(9),
+    product_stock: DataTypes.INTEGER(9),
     product_image: DataTypes.BLOB,
     product_sold: {
       type: DataTypes.INTEGER,
