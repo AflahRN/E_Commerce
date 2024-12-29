@@ -121,9 +121,6 @@ export const Login = () => {
               onClick={() => {
                 LoginController(loginData, password, navigate);
               }}
-              onDoubleClick={() => {
-                CheckCookie();
-              }}
             >
               Log in
             </Button>

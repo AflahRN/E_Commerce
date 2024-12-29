@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { deleteCart, getCart } from "../../controller/cartController";
 import { generatePaymentUrl } from "../../controller/paymentController";
 import { getUserdata } from "../../controller/userController";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
@@ -79,9 +79,17 @@ export const Header = ({ refreshChart }) => {
                 </a>
               </li>
               <li>
-                <a href="#">
+                <Link
+                  to={"/"}
+                  onClick={() => {
+                    document.cookie =
+                      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    document.cookie =
+                      "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                  }}
+                >
                   <i className="fa fa-user-o"></i> {username}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
