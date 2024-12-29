@@ -24,10 +24,12 @@ import shop02 from "../assets/images/shop02.png";
 import shop03 from "../assets/images/shop03.png";
 import { getProduct } from "../controller/productController";
 import { Link } from "react-router-dom";
+import { addCart } from "../controller/cartController";
 
 export const Dashboard = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);
   const [itemPerTopSellingPage, setItemPerTopSellingPage] = useState(8);
+  const [refreshCart, setRefreshCart] = useState(false);
 
   const [topSellingItem, setTopSellingItem] = useState([]);
 
@@ -39,7 +41,6 @@ export const Dashboard = () => {
     RefreshData();
   }, []);
 
-  console.log(topSellingItem);
   const [maxPageTopSelling, setMaxPageTopSelling] = useState([]);
   useEffect(() => {
     const loopMaxPageTopSelling = [];
@@ -51,7 +52,7 @@ export const Dashboard = () => {
 
   return (
     <>
-      <Header></Header>
+      <Header refreshChart={refreshCart}></Header>
       <Navbar></Navbar>
       {/* <!-- Products tab & slick --> */}
       <Carousel
@@ -59,9 +60,9 @@ export const Dashboard = () => {
         pause="hover"
         interval={5000}
       >
-        {[1].map((element) => {
+        {[1].map((element, index) => {
           return (
-            <Carousel.Item style={{ textAlign: "center" }}>
+            <Carousel.Item style={{ textAlign: "center" }} key={index}>
               <img
                 src={product01}
                 style={{ paddingBottom: "5vh", width: "35vw" }}
@@ -105,7 +106,7 @@ export const Dashboard = () => {
                     <br />
                     Collection
                   </h3>
-                  <a href="#" className="cta-btn">
+                  <a href="/store" className="cta-btn">
                     Shop now <i className="fa fa-arrow-circle-right"></i>
                   </a>
                 </div>
@@ -252,7 +253,6 @@ export const Dashboard = () => {
                   if (topSellingPage > 1) {
                     setTopSellingPage(topSellingPage - 1);
                   }
-                  console.log(topSellingPage);
                 }}
               />
               {maxPageTopSelling.map((element) => {
@@ -280,7 +280,6 @@ export const Dashboard = () => {
                   if (topSellingPage < maxPageTopSelling.length) {
                     setTopSellingPage(topSellingPage + 1);
                   }
-                  console.log(topSellingPage);
                 }}
               />
             </div>
@@ -306,9 +305,6 @@ export const Dashboard = () => {
                             {element.category.category_name}
                           </p>
                           <h3 className="product-name">
-                            {/* <a href={`/product/${element.product_id}`}>
-                              {element.product_name}
-                            </a> */}
                             <Link
                               to={`/product/${element.product_id}`}
                               onClick={() => {
@@ -341,7 +337,14 @@ export const Dashboard = () => {
                           </div>
                         </div>
                         <div className="add-to-cart">
-                          <button className="add-to-cart-btn">
+                          <button
+                            className="add-to-cart-btn"
+                            onClick={() => {
+                              addCart(element.product_id, 1).then(() => {
+                                setRefreshCart(!refreshCart);
+                              });
+                            }}
+                          >
                             <i className="fa fa-shopping-cart"></i> add to cart
                           </button>
                         </div>

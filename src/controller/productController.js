@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useParams } from "react-router-dom";
 const url = "http://192.168.1.103:3000";
 
 export const getProduct = async () => {

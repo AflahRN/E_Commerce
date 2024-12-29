@@ -7,10 +7,33 @@ import "../../assets/css/style.css";
 import "../../assets/css/index.css";
 import logo from "../../assets/images/logo.png";
 import product01 from "../../assets/images/product01.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { deleteCart, getCart } from "../../controller/cartController";
 
-export const Header = () => {
+export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
+  const [cartItem, setCartItem] = useState([]);
+  const [grossPayment, setGrossPayment] = useState(0);
+
+  const refresh = () => {
+    getCart().then((response) => {
+      setCartItem(response);
+    });
+  };
+
+  useEffect(() => {
+    refresh();
+  }, [refreshChart]);
+
+  useEffect(() => {
+    let total = 0;
+    cartItem.map((element) => {
+      total += element.product.product_price * element.quantity;
+    });
+    setGrossPayment(total);
+  }, [cartItem]);
+
+  console.log(grossPayment);
   return (
     <>
       {/* <!-- HEADER --> */}
@@ -60,7 +83,7 @@ export const Header = () => {
               {/* <!-- LOGO --> */}
               <div className="col-md-3">
                 <div className="header-logo">
-                  <a href="#" className="logo">
+                  <a href="/dashboard" className="logo">
                     <img src={logo} alt="" />
                   </a>
                 </div>
@@ -109,7 +132,7 @@ export const Header = () => {
                     >
                       <i className="fa fa-shopping-cart"></i>
                       <span>Your Cart</span>
-                      <div className="qty">3</div>
+                      <div className="qty">{cartItem.length}</div>
                     </a>
                     <div
                       className={
@@ -119,7 +142,7 @@ export const Header = () => {
                       }
                     >
                       <div className="cart-list">
-                        {[1, 2, 3, 4].map((element, index) => {
+                        {cartItem.map((element, index) => {
                           return (
                             <div className="product-widget" key={index}>
                               <div className="product-img">
@@ -127,13 +150,27 @@ export const Header = () => {
                               </div>
                               <div className="product-body">
                                 <h3 className="product-name">
-                                  <a href="#">product name goes here</a>
+                                  <a href="#">{element.product.product_name}</a>
                                 </h3>
                                 <h4 className="product-price">
-                                  <span className="qty">1x</span>$980.00
+                                  <span className="qty">
+                                    {element.quantity}x
+                                  </span>
+                                  Rp{" "}
+                                  {Intl.NumberFormat("id-ID").format(
+                                    element.product.product_price *
+                                      element.quantity
+                                  )}
                                 </h4>
                               </div>
-                              <button className="delete">
+                              <button
+                                className="delete"
+                                onClick={() => {
+                                  deleteCart(element.cart_id).then(() => {
+                                    refresh();
+                                  });
+                                }}
+                              >
                                 <i className="fa fa-close"></i>
                               </button>
                             </div>
@@ -141,8 +178,11 @@ export const Header = () => {
                         })}
                       </div>
                       <div className="cart-summary">
-                        <small>3 Item(s) selected</small>
-                        <h5>SUBTOTAL: $2940.00</h5>
+                        <small>{cartItem.length} Item(s) selected</small>
+                        <h5>
+                          SUBTOTAL: Rp{" "}
+                          {Intl.NumberFormat("id-ID").format(grossPayment)}
+                        </h5>
                       </div>
                       <div className="cart-btns">
                         <a href="#">View Cart</a>

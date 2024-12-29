@@ -5,6 +5,7 @@ import { Register } from "../pages/login/register";
 import { Product } from "../pages/product";
 import { VerificationCode } from "../pages/login/verification_code";
 import { ForgotPassword } from "../pages/login/forgot_password";
+import { Store } from "../pages/store";
 
 export const Router = () => {
   return (
@@ -16,6 +17,7 @@ export const Router = () => {
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/product/:id" element={<Product />} />
+        <Route path="/store" element={<Store />} />
       </Routes>
     </BrowserRouter>
   );

@@ -5,8 +5,20 @@ import "../../assets/css/nouislider.min.css";
 import "../../assets/css/slick.css";
 import "../../assets/css/style.css";
 import "../../assets/css/index.css";
+import { useEffect, useState } from "react";
+import { getCategory } from "../../controller/categoryController";
 
 export const Navbar = () => {
+  const [navbarItem, setNavbarItem] = useState([]);
+
+  const refresh = () => {
+    getCategory().then((response) => setNavbarItem(response));
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
   return (
     <>
       {/* <!-- NAVIGATION --> */}
@@ -18,26 +30,17 @@ export const Navbar = () => {
             {/* <!-- NAV --> */}
             <ul className="main-nav nav navbar-nav flex flex-row navbar-text m-0">
               <li className="active">
-                <a href="#">Home</a>
+                <a href="/dashboard">Home</a>
               </li>
-              <li>
-                <a href="#">Hot Deals</a>
-              </li>
-              <li>
-                <a href="#">Categories</a>
-              </li>
-              <li>
-                <a href="#">Laptops</a>
-              </li>
-              <li>
-                <a href="#">Smartphones</a>
-              </li>
-              <li>
-                <a href="#">Cameras</a>
-              </li>
-              <li>
-                <a href="#">Accessories</a>
-              </li>
+              {navbarItem.map((element, index) => {
+                if (index < 5) {
+                  return (
+                    <li key={index}>
+                      <a href="#">{element.category_name}</a>
+                    </li>
+                  );
+                }
+              })}
             </ul>
             {/* <!-- /NAV --> */}
           </div>
