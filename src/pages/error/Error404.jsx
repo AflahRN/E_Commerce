@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { Link as Nav, useNavigate } from "react-router-dom";
-import logo from "../assets/logo/elegant-logo.png";
-import error404 from "../assets/images/404.jpg";
-import Image from "./components/Image";
+import logo from "../../assets/logo/elegant-logo.png";
+import error404 from "../../assets/images/404.jpg";
+import Image from "../components/Image";
 
 export const Error404 = () => {
   const navigate = useNavigate();

@@ -1,11 +1,10 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { redirect } from "react-router-dom";
 
 export const generatePaymentUrl = async (item, navigate) => {
   const url = "http://192.168.1.103:3000";
-  const splitData = document.cookie.split(",");
-  const token = splitData[0].split("=")[1];
-  const accountId = splitData[1].split("=")[1];
+  const token = Cookies.get("authToken");
   if (token) {
     const response = await axios.post(
       `${url}/payment`,

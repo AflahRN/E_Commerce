@@ -111,7 +111,7 @@ export const Login = () => {
                 alignSelf: "flex-end",
               }}
             >
-              <Link href="/authentication/forgot-password" underline="hover">
+              <Link href="/forgotPassword" underline="hover">
                 Forget password
               </Link>
             </Typography>

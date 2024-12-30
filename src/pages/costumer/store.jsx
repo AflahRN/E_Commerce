@@ -1,16 +1,16 @@
-import { Navbar } from "./components/navbar";
-import { Header } from "./components/header";
-import { Footer } from "./components/footer";
+import { Navbar } from "../components/navbar";
+import { Header } from "../components/header";
+import { Footer } from "../components/footer";
 
-import product01 from "../assets/images/product01.png";
-import product02 from "../assets/images/product02.png";
-import product03 from "../assets/images/product03.png";
+import product01 from "../../assets/images/product01.png";
+import product02 from "../../assets/images/product02.png";
+import product03 from "../../assets/images/product03.png";
 import { useEffect, useState } from "react";
-import { getProduct } from "../controller/productController";
+import { getProduct } from "../../controller/productController";
 import { Link, useSearchParams } from "react-router-dom";
-import { addCart } from "../controller/cartController";
-import { Breadcrumb } from "./components/breadcrumb";
-import { getCategory } from "../controller/categoryController";
+import { addCart } from "../../controller/cartController";
+import { Breadcrumb } from "../components/breadcrumb";
+import { getCategory } from "../../controller/categoryController";
 
 export const Store = () => {
   const [product, setProduct] = useState([]);
@@ -252,7 +252,6 @@ export const Store = () => {
               {/* <!-- store products --> */}
               <div class="row">
                 {product.map((element, index) => {
-                  console.log(element);
                   return (
                     <>
                       {/* <!-- product --> */}

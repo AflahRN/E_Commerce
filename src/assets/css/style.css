@@ -2232,6 +2232,11 @@ textarea.input {
   border-radius: 5px;
 }
 
+.product-img {
+  height: 200px;
+  align-content: center;
+}
+
 /*=========================================================
 	14 -> RESPONSIVE
 ===========================================================*/

@@ -1,25 +1,25 @@
-import "../assets/css/index.css";
-import "../assets/css/product.css";
-import { Header } from "./components/header";
-import { Navbar } from "./components/navbar";
-import { Footer } from "./components/footer";
+import "../../assets/css/index.css";
+import "../../assets/css/product.css";
+import { Header } from "../components/header";
+import { Navbar } from "../components/navbar";
+import { Footer } from "../components/footer";
 import Carousel from "react-bootstrap/Carousel";
 
 // Bisa dihapus
-import "../assets/fonts/fontawesome-webfont.ttf";
-import "../assets/fonts/FontAwesome.otf";
-import "../assets/fonts/slick.ttf";
-import product01 from "../assets/images/product01.png";
-import product02 from "../assets/images/product02.png";
-import product03 from "../assets/images/product03.png";
-import product04 from "../assets/images/product04.png";
-import product06 from "../assets/images/product06.png";
-import product08 from "../assets/images/product08.png";
+import "../../assets/fonts/fontawesome-webfont.ttf";
+import "../../assets/fonts/FontAwesome.otf";
+import "../../assets/fonts/slick.ttf";
+import product01 from "../../assets/images/product01.png";
+import product02 from "../../assets/images/product02.png";
+import product03 from "../../assets/images/product03.png";
+import product04 from "../../assets/images/product04.png";
+import product06 from "../../assets/images/product06.png";
+import product08 from "../../assets/images/product08.png";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../controller/productController";
+import { getProductById } from "../../controller/productController";
 import { useEffect, useState } from "react";
-import { addCart } from "../controller/cartController";
-import { Breadcrumb } from "./components/breadcrumb";
+import { addCart } from "../../controller/cartController";
+import { Breadcrumb } from "../components/breadcrumb";
 
 export const Product = () => {
   const { id } = useParams();

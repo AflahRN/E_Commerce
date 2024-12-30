@@ -1,40 +1,41 @@
 import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io";
 import { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
-import { Header } from "./components/header";
-import { Navbar } from "./components/navbar";
-import { Footer } from "./components/footer";
+import { Header } from "../components/header";
+import { Navbar } from "../components/navbar";
+import { Footer } from "../components/footer";
 import Carousel from "react-bootstrap/Carousel";
+import "../../assets/fonts/fontawesome-webfont.ttf";
+import "../../assets/fonts/FontAwesome.otf";
+import "../../assets/fonts/slick.ttf";
+import "../../assets/css/style.css";
 
 // Bisa dihapus
-import "../assets/fonts/fontawesome-webfont.ttf";
-import "../assets/fonts/FontAwesome.otf";
-import "../assets/fonts/slick.ttf";
-import product01 from "../assets/images/product01.png";
-import product02 from "../assets/images/product02.png";
-import product03 from "../assets/images/product03.png";
-import product04 from "../assets/images/product04.png";
-import product05 from "../assets/images/product05.png";
-import product06 from "../assets/images/product06.png";
-import product07 from "../assets/images/product07.png";
-import product08 from "../assets/images/product08.png";
-import product09 from "../assets/images/product09.png";
-import shop01 from "../assets/images/shop01.png";
-import shop02 from "../assets/images/shop02.png";
-import shop03 from "../assets/images/shop03.png";
-import { getProduct } from "../controller/productController";
+import product01 from "../../assets/images/product01.png";
+import product02 from "../../assets/images/product02.png";
+import product03 from "../../assets/images/product03.png";
+import product04 from "../../assets/images/product04.png";
+import product05 from "../../assets/images/product05.png";
+import product06 from "../../assets/images/product06.png";
+import product07 from "../../assets/images/product07.png";
+import product08 from "../../assets/images/product08.png";
+import product09 from "../../assets/images/product09.png";
+import shop01 from "../../assets/images/shop01.png";
+import shop02 from "../../assets/images/shop02.png";
+import shop03 from "../../assets/images/shop03.png";
+import { getProduct } from "../../controller/productController";
 import { Link } from "react-router-dom";
-import { addCart } from "../controller/cartController";
+import { addCart } from "../../controller/cartController";
 
 export const Dashboard = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);
-  const [itemPerTopSellingPage, setItemPerTopSellingPage] = useState(8);
+  const [productPerPage, setProductPerPage] = useState(8);
   const [refreshCart, setRefreshCart] = useState(false);
 
-  const [topSellingItem, setTopSellingItem] = useState([]);
+  const [product, setProduct] = useState([]);
 
   const RefreshData = () => {
-    getProduct().then((response) => setTopSellingItem(response));
+    getProduct().then((response) => setProduct(response));
   };
 
   useEffect(() => {
@@ -44,12 +45,13 @@ export const Dashboard = () => {
   const [maxPageTopSelling, setMaxPageTopSelling] = useState([]);
   useEffect(() => {
     const loopMaxPageTopSelling = [];
-    for (let i = 0; i < topSellingItem.length / itemPerTopSellingPage; i++) {
+    for (let i = 0; i < product.length / productPerPage; i++) {
       loopMaxPageTopSelling.push(i + 1);
     }
     setMaxPageTopSelling(loopMaxPageTopSelling);
-  }, []);
+  }, [product]);
 
+  console.log(product);
   return (
     <>
       <Header refreshChart={refreshCart}></Header>
@@ -286,16 +288,18 @@ export const Dashboard = () => {
             {/* Pagination */}
 
             <Row xs={0} md={4} className="g-4">
-              {topSellingItem.map((element, index) => {
-                return index >=
-                  0 + (topSellingPage - 1) * itemPerTopSellingPage &&
-                  index < topSellingPage * itemPerTopSellingPage ? (
+              {product.map((element, index) => {
+                return index >= 0 + (topSellingPage - 1) * productPerPage &&
+                  index < topSellingPage * productPerPage ? (
                   <>
                     {/* <!-- product --> */}
                     <div className="col-md-3 col-xs-6">
                       <div className="product">
                         <div className="product-img">
-                          <img src={""} alt="" />
+                          <img
+                            src={`http://localhost:3000/image/${element.product_image}`}
+                            alt=""
+                          />
                           {/* <div className="product-label">
                             <span className="sale">-30%</span>
                           </div> */}

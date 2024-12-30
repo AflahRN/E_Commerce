@@ -1,9 +1,9 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 const url = "http://192.168.1.103:3000";
 
 export const getProduct = async () => {
-  const splitData = document.cookie.split(",");
-  const token = splitData[0].split("=")[1];
+  const token = Cookies.get("authToken");
   const response = await axios.get(`${url}/product`, {
     responseType: "json",
     headers: {
@@ -16,8 +16,7 @@ export const getProduct = async () => {
 };
 
 export const getProductById = async (id) => {
-  const splitData = document.cookie.split(",");
-  const token = splitData[0].split("=")[1];
+  const token = Cookies.get("authToken");
   try {
     const response = await axios.get(`${url}/product/${id}`, {
       headers: {

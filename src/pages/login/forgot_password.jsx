@@ -1,9 +1,9 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import {
   Button,
   FormControl,
+  IconButton,
   InputAdornment,
-  InputLabel,
   Link,
   Skeleton,
   Stack,
@@ -14,8 +14,10 @@ import Image from "../components/Image";
 import forgotPassword from "../../assets/images/forgot-password.png";
 import IconifyIcon from "../components/IconifyIcon";
 import logo from "../../assets/logo/elegant-logo.png";
+import { useNavigate } from "react-router-dom";
 
 export const ForgotPassword = () => {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div
       style={{
@@ -43,28 +45,51 @@ export const ForgotPassword = () => {
             </Typography>
             <FormControl variant="standard" fullWidth>
               <TextField
-                placeholder="Enter your email"
+                placeholder="Enter new password"
                 id="email"
+                type={showPassword ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconifyIcon
-                        icon="ic:baseline-email"
-                        width={"20px"}
-                        height={"20px"}
-                      />
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                        edge="end"
+                        sx={{
+                          color: "text.secondary",
+                        }}
+                      >
+                        {showPassword ? (
+                          <IconifyIcon
+                            icon="ic:baseline-key-off"
+                            width={"20px"}
+                            height={"20px"}
+                          />
+                        ) : (
+                          <IconifyIcon
+                            icon="ic:baseline-key"
+                            width={"20px"}
+                            height={"20px"}
+                          />
+                        )}
+                      </IconButton>
                     </InputAdornment>
                   ),
                 }}
               />
             </FormControl>
             <Button variant="contained" fullWidth>
-              Send Code
+              Change Password
             </Button>
             <Typography variant="body2" color="text.secondary">
               Back to{" "}
               <Link
-                href="/authentication/login"
+                to="/"
+                style={{
+                  cursor: "pointer",
+                }}
                 underline="hover"
                 fontSize={(theme) => theme.typography.body1.fontSize}
               >
