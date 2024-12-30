@@ -1,7 +1,11 @@
+import express from "express";
+import multer from "multer";
 import Account from "../models/account.js";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
 import fs from "fs";
+import path from "path";
+import { nanoid } from "nanoid";
 
 export const ShowProduct = async (req, res) => {
   try {
@@ -9,19 +13,6 @@ export const ShowProduct = async (req, res) => {
       include: [{ model: Category, attributes: ["category_name"] }],
     });
     res.status(200).json(response);
-  } catch (error) {
-    res.json({ msg: Error });
-  }
-};
-
-export const ShowProductImage = async (req, res) => {
-  const { id } = req.body;
-  try {
-    const response = await Product.findOne({
-      where: { product_id: id },
-      attributes: ["product_image"],
-    });
-    res.status(200).json({ buffer: response["product_image"] });
   } catch (error) {
     res.json({ msg: Error });
   }
@@ -40,6 +31,8 @@ export const ShowProductById = async (req, res) => {
   }
 };
 
+export const ShowProductImage = async (path) => {};
+
 export const AddProduct = async (req, res) => {
   const {
     productName,
@@ -50,38 +43,57 @@ export const AddProduct = async (req, res) => {
     accountId,
   } = req.body;
   const file = req.file;
-  if (file["size"] >= 100000) {
-    res.json({
-      status: "Error",
-      message: "Maximal image size 100kb",
-    });
-  } else {
-    const imageData = fs.readFileSync(file.path);
-    try {
-      const isCustomer = await Account.findOne({
-        where: { account_id: accountId },
-      }).then((element) => element.type == "saler");
-
-      if (isCustomer) {
-        await Product.create({
-          product_name: productName,
-          product_description: productDescription,
-          product_price: productPrice,
-          product_stock: productStock,
-          product_image: imageData,
-          category_id: categoryId,
-          account_id: accountId,
-        });
-        res.status(200).json({ msg: "Data berhasil dikirim" });
-      } else {
-        res.json({
-          msg: "Hanya akun saler yang diperbolehkan melakukan action ini",
-        });
-      }
-    } catch (error) {
-      res.json({ msg: Error });
+  try {
+    const isCustomer = await Account.findOne({
+      where: { account_id: accountId },
+    }).then((element) => element.type == "saler");
+    if (isCustomer) {
+      await Product.create({
+        product_name: productName,
+        product_description: productDescription,
+        product_price: productPrice,
+        product_stock: productStock,
+        product_image: file.filename,
+        category_id: categoryId,
+        account_id: accountId,
+      });
+      res
+        .status(200)
+        .json({ status: "Success", message: "Data berhasil dikirim" });
+    } else {
+      res.json({
+        status: "Error",
+        message: "Hanya akun saler yang diperbolehkan melakukan action ini",
+      });
     }
+  } catch (error) {
+    res.json({ status: "Error", message: Error });
   }
+};
+
+export const multerConfig = async (req, res, next) => {
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "public/post");
+    },
+    filename: (req, file, cb) => {
+      cb(
+        null,
+        `PR-${nanoid(4)}-${nanoid(8)}` + path.extname(file.originalname)
+      );
+    },
+  });
+
+  const upload = multer({
+    storage: storage,
+  });
+
+  upload.single("productImage")(req, res, (err) => {
+    if (err) {
+      return res.status(400).send("Error uploading file: " + err.message);
+    }
+    next();
+  });
 };
 
 export const UpdateProduct = async (req, res) => {
@@ -132,6 +144,13 @@ export const DeleteProduct = async (req, res) => {
   try {
     const isExist = await Product.findOne({ where: { product_id: id } });
     if (isExist) {
+      fs.unlink(`public/post/${isExist.product_image}`, (err) => {
+        if (err) {
+          console.error(`Error deleting file: ${err}`);
+          return;
+        }
+        console.log("File deleted successfully");
+      });
       await Product.destroy({
         where: { product_id: id },
       });

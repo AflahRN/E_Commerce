@@ -9,6 +9,7 @@ import {
 import {
   AddProduct,
   DeleteProduct,
+  multerConfig,
   ShowProduct,
   ShowProductById,
   ShowProductImage,
@@ -51,11 +52,9 @@ import {
   ShowTransactionById,
 } from "../controllers/transactionController.js";
 import { checkPayment, payment } from "../controllers/paymentController.js";
-import multer from "multer";
 import { tokenAuth } from "../middleware/tokenAuth.js";
 
 const router = express.Router();
-const upload = multer({ dest: "/products" });
 
 //category
 router.get("/category", tokenAuth, ShowCategory);
@@ -66,15 +65,9 @@ router.delete("/category/:id", tokenAuth, DeleteCategory);
 
 //Product
 router.get("/product", tokenAuth, ShowProduct);
-router.get("/product/image", tokenAuth, ShowProductImage);
 router.get("/product/:id", tokenAuth, ShowProductById);
-router.post("/product", tokenAuth, upload.single("productImage"), AddProduct);
-router.patch(
-  "/product/:id",
-  tokenAuth,
-  upload.single("productImage"),
-  UpdateProduct
-);
+router.post("/product", tokenAuth, multerConfig, AddProduct);
+router.patch("/product/:id", tokenAuth, UpdateProduct);
 router.delete("/product/:id", tokenAuth, DeleteProduct);
 
 //Cart

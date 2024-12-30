@@ -26,7 +26,7 @@ export const Login = async (req, res) => {
       } else {
         const accessToken = jwt.sign(
           {
-            userId: userData.account_id,
+            accountId: userData.account_id,
             username: userData.username,
             email: userData.email,
           },
@@ -49,7 +49,7 @@ export const Login = async (req, res) => {
         );
         res.json({
           token: accessToken,
-          userId: userData.account_id,
+          accountId: userData.account_id,
           type: userData.type,
         });
       }
