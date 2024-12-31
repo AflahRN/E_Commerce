@@ -39,6 +39,27 @@ export const addCart = async (productId, quantity) => {
   }
 };
 
+export const updateCart = async (cartId, quantity, productId) => {
+  const token = Cookies.get("authToken");
+  if (token) {
+    const response = await axios.patch(
+      `${url}/cart/${cartId}`,
+      {
+        quantity: quantity,
+        productId: productId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status == 200) {
+      return response.data;
+    }
+  }
+};
+
 export const deleteCart = async (cartId) => {
   const token = Cookies.get("authToken");
   if (token) {

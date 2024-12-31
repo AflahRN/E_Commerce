@@ -11,10 +11,12 @@ import {
   cleanCart,
   deleteCart,
   getCart,
+  updateCart,
 } from "../../controller/cartController";
 import { generatePaymentUrl } from "../../controller/paymentController";
 import { getUserdata } from "../../controller/userController";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getCategory } from "../../controller/categoryController";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
@@ -22,12 +24,15 @@ export const Header = ({ refreshChart }) => {
   const [grossPayment, setGrossPayment] = useState(0);
   const [username, setUsername] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [category, setCategory] = useState([]);
+  const [categorySearch, setCategorySearch] = useState();
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleNavigate = () => {
     const params = new URLSearchParams(location.search);
     params.set("search", searchText);
+    params.set("category", categorySearch);
 
     navigate({
       pathname: "/store",
@@ -41,6 +46,7 @@ export const Header = ({ refreshChart }) => {
     getCart().then((response) => {
       setCartItem(response);
     });
+    getCategory().then((response) => setCategory(response));
   };
 
   useEffect(() => {
@@ -108,10 +114,20 @@ export const Header = ({ refreshChart }) => {
               <div className="col-md-6">
                 <div className="header-search">
                   <form className="d-flex align-items-center">
-                    <select className="input-select m-0">
-                      <option value="0">All Categories</option>
-                      <option value="1">Category 01</option>
-                      <option value="1">Category 02</option>
+                    <select
+                      className="input-select m-0"
+                      onChange={(e) => {
+                        setCategorySearch(e.target.value);
+                      }}
+                    >
+                      <option value="">All Categories</option>
+                      {category.map((element, index) => {
+                        return (
+                          <option value={element.category_id} key={index}>
+                            {element.category_name}
+                          </option>
+                        );
+                      })}
                     </select>
                     <input
                       className="input"
@@ -197,10 +213,44 @@ export const Header = ({ refreshChart }) => {
                                 <h3 className="product-name">
                                   <a href="#">{element.product.product_name}</a>
                                 </h3>
-                                <h4 className="product-price">
-                                  <span className="qty">
-                                    {element.quantity}x
+                                <h4 className="product-price my-1">
+                                  <span>
+                                    <input
+                                      type="button"
+                                      value="+"
+                                      className="border border-black text-black font-bold mr-3 py-1 px-2 rounded bg-transparent"
+                                      onClick={() => {
+                                        updateCart(
+                                          element.cart_id,
+                                          element.quantity + 1,
+                                          element.product_id
+                                        ).then(() => refresh());
+                                      }}
+                                    />
                                   </span>
+                                  {element.quantity}x
+                                  <span>
+                                    <input
+                                      type="button"
+                                      value="-"
+                                      className="border border-black text-black font-bold ml-3 py-1 px-2 rounded bg-transparent"
+                                      onClick={() => {
+                                        if (element.quantity > 1) {
+                                          updateCart(
+                                            element.cart_id,
+                                            element.quantity - 1,
+                                            element.product_id
+                                          ).then(() => refresh());
+                                        } else {
+                                          deleteCart(element.cart_id).then(() =>
+                                            refresh()
+                                          );
+                                        }
+                                      }}
+                                    />
+                                  </span>
+                                </h4>
+                                <h4 className="product-price">
                                   Rp{" "}
                                   {Intl.NumberFormat("id-ID").format(
                                     element.product.product_price *

@@ -103,7 +103,7 @@ export const Product = () => {
                 </div>
                 <p>{product.product_description}</p>
 
-                <div className="add-to-cart">
+                <div className="add-to-cart mt-5">
                   <div className="qty-label">
                     Qty
                     <div className="input-number mx-2">
@@ -397,9 +397,18 @@ export const Product = () => {
                                         ></i>
                                       </div>
                                     </div>
-                                    <div className="review-body">
+                                    <div className="review-body p-3">
                                       <p>{element.review_text}</p>
                                     </div>
+                                    {element.review_response ? (
+                                      <div className="review-body shadow-inner p-3 bg-[#EFF3F3] rounded">
+                                        <p>
+                                          Penjual : {element.review_response}
+                                        </p>
+                                      </div>
+                                    ) : (
+                                      <></>
+                                    )}
                                   </li>
                                 );
                               })}
