@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = "http://10.190.4.131:3000";
+const url = "http://localhost:3000";
 
 export const getProduct = async () => {
   const token = Cookies.get("authToken");

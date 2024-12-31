@@ -7,7 +7,11 @@ import "../../assets/css/style.css";
 import "../../assets/css/index.css";
 import logo from "../../assets/images/logo.png";
 import { useEffect, useState } from "react";
-import { deleteCart, getCart } from "../../controller/cartController";
+import {
+  cleanCart,
+  deleteCart,
+  getCart,
+} from "../../controller/cartController";
 import { generatePaymentUrl } from "../../controller/paymentController";
 import { getUserdata } from "../../controller/userController";
 import { Link, useNavigate } from "react-router-dom";
@@ -47,7 +51,6 @@ export const Header = ({ refreshChart }) => {
     setGrossPayment(total);
   }, [cartItem]);
 
-  console.log(cartItem);
   return (
     <>
       {/* <!-- HEADER --> */}
@@ -166,10 +169,10 @@ export const Header = ({ refreshChart }) => {
                     >
                       <div className="cart-list">
                         {cartItem.map((element, index) => {
-                          // checkoutItem.push({
-                          //   product_id: element.product_id,
-                          //   quantity: element.quantity,
-                          // });
+                          checkoutItem.push({
+                            product_id: element.product_id,
+                            quantity: element.quantity,
+                          });
                           return (
                             <div className="product-widget" key={index}>
                               <div className="product-img">
@@ -217,7 +220,7 @@ export const Header = ({ refreshChart }) => {
                       <div className="cart-btns" style={{ cursor: "pointer" }}>
                         <a
                           onClick={() => {
-                            generatePaymentUrl(checkoutItem);
+                            generatePaymentUrl(checkoutItem, grossPayment);
                           }}
                         >
                           Checkout <i className="fa fa-arrow-circle-right"></i>

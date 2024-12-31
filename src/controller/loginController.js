@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const url = "https://cfca-36-66-160-3.ngrok-free.app";
+const url = "http://localhost:3000";
 
 export const Login = async (loginData, password, navigate) => {
   const requestData = {

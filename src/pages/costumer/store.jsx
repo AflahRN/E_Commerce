@@ -1,13 +1,9 @@
 import { Navbar } from "../components/navbar";
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
-
-import product01 from "../../assets/images/product01.png";
-import product02 from "../../assets/images/product02.png";
-import product03 from "../../assets/images/product03.png";
 import { useEffect, useState } from "react";
 import { getProduct } from "../../controller/productController";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { addCart } from "../../controller/cartController";
 import { Breadcrumb } from "../components/breadcrumb";
 import { getCategory } from "../../controller/categoryController";
@@ -18,21 +14,30 @@ export const Store = () => {
   const [category, setCategory] = useState([]);
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search") || "";
+  const searchCategory = searchParams.get("category") || "";
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     refresh();
-  }, [search]);
+  }, [search, searchCategory]);
 
   const refresh = () => {
     getProduct()
       .then((response) =>
-        response.filter((element) =>
-          element.product_name.toLowerCase().includes(search.toLowerCase())
+        response.filter(
+          (element) =>
+            element.product_name.toLowerCase().includes(search.toLowerCase()) &&
+            element.category_id.includes(searchCategory)
         )
       )
-      .then((value) => setProduct(value));
+      .then((filter) => setProduct(filter));
     getCategory().then((response) => setCategory(response));
   };
+
+  console.log(product);
+
+  console.log(searchCategory);
   return (
     <>
       <Header refreshChart={refreshCart} />
@@ -40,46 +45,49 @@ export const Store = () => {
       <Breadcrumb path={["All Categories", search]} />
 
       {/* <!-- SECTION --> */}
-      <div class="section">
+      <div className="section">
         {/* <!-- container --> */}
-        <div class="container">
+        <div className="container">
           {/* <!-- row --> */}
-          <div class="row">
+          <div className="row">
             {/* <!-- ASIDE --> */}
-            <div id="aside" class="col-md-3">
+            <div id="aside" className="col-md-3">
               {/* <!-- aside Widget --> */}
-              <div class="aside">
-                <h3 class="aside-title">Categories</h3>
-                <div class="checkbox-filter">
+              <div className="aside">
+                <h3 className="aside-title">Categories</h3>
+                <div className="checkbox-filter">
                   {category.map((element, index) => {
                     return (
-                      <>
-                        <div class="input-checkbox">
-                          <input
-                            type="checkbox"
-                            value={element.category_id}
-                            id={element.category_id}
-                            onChange={(e) => {
-                              console.log(e.target.value);
-                            }}
-                          />
-                          <label for={element.category_id}>
-                            <span></span>
-                            {element.category_name}
-                            <small>
-                              {" "}
-                              (
-                              {
-                                product.filter(
-                                  (data) =>
-                                    data.category_id === element.category_id
-                                ).length
-                              }
-                              )
-                            </small>
-                          </label>
-                        </div>
-                      </>
+                      <div className="input-checkbox" key={index}>
+                        <input
+                          type="radio"
+                          name="category"
+                          value={element.category_id}
+                          id={element.category_id}
+                          onChange={(e) => {
+                            navigate({
+                              pathname: "/store",
+                              search: `?category=${e.target.value}`,
+                            });
+                            refresh();
+                          }}
+                        />
+                        <label for={element.category_id}>
+                          <span></span>
+                          {element.category_name}
+                          <small>
+                            {" "}
+                            (
+                            {
+                              product.filter(
+                                (data) =>
+                                  data.category_id === element.category_id
+                              ).length
+                            }
+                            )
+                          </small>
+                        </label>
+                      </div>
                     );
                   })}
                 </div>
@@ -89,13 +97,13 @@ export const Store = () => {
             {/* <!-- /ASIDE --> */}
 
             {/* <!-- STORE --> */}
-            <div id="store" class="col-md-9">
+            <div id="store" className="col-md-9">
               {/* <!-- store top filter --> */}
-              <div class="store-filter clearfix">
-                <div class="store-sort">
+              <div className="store-filter clearfix">
+                <div className="store-sort">
                   <label>
                     Sort By:
-                    <select class="input-select">
+                    <select className="input-select">
                       <option value="0">Popular</option>
                       <option value="1">Position</option>
                     </select>
@@ -103,19 +111,19 @@ export const Store = () => {
 
                   <label>
                     Show:
-                    <select class="input-select">
+                    <select className="input-select">
                       <option value="0">20</option>
                       <option value="1">50</option>
                     </select>
                   </label>
                 </div>
-                <ul class="store-grid">
-                  <li class="active">
-                    <i class="fa fa-th"></i>
+                <ul className="store-grid">
+                  <li className="active">
+                    <i className="fa fa-th"></i>
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa fa-th-list"></i>
+                      <i className="fa fa-th-list"></i>
                     </a>
                   </li>
                 </ul>
@@ -123,79 +131,75 @@ export const Store = () => {
               {/* <!-- /store top filter --> */}
 
               {/* <!-- store products --> */}
-              <div class="row">
+              <div className="row">
                 {product.map((element, index) => {
                   return (
-                    <>
-                      {/* <!-- product --> */}
-                      <div class="col-md-4 col-xs-6">
-                        <div class="product">
-                          <div class="product-img h-[280px] grid items-center p-3">
-                            <img
-                              src={`http://localhost:3000/image/${element.product_image}`}
-                              alt=""
-                            />
-                          </div>
-                          <div class="product-body">
-                            <p class="product-category">
-                              {element.category.category_name}
-                            </p>
-                            <h3 class="product-name">
-                              <Link
-                                to={`/product/${element.product_id}`}
-                                onClick={() => {
-                                  window.scrollTo({ top: 0 });
-                                }}
-                              >
-                                {element.product_name}
-                              </Link>
-                            </h3>
-                            <h4 class="product-price">
-                              Rp{" "}
-                              {Intl.NumberFormat("id-ID").format(
-                                element.product_price
-                              )}
-                            </h4>
-                            <div class="product-rating">
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product-btns">
-                              <button class="add-to-wishlist">
-                                <i class="fa fa-heart-o"></i>
-                                <span class="tooltipp">add to wishlist</span>
-                              </button>
-                            </div>
-                          </div>
-                          <div class="add-to-cart">
-                            <button
-                              class="add-to-cart-btn"
+                    <div className="col-md-4 col-xs-6" key={index}>
+                      <div className="product">
+                        <div className="product-img h-[280px] grid items-center p-3">
+                          <img
+                            src={`http://localhost:3000/image/${element.product_image}`}
+                            alt=""
+                          />
+                        </div>
+                        <div className="product-body">
+                          <p className="product-category">
+                            {element.category.category_name}
+                          </p>
+                          <h3 className="product-name">
+                            <Link
+                              to={`/product/${element.product_id}`}
                               onClick={() => {
-                                addCart(element.product_id, 1).then(() => {
-                                  setRefreshCart(!refreshCart);
-                                });
+                                window.scrollTo({ top: 0 });
                               }}
                             >
-                              <i class="fa fa-shopping-cart"></i> add to cart
+                              {element.product_name}
+                            </Link>
+                          </h3>
+                          <h4 className="product-price">
+                            Rp{" "}
+                            {Intl.NumberFormat("id-ID").format(
+                              element.product_price
+                            )}
+                          </h4>
+                          <div className="product-rating">
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                          </div>
+                          <div className="product-btns">
+                            <button className="add-to-wishlist">
+                              <i className="fa fa-heart-o"></i>
+                              <span className="tooltipp">add to wishlist</span>
                             </button>
                           </div>
                         </div>
+                        <div className="add-to-cart">
+                          <button
+                            className="add-to-cart-btn"
+                            onClick={() => {
+                              addCart(element.product_id, 1).then(() => {
+                                setRefreshCart(!refreshCart);
+                              });
+                            }}
+                          >
+                            <i className="fa fa-shopping-cart"></i> add to cart
+                          </button>
+                        </div>
                       </div>
-                      {/* <!-- /product --> */}
-                    </>
+                    </div>
                   );
                 })}
               </div>
               {/* <!-- /store products --> */}
 
               {/* <!-- store bottom filter --> */}
-              <div class="store-filter clearfix">
-                <span class="store-qty">Showing 20-100 products</span>
-                <ul class="store-pagination">
-                  <li class="active">1</li>
+              <div className="store-filter clearfix">
+                <span className="store-qty">Showing 20-100 products</span>
+                <ul className="store-pagination">
+                  <li className="active">1</li>
                   <li>
                     <a href="#">2</a>
                   </li>
@@ -207,7 +211,7 @@ export const Store = () => {
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa fa-angle-right"></i>
+                      <i className="fa fa-angle-right"></i>
                     </a>
                   </li>
                 </ul>
@@ -223,45 +227,45 @@ export const Store = () => {
       {/* <!-- /SECTION --> */}
 
       {/* <!-- NEWSLETTER --> */}
-      <div id="newsletter" class="section">
+      <div id="newsletter" className="section">
         {/* <!-- container --> */}
-        <div class="container">
+        <div className="container">
           {/* <!-- row --> */}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="newsletter">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="newsletter">
                 <p>
                   Sign Up for the <strong>NEWSLETTER</strong>
                 </p>
                 <form>
                   <input
-                    class="input"
+                    className="input"
                     type="email"
                     placeholder="Enter Your Email"
                   />
-                  <button class="newsletter-btn">
-                    <i class="fa fa-envelope"></i> Subscribe
+                  <button className="newsletter-btn">
+                    <i className="fa fa-envelope"></i> Subscribe
                   </button>
                 </form>
-                <ul class="newsletter-follow">
+                <ul className="newsletter-follow">
                   <li>
                     <a href="#">
-                      <i class="fa fa-facebook"></i>
+                      <i className="fa fa-facebook"></i>
                     </a>
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa fa-twitter"></i>
+                      <i className="fa fa-twitter"></i>
                     </a>
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa fa-instagram"></i>
+                      <i className="fa fa-instagram"></i>
                     </a>
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa fa-pinterest"></i>
+                      <i className="fa fa-pinterest"></i>
                     </a>
                   </li>
                 </ul>

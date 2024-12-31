@@ -7,9 +7,12 @@ import "../../assets/css/style.css";
 import "../../assets/css/index.css";
 import { useEffect, useState } from "react";
 import { getCategory } from "../../controller/categoryController";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
   const [navbarItem, setNavbarItem] = useState([]);
+  const [activePage, setActivePage] = useState("home");
+  const navigate = useNavigate();
 
   const refresh = () => {
     getCategory().then((response) => setNavbarItem(response));
@@ -29,14 +32,38 @@ export const Navbar = () => {
           <div id="responsive-nav">
             {/* <!-- NAV --> */}
             <ul className="main-nav nav navbar-nav flex flex-row navbar-text m-0">
-              <li className="active">
+              <li
+                className={`
+                        cursor-pointer
+                        ${activePage == "home" ? "active" : ""}`}
+                onClick={() => {
+                  setActivePage("home");
+                }}
+              >
                 <a href="/dashboard">Home</a>
               </li>
               {navbarItem.map((element, index) => {
                 if (index < 5) {
                   return (
-                    <li key={index}>
-                      <a href="#">{element.category_name}</a>
+                    <li
+                      key={index}
+                      className={`
+                        cursor-pointer
+                        ${activePage == element.category_name ? "active" : ""}`}
+                      onClick={() => {
+                        setActivePage(element.category_name);
+                      }}
+                    >
+                      <a
+                        onClick={() => {
+                          navigate({
+                            pathname: "/store",
+                            search: `?category=${element.category_id}`,
+                          });
+                        }}
+                      >
+                        {element.category_name}
+                      </a>
                     </li>
                   );
                 }

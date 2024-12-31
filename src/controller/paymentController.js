@@ -1,18 +1,19 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const generatePaymentUrl = async (item, navigate) => {
-  const url = "http://10.190.4.131:3000";
+export const generatePaymentUrl = async (item, grossAmount) => {
+  const url = "http://localhost:3000";
   const token = Cookies.get("authToken");
+  const accountId = Cookies.get("accountId");
+
   if (token) {
     const response = await axios.post(
       `${url}/payment`,
-      { item: item },
+      { item: item, accountId: accountId, grossAmount: grossAmount },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-
-    // console.log(response);
-    if (response.status === 200) {
+    console.log(response);
+    if (response.data.redirect_url) {
       window.location.href = response.data.redirect_url;
       return response;
     }

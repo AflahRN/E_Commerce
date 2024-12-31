@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = "http://10.190.4.131:3000";
+const url = "http://localhost:3000";
 
 export const getCart = async () => {
   const token = Cookies.get("authToken");
@@ -50,5 +50,17 @@ export const deleteCart = async (cartId) => {
     if (response.status == 200) {
       return response.data;
     }
+  }
+};
+
+export const cleanCart = async () => {
+  const token = Cookies.get("authToken");
+  if (token) {
+    const response = await axios.delete(`${url}/clean`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
   }
 };
