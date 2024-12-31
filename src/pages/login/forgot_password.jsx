@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 export const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -83,10 +84,15 @@ export const ForgotPassword = () => {
             <Button variant="contained" fullWidth>
               Change Password
             </Button>
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
               Back to{" "}
               <Link
-                to="/"
                 style={{
                   cursor: "pointer",
                 }}

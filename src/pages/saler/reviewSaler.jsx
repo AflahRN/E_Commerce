@@ -13,6 +13,16 @@ export const ReviewSaler = () => {
   const [reviewResponse, setReviewResponse] = useState();
   const userCredential = Cookies.get();
 
+  const [types, setTypes] = useState(review.map(() => "exist")); // Default to "exist" for each review
+
+  const handleButtonClick = (index) => {
+    setTypes((prevTypes) => {
+      const newTypes = [...prevTypes];
+      newTypes[index] = newTypes[index] === "exist" ? "nothing" : "exist"; // Toggle between "exist" and "nothing"
+      return newTypes;
+    });
+  };
+
   const refresh = () => {
     getProduct()
       .then((response) =>
@@ -47,7 +57,7 @@ export const ReviewSaler = () => {
   return (
     <>
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-        <SalerNavbar />
+        <SalerNavbar page={"review"} />
         <div className="flex flex-col flex-1 w-full">
           <SalerHeader />
           <main className="h-full pb-16 overflow-y-auto">
@@ -71,6 +81,7 @@ export const ReviewSaler = () => {
                     </thead>
                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                       {review.map((element, index) => {
+                        let type = "exist";
                         return (
                           <tr
                             className="dark:text-gray-400"
@@ -99,37 +110,47 @@ export const ReviewSaler = () => {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-lg lg max-w-[200px] overflow-hidden text-wrap text-ellipsis">
-                              Lorem ipsum, dolor sit amet consectetur
-                              adipisicing elit. Tempora nobis explicabo tenetur
-                              dolorem voluptatibus numquam aliquam, voluptatem
-                              tempore ullam odit aspernatur, eveniet nihil
-                              labore provident perspiciatis autem! Ratione, nemo
-                              officiis.
+                              {element.review_text}
                             </td>
                             <td className="px-4 py-3 text-xl text-center">
                               {element.review_skor}
                             </td>
-                            <td className="px-4 py-3 text-sm">
-                              <textarea
-                                className="border border-gray-300 rounded-lg text-lg p-2 w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                style={{ height: "auto" }}
-                                placeholder="Type your message here..."
-                                onChange={(e) => {
-                                  setReviewResponse(e.target.value);
-                                }}
-                              ></textarea>
-                            </td>
+                            {types[index] == "nothing" ? (
+                              <td className="px-4 py-3 text-sm">
+                                <textarea
+                                  className="border border-gray-300 rounded-lg text-lg p-2 w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                  style={{ height: "auto" }}
+                                  placeholder="Type your message here..."
+                                  onChange={(e) => {
+                                    setReviewResponse(e.target.value);
+                                  }}
+                                ></textarea>
+                              </td>
+                            ) : (
+                              <td className="px-4 py-3 text-lg lg max-w-[200px] overflow-hidden text-wrap text-ellipsis">
+                                {element.review_response}
+                              </td>
+                            )}
+
                             <td className="px-4 py-3 text-center">
                               <button
-                                onClick={() => {
-                                  sendResponse(
-                                    element.review_id,
-                                    reviewResponse
-                                  );
+                                onClick={(e) => {
+                                  {
+                                    types[index] == "nothing"
+                                      ? sendResponse(
+                                          element.review_id,
+                                          reviewResponse
+                                        ).then(() => {
+                                          refresh();
+                                        })
+                                      : handleButtonClick(index);
+                                  }
                                 }}
-                                className="bg-blue-500 text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+                                className="bg-[#7e3af2] text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
                               >
-                                Send Response
+                                {types[index] == "nothing"
+                                  ? "Send Response"
+                                  : "Edit Response"}
                               </button>
                             </td>
                           </tr>
@@ -137,88 +158,6 @@ export const ReviewSaler = () => {
                       })}
                     </tbody>
                   </table>
-                </div>
-                <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-                  <span className="flex items-center col-span-3">
-                    Showing 21-30 of 100
-                  </span>
-                  <span className="col-span-2"></span>
-                  {/* <!-- Pagination --> */}
-                  <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                    <nav aria-label="Table navigation">
-                      <ul className="inline-flex items-center">
-                        <li>
-                          <button
-                            className="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
-                            aria-label="Previous"
-                          >
-                            <svg
-                              className="w-4 h-4 fill-current"
-                              aria-hidden="true"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                                fillRule="evenodd"
-                              ></path>
-                            </svg>
-                          </button>
-                        </li>
-                        <li>
-                          <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                            1
-                          </button>
-                        </li>
-                        <li>
-                          <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                            2
-                          </button>
-                        </li>
-                        <li>
-                          <button className="px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple">
-                            3
-                          </button>
-                        </li>
-                        <li>
-                          <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                            4
-                          </button>
-                        </li>
-                        <li>
-                          <span className="px-3 py-1">...</span>
-                        </li>
-                        <li>
-                          <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                            8
-                          </button>
-                        </li>
-                        <li>
-                          <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                            9
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            className="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
-                            aria-label="Next"
-                          >
-                            <svg
-                              className="w-4 h-4 fill-current"
-                              aria-hidden="true"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clipRule="evenodd"
-                                fillRule="evenodd"
-                              ></path>
-                            </svg>
-                          </button>
-                        </li>
-                      </ul>
-                    </nav>
-                  </span>
                 </div>
               </div>
             </div>

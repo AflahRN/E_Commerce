@@ -20,12 +20,14 @@ import { getProductById } from "../../controller/productController";
 import { useEffect, useState } from "react";
 import { addCart } from "../../controller/cartController";
 import { Breadcrumb } from "../components/breadcrumb";
+import { getReview } from "../../controller/reviewController";
 
 export const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [refreshCart, setRefreshCart] = useState(false);
+  const [review, setReview] = useState([]);
 
   const refresh = () => {
     getProductById(id).then((response) => setProduct(response));
@@ -33,9 +35,12 @@ export const Product = () => {
 
   useEffect(() => {
     refresh();
+    getReview().then((response) => {
+      setReview(response.filter((element) => element.product_id == id));
+    });
   }, []);
 
-  console.log(product.category?.category_name);
+  console.log(product);
   return (
     <>
       <Header refreshChart={refreshCart} />
@@ -53,9 +58,14 @@ export const Product = () => {
         {/* <!-- container --> */}
         <div className="container">
           {/* <!-- row --> */}
-          <div className="row justify-content-center">
+          <div className="row justify-center">
             {/* <!-- Product main img --> */}
-            <Carousel
+            <img
+              className="w-[400px] h-min flex"
+              src={`http://localhost:3000/image/${product.product_image}`}
+              alt=""
+            />
+            {/* <Carousel
               className="carouselItem"
               nextIcon={
                 <span className="fa fa-sharp fa-chevron-right carousel-icon"></span>
@@ -84,7 +94,7 @@ export const Product = () => {
                   <img src={product08} alt="" />
                 </div>
               </Carousel.Item>
-            </Carousel>
+            </Carousel> */}
             {/* <!-- /Product main img --> */}
 
             {/* <!-- Product details --> */}
@@ -100,7 +110,7 @@ export const Product = () => {
                     <i className="fa fa-star-o"></i>
                   </div>
                   <a className="review-link" href="#">
-                    10 Review(s) | Add your review
+                    {review.length} Review(s) | Add your review
                   </a>
                 </div>
                 <div>
@@ -173,41 +183,12 @@ export const Product = () => {
                       <i className="fa fa-heart-o"></i> add to wishlist
                     </a>
                   </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-exchange"></i> add to compare
-                    </a>
-                  </li>
                 </ul>
 
                 <ul className="product-links">
                   <li>Category:</li>
                   <li>
                     <a href="#">{product.category?.category_name}</a>
-                  </li>
-                </ul>
-
-                <ul className="product-links">
-                  <li>Share:</li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-twitter"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-google-plus"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-envelope"></i>
-                    </a>
                   </li>
                 </ul>
               </div>
@@ -226,12 +207,7 @@ export const Product = () => {
                   </li>
                   <li>
                     <a data-toggle="tab" href="#tab2">
-                      Details
-                    </a>
-                  </li>
-                  <li>
-                    <a data-toggle="tab" href="#tab3">
-                      Reviews (3)
+                      Reviews ({review.length})
                     </a>
                   </li>
                 </ul>
@@ -554,10 +530,6 @@ export const Product = () => {
                       <i className="fa fa-heart-o"></i>
                       <span className="tooltipp">add to wishlist</span>
                     </button>
-                    <button className="add-to-compare">
-                      <i className="fa fa-exchange"></i>
-                      <span className="tooltipp">add to compare</span>
-                    </button>
                     <button className="quick-view">
                       <i className="fa fa-eye"></i>
                       <span className="tooltipp">quick view</span>
@@ -602,10 +574,6 @@ export const Product = () => {
                       <i className="fa fa-heart-o"></i>
                       <span className="tooltipp">add to wishlist</span>
                     </button>
-                    <button className="add-to-compare">
-                      <i className="fa fa-exchange"></i>
-                      <span className="tooltipp">add to compare</span>
-                    </button>
                     <button className="quick-view">
                       <i className="fa fa-eye"></i>
                       <span className="tooltipp">quick view</span>
@@ -649,10 +617,6 @@ export const Product = () => {
                       <i className="fa fa-heart-o"></i>
                       <span className="tooltipp">add to wishlist</span>
                     </button>
-                    <button className="add-to-compare">
-                      <i className="fa fa-exchange"></i>
-                      <span className="tooltipp">add to compare</span>
-                    </button>
                     <button className="quick-view">
                       <i className="fa fa-eye"></i>
                       <span className="tooltipp">quick view</span>
@@ -687,10 +651,6 @@ export const Product = () => {
                     <button className="add-to-wishlist">
                       <i className="fa fa-heart-o"></i>
                       <span className="tooltipp">add to wishlist</span>
-                    </button>
-                    <button className="add-to-compare">
-                      <i className="fa fa-exchange"></i>
-                      <span className="tooltipp">add to compare</span>
                     </button>
                     <button className="quick-view">
                       <i className="fa fa-eye"></i>

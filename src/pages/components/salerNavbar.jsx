@@ -1,23 +1,35 @@
+import { useState } from "react";
 import "../../assets/css/tailwind.output.css";
+import { Link } from "react-router-dom";
 
-export const SalerNavbar = () => {
+export const SalerNavbar = ({ page }) => {
   return (
     <>
       {/* <!-- Desktop sidebar --> */}
       <aside className="z-20 flex-shrink-0 w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block">
         <div className="py-4 text-gray-500 dark:text-gray-400">
-          <a
-            className="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
-            href="#"
+          <Link
+            className={`ml-6 text-lg font-bold dark:text-gray-200 ${
+              page == "dashboard" ? "text-gray-800" : ""
+            }`}
+            to="/saler/dashboard"
+            onClick={(e) => {
+              e.preventDefault();
+              setPage("dashboard");
+            }}
           >
             Windmill
-          </a>
+          </Link>
           <ul className="mt-6">
             <li className="relative px-6 py-3">
-              <span
-                className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                aria-hidden="true"
-              ></span>
+              {page == "dashboard" ? (
+                <span
+                  className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                  aria-hidden="true"
+                ></span>
+              ) : (
+                <></>
+              )}
               <a
                 className="inline-flex items-center w-full text-sm text-gray-800 font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/saler/dashboard"
@@ -40,9 +52,19 @@ export const SalerNavbar = () => {
           </ul>
           <ul>
             <li className="relative px-6 py-3">
-              <a
-                className="inline-flex items-center w-full text-sm font-semibold  transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                href="/saler/review"
+              {page == "review" ? (
+                <span
+                  className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                  aria-hidden="true"
+                ></span>
+              ) : (
+                <></>
+              )}
+              <Link
+                className={`inline-flex items-center w-full text-sm font-semibold  transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100 ${
+                  page == "review" ? "text-gray-800" : ""
+                }`}
+                to="/saler/review"
               >
                 <svg
                   className="w-7 h-7"
@@ -57,7 +79,7 @@ export const SalerNavbar = () => {
                   <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
                 </svg>
                 <span className="ml-4 text-lg">Review</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

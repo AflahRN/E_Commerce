@@ -29,7 +29,7 @@ export const Router = () => {
         {/* Saler */}
         <Route path="/saler/dashboard" element={<DashboardSaler />} />
         <Route path="/saler/review" element={<ReviewSaler />} />
-        <Route path="/saler/add" element={<FormProduct />} />
+        <Route path="/saler/form" element={<FormProduct />} />
         <Route path="*" element={<Error404 />}></Route>
       </Routes>
     </BrowserRouter>

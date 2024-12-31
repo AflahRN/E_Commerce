@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { SalerHeader } from "../components/salerHeader";
 import { SalerNavbar } from "../components/salerNavbar";
 import Dropdown from "react-dropdown";
-import { AddProduct } from "../../controller/productController";
+import {
+  AddProduct,
+  editProduct,
+  getProductById,
+} from "../../controller/productController";
 import { getCategory } from "../../controller/categoryController";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const FormProduct = () => {
   const [productName, setProductName] = useState();
@@ -15,6 +19,8 @@ export const FormProduct = () => {
   const [productImage, setProductImage] = useState();
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const stateData = location.state;
 
   const refresh = () => {
     const resList = [];
@@ -36,6 +42,19 @@ export const FormProduct = () => {
     refresh();
   }, []);
 
+  if (stateData.type == "edit" && stateData.id != "") {
+    useEffect(() => {
+      getProductById(stateData.id).then((element) => {
+        setProductName(element.product_name),
+          setProductDescription(element.product_description),
+          setProductPrice(element.product_price),
+          setProductStock(element.product_stock),
+          setProductCategory(element.category_id);
+      });
+    }, [stateData]);
+  }
+
+  console.log(productName);
   return (
     <>
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -46,7 +65,7 @@ export const FormProduct = () => {
           <main className="h-full pb-16 overflow-y-auto">
             <div className="container px-6 mx-auto grid">
               <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Tambah Product
+                {stateData.type == "edit" ? "Edit Product" : "Tambah Product"}
               </h2>
 
               {/* <!-- General elements --> */}
@@ -58,6 +77,7 @@ export const FormProduct = () => {
                   <input
                     className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     placeholder="Nama produck"
+                    defaultValue={productName}
                     onChange={(e) => {
                       setProductName(e.target.value);
                     }}
@@ -72,6 +92,7 @@ export const FormProduct = () => {
                     className="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                     rows="3"
                     placeholder="Tuliskan deskripsi dari product."
+                    defaultValue={productDescription}
                     onChange={(e) => {
                       setProductDescription(e.target.value);
                     }}
@@ -85,6 +106,7 @@ export const FormProduct = () => {
                     className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     type="number"
                     placeholder="Harga produck"
+                    defaultValue={productPrice}
                     onChange={(e) => {
                       setProductPrice(e.target.value);
                     }}
@@ -98,6 +120,7 @@ export const FormProduct = () => {
                     className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     type="number"
                     placeholder="Stok produck"
+                    defaultValue={productStock}
                     onChange={(e) => {
                       setProductStock(e.target.value);
                     }}
@@ -136,19 +159,33 @@ export const FormProduct = () => {
                 <input
                   type="button"
                   placeholder="Jane Doe"
-                  value="Tambah"
+                  value={
+                    stateData.type == "edit" ? "Edit Product" : "Tambah Product"
+                  }
                   className="bg-[#7e3af2] text-white font-semibold py-2 px-4 text-lg rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
                   onClick={() => {
-                    AddProduct(
-                      productName,
-                      productDescription,
-                      productPrice,
-                      productStock,
-                      productImage,
-                      productCategory
-                    ).then(() => {
-                      navigate(-1);
-                    });
+                    stateData.type == "edit"
+                      ? editProduct(
+                          stateData.id,
+                          productName,
+                          productDescription,
+                          productPrice,
+                          productStock,
+                          productImage,
+                          productCategory
+                        ).then(() => {
+                          navigate(-1);
+                        })
+                      : AddProduct(
+                          productName,
+                          productDescription,
+                          productPrice,
+                          productStock,
+                          productImage,
+                          productCategory
+                        ).then(() => {
+                          navigate(-1);
+                        });
                   }}
                 />
               </div>

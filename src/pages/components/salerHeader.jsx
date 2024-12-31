@@ -71,7 +71,7 @@ export const SalerHeader = () => {
           {/* <!-- Profile menu --> */}
           <li className="relative">
             <h4
-              className="cursor-pointer"
+              className="cursor-pointer text-xl font-bold"
               onClick={() => {
                 setOpenLogout(!openLogout);
               }}

@@ -27,7 +27,7 @@ export const DashboardSaler = () => {
     <>
       {/* Modal */}
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-        <SalerNavbar />
+        <SalerNavbar page={"dashboard"} />
         <div className="flex flex-col flex-1 w-full">
           <SalerHeader />
           <main className="h-full pb-16 overflow-y-auto">
@@ -39,7 +39,9 @@ export const DashboardSaler = () => {
                 <button
                   className="bg-[#7e3af2] text-white font-semibold h-min px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
                   onClick={() => {
-                    navigate("/saler/add");
+                    navigate("/saler/form", {
+                      state: { type: "add" },
+                    });
                   }}
                 >
                   Add product
@@ -117,6 +119,14 @@ export const DashboardSaler = () => {
                                 <button
                                   className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                   aria-label="Edit"
+                                  onClick={() => {
+                                    navigate("/saler/form", {
+                                      state: {
+                                        type: "edit",
+                                        id: element.product_id,
+                                      },
+                                    });
+                                  }}
                                 >
                                   <svg
                                     className="w-5 h-5"

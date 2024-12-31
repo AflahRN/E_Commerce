@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = "http://192.168.1.103:3000";
+const url = "http://10.190.4.131:3000";
 
 export const getProduct = async () => {
   const token = Cookies.get("authToken");
@@ -58,6 +58,39 @@ export const AddProduct = async (
       },
     });
     console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editProduct = async (
+  id,
+  productName,
+  productDescription,
+  productPrice,
+  productStock,
+  productImage,
+  categoryId
+) => {
+  const token = Cookies.get("authToken");
+  const formData = new FormData();
+  formData.append("productName", productName);
+  formData.append("productDescription", productDescription);
+  formData.append("productPrice", productPrice);
+  formData.append("productStock", productStock);
+  if (productImage) formData.append("productImage", productImage);
+  formData.append("categoryId", categoryId);
+
+  try {
+    const response = await axios.patch(`${url}/product/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status == 200) {
+      return response;
+    }
   } catch (error) {
     console.error(error);
   }
