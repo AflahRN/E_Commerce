@@ -150,14 +150,6 @@ export const Product = () => {
                   </button>
                 </div>
 
-                <ul className="product-btns">
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-heart-o"></i> add to wishlist
-                    </a>
-                  </li>
-                </ul>
-
                 <ul className="product-links">
                   <li>Category:</li>
                   <li>

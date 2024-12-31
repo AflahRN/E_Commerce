@@ -183,12 +183,6 @@ export const Store = () => {
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                           </div>
-                          <div className="product-btns">
-                            <button className="add-to-wishlist">
-                              <i className="fa fa-heart-o"></i>
-                              <span className="tooltipp">add to wishlist</span>
-                            </button>
-                          </div>
                         </div>
                         <div className="add-to-cart">
                           <button

@@ -1,18 +1,14 @@
-import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io";
-import { useState, useEffect } from "react";
-import Row from "react-bootstrap/Row";
-import { Header } from "../components/header";
-import { Navbar } from "../components/navbar";
-import { Footer } from "../components/footer";
 import "../../assets/fonts/fontawesome-webfont.ttf";
 import "../../assets/fonts/FontAwesome.otf";
 import "../../assets/fonts/slick.ttf";
 import "../../assets/css/style.css";
-
-// Bisa dihapus
-import shop01 from "../../assets/images/shop01.png";
-import shop02 from "../../assets/images/shop02.png";
+import Row from "react-bootstrap/Row";
 import shop03 from "../../assets/images/shop03.png";
+import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io";
+import { useState, useEffect } from "react";
+import { Header } from "../components/header";
+import { Navbar } from "../components/navbar";
+import { Footer } from "../components/footer";
 import { getProduct } from "../../controller/productController";
 import { Link, useNavigate } from "react-router-dom";
 import { addCart } from "../../controller/cartController";
@@ -23,17 +19,28 @@ export const Dashboard = () => {
   const [productPerPage, setProductPerPage] = useState(8);
   const [refreshCart, setRefreshCart] = useState(false);
   const [category, setCategory] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [product, setProduct] = useState([]);
 
   const navigate = useNavigate();
 
-  const RefreshData = () => {
-    getProduct().then((response) => setProduct(response));
+  const RefreshProduct = () => {
+    getProduct()
+      .then((response) =>
+        response.filter((element) =>
+          element.category.category_name.includes(categoryFilter)
+        )
+      )
+      .then((filter) => setProduct(filter));
+  };
+
+  const RefreshCategory = () => {
     getCategory().then((response) => setCategory(response));
   };
 
   useEffect(() => {
-    RefreshData();
+    RefreshProduct();
+    RefreshCategory();
   }, []);
 
   const [maxPageTopSelling, setMaxPageTopSelling] = useState([]);
@@ -45,7 +52,10 @@ export const Dashboard = () => {
     setMaxPageTopSelling(loopMaxPageTopSelling);
   }, [product]);
 
-  console.log(category);
+  useEffect(() => {
+    RefreshProduct();
+  }, [categoryFilter]);
+
   return (
     <>
       <Header refreshChart={refreshCart} />
@@ -57,9 +67,9 @@ export const Dashboard = () => {
           {/* <!-- row --> */}
           <div className="row">
             {/* <!-- shop --> */}
-            {category.map((element) => {
+            {category.map((element, index) => {
               return (
-                <div className="col-md-4 col-xs-6">
+                <div className="col-md-4 col-xs-6" key={index}>
                   <div className="shop">
                     <div className="shop-img">
                       <img src={shop03} alt="" />
@@ -152,26 +162,26 @@ export const Dashboard = () => {
                 <h3 className="title">Top selling</h3>
                 <div className="section-nav">
                   <ul className="section-tab-nav tab-nav">
-                    <li className="active">
-                      <a data-toggle="tab" href="#tab2">
-                        Laptops
-                      </a>
-                    </li>
-                    <li>
-                      <a data-toggle="tab" href="#tab2">
-                        Smartphones
-                      </a>
-                    </li>
-                    <li>
-                      <a data-toggle="tab" href="#tab2">
-                        Cameras
-                      </a>
-                    </li>
-                    <li>
-                      <a data-toggle="tab" href="#tab2">
-                        Accessories
-                      </a>
-                    </li>
+                    {category.map((element) => {
+                      return (
+                        <li
+                          className={`${
+                            categoryFilter == element.category_name
+                              ? "active"
+                              : ""
+                          } cursor-pointer`}
+                        >
+                          <a
+                            data-toggle="tab"
+                            onClick={() => {
+                              setCategoryFilter(element.category_name);
+                            }}
+                          >
+                            {element.category_name}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
@@ -189,7 +199,7 @@ export const Dashboard = () => {
                   }
                 }}
               />
-              {maxPageTopSelling.map((element) => {
+              {maxPageTopSelling.map((element, index) => {
                 return (
                   <p
                     style={{
@@ -202,6 +212,7 @@ export const Dashboard = () => {
                     onClick={() => {
                       setTopSellingPage(element);
                     }}
+                    key={index}
                   >
                     {element}
                   </p>
@@ -223,60 +234,50 @@ export const Dashboard = () => {
               {product.map((element, index) => {
                 return index >= 0 + (topSellingPage - 1) * productPerPage &&
                   index < topSellingPage * productPerPage ? (
-                  <>
-                    {/* <!-- product --> */}
-                    <div className="col-md-3 col-xs-6">
-                      <div className="product">
-                        <div className="product-img h-[342px] p-3 grid items-center">
-                          <img
-                            src={`http://localhost:3000/image/${element.product_image}`}
-                            alt=""
-                          />
-                        </div>
-                        <div className="product-body">
-                          <p className="product-category">
-                            {element.category.category_name}
-                          </p>
-                          <h3 className="product-name">
-                            <Link
-                              to={`/product/${element.product_id}`}
-                              onClick={() => {
-                                window.scrollTo({ top: 0 });
-                              }}
-                            >
-                              {element.product_name}
-                            </Link>
-                          </h3>
-                          <h4 className="product-price">
-                            Rp{" "}
-                            {Intl.NumberFormat("id-ID", {}).format(
-                              element.product_price
-                            )}
-                          </h4>
-                          <div className="product-rating"></div>
-                          <div className="product-btns">
-                            {/* <button className="add-to-wishlist">
-                              <i className="fa fa-heart-o"></i>
-                              <span className="tooltipp">add to wishlist</span>
-                            </button> */}
-                          </div>
-                        </div>
-                        <div className="add-to-cart">
-                          <button
-                            className="add-to-cart-btn"
+                  <div className="col-md-3 col-xs-6" key={index}>
+                    <div className="product">
+                      <div className="product-img h-[342px] p-3 grid items-center">
+                        <img
+                          src={`http://localhost:3000/image/${element.product_image}`}
+                          alt=""
+                        />
+                      </div>
+                      <div className="product-body">
+                        <p className="product-category">
+                          {element.category.category_name}
+                        </p>
+                        <h3 className="product-name">
+                          <Link
+                            to={`/product/${element.product_id}`}
                             onClick={() => {
-                              addCart(element.product_id, 1).then(() => {
-                                setRefreshCart(!refreshCart);
-                              });
+                              window.scrollTo({ top: 0 });
                             }}
                           >
-                            <i className="fa fa-shopping-cart"></i> add to cart
-                          </button>
-                        </div>
+                            {element.product_name}
+                          </Link>
+                        </h3>
+                        <h4 className="product-price">
+                          Rp{" "}
+                          {Intl.NumberFormat("id-ID", {}).format(
+                            element.product_price
+                          )}
+                        </h4>
+                        <div className="product-rating"></div>
+                      </div>
+                      <div className="add-to-cart">
+                        <button
+                          className="add-to-cart-btn"
+                          onClick={() => {
+                            addCart(element.product_id, 1).then(() => {
+                              setRefreshCart(!refreshCart);
+                            });
+                          }}
+                        >
+                          <i className="fa fa-shopping-cart"></i> add to cart
+                        </button>
                       </div>
                     </div>
-                    {/* <!-- /product --> */}
-                  </>
+                  </div>
                 ) : (
                   <></>
                 );
