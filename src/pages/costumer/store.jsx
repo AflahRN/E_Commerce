@@ -3,7 +3,12 @@ import { Header } from "../components/header";
 import { Footer } from "../components/footer";
 import { useEffect, useState } from "react";
 import { getProduct } from "../../controller/productController";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { addCart } from "../../controller/cartController";
 import { Breadcrumb } from "../components/breadcrumb";
 import { getCategory } from "../../controller/categoryController";
@@ -17,6 +22,17 @@ export const Store = () => {
   const searchCategory = searchParams.get("category") || "";
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigate = (searchText) => {
+    const params = new URLSearchParams(location.search);
+    params.set("category", searchText);
+
+    navigate({
+      pathname: "/store",
+      search: params.toString(),
+    });
+  };
 
   useEffect(() => {
     refresh();
@@ -35,9 +51,6 @@ export const Store = () => {
     getCategory().then((response) => setCategory(response));
   };
 
-  console.log(product);
-
-  console.log(searchCategory);
   return (
     <>
       <Header refreshChart={refreshCart} />
@@ -65,14 +78,15 @@ export const Store = () => {
                           value={element.category_id}
                           id={element.category_id}
                           onChange={(e) => {
-                            navigate({
-                              pathname: "/store",
-                              search: `?category=${e.target.value}`,
-                            });
+                            handleNavigate(e.target.value);
+                            // navigate({
+                            //   pathname: "/store",
+                            //   search: `?category=${e.target.value}`,
+                            // });
                             refresh();
                           }}
                         />
-                        <label for={element.category_id}>
+                        <label htmlFor={element.category_id}>
                           <span></span>
                           {element.category_name}
                           <small>

@@ -14,18 +14,22 @@ import shop01 from "../../assets/images/shop01.png";
 import shop02 from "../../assets/images/shop02.png";
 import shop03 from "../../assets/images/shop03.png";
 import { getProduct } from "../../controller/productController";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addCart } from "../../controller/cartController";
+import { getCategory } from "../../controller/categoryController";
 
 export const Dashboard = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);
   const [productPerPage, setProductPerPage] = useState(8);
   const [refreshCart, setRefreshCart] = useState(false);
-
+  const [category, setCategory] = useState([]);
   const [product, setProduct] = useState([]);
+
+  const navigate = useNavigate();
 
   const RefreshData = () => {
     getProduct().then((response) => setProduct(response));
+    getCategory().then((response) => setCategory(response));
   };
 
   useEffect(() => {
@@ -41,7 +45,7 @@ export const Dashboard = () => {
     setMaxPageTopSelling(loopMaxPageTopSelling);
   }, [product]);
 
-  console.log(product);
+  console.log(category);
   return (
     <>
       <Header refreshChart={refreshCart} />
@@ -53,63 +57,35 @@ export const Dashboard = () => {
           {/* <!-- row --> */}
           <div className="row">
             {/* <!-- shop --> */}
-            <div className="col-md-4 col-xs-6">
-              <div className="shop">
-                <div className="shop-img">
-                  <img src={shop01} alt="" />
+            {category.map((element) => {
+              return (
+                <div className="col-md-4 col-xs-6">
+                  <div className="shop">
+                    <div className="shop-img">
+                      <img src={shop03} alt="" />
+                    </div>
+                    <div className="shop-body">
+                      <h3>
+                        {element.category_name}
+                        <br />
+                        Collection
+                      </h3>
+                      <a
+                        onClick={() => {
+                          navigate({
+                            pathname: "/store",
+                            search: `?category=${element.category_id}`,
+                          });
+                        }}
+                        className="cta-btn cursor-pointer"
+                      >
+                        Shop now <i className="fa fa-arrow-circle-right"></i>
+                      </a>
+                    </div>
+                  </div>
                 </div>
-                <div className="shop-body">
-                  <h3>
-                    Laptop
-                    <br />
-                    Collection
-                  </h3>
-                  <a href="#" className="cta-btn">
-                    Shop now <i className="fa fa-arrow-circle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/* <!-- /shop --> */}
-
-            {/* <!-- shop --> */}
-            <div className="col-md-4 col-xs-6">
-              <div className="shop">
-                <div className="shop-img">
-                  <img src={shop03} alt="" />
-                </div>
-                <div className="shop-body">
-                  <h3>
-                    Accessories
-                    <br />
-                    Collection
-                  </h3>
-                  <a href="#" className="cta-btn">
-                    Shop now <i className="fa fa-arrow-circle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/* <!-- /shop --> */}
-
-            {/* <!-- shop --> */}
-            <div className="col-md-4 col-xs-6">
-              <div className="shop">
-                <div className="shop-img">
-                  <img src={shop02} alt="" />
-                </div>
-                <div className="shop-body">
-                  <h3>
-                    Cameras
-                    <br />
-                    Collection
-                  </h3>
-                  <a href="#" className="cta-btn">
-                    Shop now <i className="fa fa-arrow-circle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
+              );
+            })}
             {/* <!-- /shop --> */}
           </div>
           {/* <!-- /row --> */}

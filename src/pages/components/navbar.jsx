@@ -7,12 +7,14 @@ import "../../assets/css/style.css";
 import "../../assets/css/index.css";
 import { useEffect, useState } from "react";
 import { getCategory } from "../../controller/categoryController";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const Navbar = () => {
   const [navbarItem, setNavbarItem] = useState([]);
   const [activePage, setActivePage] = useState("home");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchCategory = searchParams.get("category") || "";
 
   const refresh = () => {
     getCategory().then((response) => setNavbarItem(response));
@@ -35,7 +37,11 @@ export const Navbar = () => {
               <li
                 className={`
                         cursor-pointer
-                        ${activePage == "home" ? "active" : ""}`}
+                        ${
+                          activePage == "home" && searchCategory == ""
+                            ? "active"
+                            : ""
+                        }`}
                 onClick={() => {
                   setActivePage("home");
                 }}
@@ -49,7 +55,12 @@ export const Navbar = () => {
                       key={index}
                       className={`
                         cursor-pointer
-                        ${activePage == element.category_name ? "active" : ""}`}
+                        ${
+                          activePage == element.category_name ||
+                          searchCategory == element.category_id
+                            ? "active"
+                            : ""
+                        }`}
                       onClick={() => {
                         setActivePage(element.category_name);
                       }}

@@ -10,13 +10,13 @@ export const Breadcrumb = ({ path }) => {
   return (
     <>
       {/* <!-- BREADCRUMB --> */}
-      <div id="breadcrumb" class="section">
+      <div id="breadcrumb" className="section">
         {/* <!-- container --> */}
-        <div class="container">
+        <div className="container">
           {/* <!-- row --> */}
-          <div class="row">
-            <div class="col-md-12">
-              <ul class="breadcrumb-tree">
+          <div className="row">
+            <div className="col-md-12">
+              <ul className="breadcrumb-tree">
                 <li>
                   <a href="/dashboard">Home</a>
                 </li>

@@ -14,7 +14,7 @@ import {
 } from "../../controller/cartController";
 import { generatePaymentUrl } from "../../controller/paymentController";
 import { getUserdata } from "../../controller/userController";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
@@ -23,6 +23,17 @@ export const Header = ({ refreshChart }) => {
   const [username, setUsername] = useState("");
   const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigate = () => {
+    const params = new URLSearchParams(location.search);
+    params.set("search", searchText);
+
+    navigate({
+      pathname: "/store",
+      search: params.toString(),
+    });
+  };
 
   const checkoutItem = [];
 
@@ -109,10 +120,11 @@ export const Header = ({ refreshChart }) => {
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
-                          navigate({
-                            pathname: "/store",
-                            search: `?search=${searchText}`,
-                          });
+                          handleNavigate();
+                          // navigate({
+                          //   pathname: "/store",
+                          //   search: `?search=${searchText}`,
+                          // });
                         }
                       }}
                     />
