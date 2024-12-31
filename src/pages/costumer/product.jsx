@@ -3,9 +3,6 @@ import "../../assets/css/product.css";
 import { Header } from "../components/header";
 import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
-import Carousel from "react-bootstrap/Carousel";
-
-// Bisa dihapus
 import "../../assets/fonts/fontawesome-webfont.ttf";
 import "../../assets/fonts/FontAwesome.otf";
 import "../../assets/fonts/slick.ttf";
@@ -13,14 +10,12 @@ import product01 from "../../assets/images/product01.png";
 import product02 from "../../assets/images/product02.png";
 import product03 from "../../assets/images/product03.png";
 import product04 from "../../assets/images/product04.png";
-import product06 from "../../assets/images/product06.png";
-import product08 from "../../assets/images/product08.png";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../../controller/productController";
 import { useEffect, useState } from "react";
 import { addCart } from "../../controller/cartController";
 import { Breadcrumb } from "../components/breadcrumb";
-import { getReview } from "../../controller/reviewController";
+import { addReview, getReview } from "../../controller/reviewController";
 
 export const Product = () => {
   const { id } = useParams();
@@ -28,19 +23,27 @@ export const Product = () => {
   const [quantity, setQuantity] = useState(0);
   const [refreshCart, setRefreshCart] = useState(false);
   const [review, setReview] = useState([]);
+  const [tabContent, setTabContent] = useState(true);
+
+  // Review data
+  const [reviewText, setReviewText] = useState();
+  const [reviewScore, setReviewScore] = useState();
 
   const refresh = () => {
-    getProductById(id).then((response) => setProduct(response));
+    getProductById(id)
+      .then((response) => setProduct(response))
+      .then(() => {
+        getReview().then((response) => {
+          setReview(response.filter((element) => element.product_id == id));
+        });
+      });
   };
 
   useEffect(() => {
     refresh();
-    getReview().then((response) => {
-      setReview(response.filter((element) => element.product_id == id));
-    });
   }, []);
+  console.log(review);
 
-  console.log(product);
   return (
     <>
       <Header refreshChart={refreshCart} />
@@ -65,36 +68,6 @@ export const Product = () => {
               src={`http://localhost:3000/image/${product.product_image}`}
               alt=""
             />
-            {/* <Carousel
-              className="carouselItem"
-              nextIcon={
-                <span className="fa fa-sharp fa-chevron-right carousel-icon"></span>
-              }
-              prevIcon={
-                <span className="fa fa-sharp fa-chevron-left carousel-icon"></span>
-              }
-            >
-              <Carousel.Item>
-                <div className="">
-                  <img src={product01} alt="" />
-                </div>
-              </Carousel.Item>
-              <Carousel.Item>
-                <div className="">
-                  <img src={product03} alt="" />
-                </div>
-              </Carousel.Item>
-              <Carousel.Item>
-                <div className="">
-                  <img src={product06} alt="" />
-                </div>
-              </Carousel.Item>
-              <Carousel.Item>
-                <div className="">
-                  <img src={product08} alt="" />
-                </div>
-              </Carousel.Item>
-            </Carousel> */}
             {/* <!-- /Product main img --> */}
 
             {/* <!-- Product details --> */}
@@ -201,12 +174,24 @@ export const Product = () => {
                 {/* <!-- product tab nav --> */}
                 <ul className="tab-nav">
                   <li className="active">
-                    <a data-toggle="tab" href="#tab1">
+                    <a
+                      data-toggle="tab"
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setTabContent(true);
+                      }}
+                    >
                       Description
                     </a>
                   </li>
                   <li>
-                    <a data-toggle="tab" href="#tab2">
+                    <a
+                      data-toggle="tab"
+                      href="#tab2"
+                      onClick={() => {
+                        setTabContent(false);
+                      }}
+                    >
                       Reviews ({review.length})
                     </a>
                   </li>
@@ -215,275 +200,314 @@ export const Product = () => {
 
                 {/* <!-- product tab content --> */}
                 <div className="tab-content">
-                  {/* <!-- tab1  --> */}
-                  <div id="tab1" className="tab-pane fade in active">
-                    <div className="row">
-                      <div className="col-md-12">
-                        <p>{product.product_description}</p>
+                  {tabContent ? (
+                    <div
+                      id="tab1"
+                      className="fade in active active block h-auto opacity-1 overflow-hidden pb-[15px] mb-[-15px]"
+                    >
+                      <div className="row">
+                        <div className="col-md-12">
+                          <p>{product.product_description}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {/* <!-- /tab1  --> */}
-
-                  {/* <!-- tab2  --> */}
-                  <div id="tab2" className="tab-pane fade in">
-                    <div className="row">
-                      <div className="col-md-12">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris nisi ut aliquip
-                          ex ea commodo consequat. Duis aute irure dolor in
-                          reprehenderit in voluptate velit esse cillum dolore eu
-                          fugiat nulla pariatur. Excepteur sint occaecat
-                          cupidatat non proident, sunt in culpa qui officia
-                          deserunt mollit anim id est laborum.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  {/* <!-- /tab2  --> */}
-
-                  {/* <!-- tab3  --> */}
-                  <div id="tab3" className="tab-pane fade in">
-                    <div className="row">
-                      {/* <!-- Rating --> */}
-                      <div className="col-md-3">
-                        <div id="rating">
-                          <div className="rating-avg">
-                            <span>4.5</span>
-                            <div className="rating-stars">
-                              <i className="fa fa-star"></i>
-                              <i className="fa fa-star"></i>
-                              <i className="fa fa-star"></i>
-                              <i className="fa fa-star"></i>
-                              <i className="fa fa-star-o"></i>
+                  ) : (
+                    <div
+                      id="tab3"
+                      className="fade in fade in active active block h-auto opacity-1 overflow-hidden pb-[15px] mb-[-15px]"
+                    >
+                      <div className="row">
+                        {/* <!-- Rating --> */}
+                        <div className="col-md-3">
+                          <div id="rating">
+                            <div className="rating-avg">
+                              <span>4.5</span>
+                              <div className="rating-stars">
+                                <i className="fa fa-star"></i>
+                                <i className="fa fa-star"></i>
+                                <i className="fa fa-star"></i>
+                                <i className="fa fa-star"></i>
+                                <i className="fa fa-star-o"></i>
+                              </div>
                             </div>
+                            <ul className="rating">
+                              <li>
+                                <div className="rating-stars">
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                </div>
+                                <div className="rating-progress">
+                                  <div
+                                    style={{
+                                      width: `${parseInt(
+                                        (review.filter(
+                                          (element) => element.review_skor == 5
+                                        ).length /
+                                          review.length) *
+                                          100
+                                      )}%`,
+                                    }}
+                                  ></div>
+                                </div>
+                                <span className="sum">5</span>
+                              </li>
+                              <li>
+                                <div className="rating-stars">
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star-o"></i>
+                                </div>
+                                <div className="rating-progress">
+                                  <div
+                                    style={{
+                                      width: `${parseInt(
+                                        (review.filter(
+                                          (element) => element.review_skor == 4
+                                        ).length /
+                                          review.length) *
+                                          100
+                                      )}%`,
+                                    }}
+                                  ></div>
+                                </div>
+                                <span className="sum">4</span>
+                              </li>
+                              <li>
+                                <div className="rating-stars">
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star-o"></i>
+                                  <i className="fa fa-star-o"></i>
+                                </div>
+                                <div className="rating-progress">
+                                  <div
+                                    style={{
+                                      width: `${parseInt(
+                                        (review.filter(
+                                          (element) => element.review_skor == 3
+                                        ).length /
+                                          review.length) *
+                                          100
+                                      )}%`,
+                                    }}
+                                  ></div>
+                                </div>
+                                <span className="sum">3</span>
+                              </li>
+                              <li>
+                                <div className="rating-stars">
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star-o"></i>
+                                  <i className="fa fa-star-o"></i>
+                                  <i className="fa fa-star-o"></i>
+                                </div>
+                                <div className="rating-progress">
+                                  <div
+                                    style={{
+                                      width: `${parseInt(
+                                        (review.filter(
+                                          (element) => element.review_skor == 2
+                                        ).length /
+                                          review.length) *
+                                          100
+                                      )}%`,
+                                    }}
+                                  ></div>
+                                </div>
+                                <span className="sum">2</span>
+                              </li>
+                              <li>
+                                <div className="rating-stars">
+                                  <i className="fa fa-star"></i>
+                                  <i className="fa fa-star-o"></i>
+                                  <i className="fa fa-star-o"></i>
+                                  <i className="fa fa-star-o"></i>
+                                  <i className="fa fa-star-o"></i>
+                                </div>
+                                <div className="rating-progress">
+                                  <div
+                                    style={{
+                                      width: `${parseInt(
+                                        (review.filter(
+                                          (element) => element.review_skor == 1
+                                        ).length /
+                                          review.length) *
+                                          100
+                                      )}%`,
+                                    }}
+                                  ></div>
+                                </div>
+                                <span className="sum">1</span>
+                              </li>
+                            </ul>
                           </div>
-                          <ul className="rating">
-                            <li>
-                              <div className="rating-stars">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                              </div>
-                              <div className="rating-progress">
-                                <div style={{ width: "80%" }}></div>
-                              </div>
-                              <span className="sum">3</span>
-                            </li>
-                            <li>
-                              <div className="rating-stars">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star-o"></i>
-                              </div>
-                              <div className="rating-progress">
-                                <div style={{ width: "60%" }}></div>
-                              </div>
-                              <span className="sum">2</span>
-                            </li>
-                            <li>
-                              <div className="rating-stars">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star-o"></i>
-                                <i className="fa fa-star-o"></i>
-                              </div>
-                              <div className="rating-progress">
-                                <div></div>
-                              </div>
-                              <span className="sum">0</span>
-                            </li>
-                            <li>
-                              <div className="rating-stars">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star-o"></i>
-                                <i className="fa fa-star-o"></i>
-                                <i className="fa fa-star-o"></i>
-                              </div>
-                              <div className="rating-progress">
-                                <div></div>
-                              </div>
-                              <span className="sum">0</span>
-                            </li>
-                            <li>
-                              <div className="rating-stars">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star-o"></i>
-                                <i className="fa fa-star-o"></i>
-                                <i className="fa fa-star-o"></i>
-                                <i className="fa fa-star-o"></i>
-                              </div>
-                              <div className="rating-progress">
-                                <div></div>
-                              </div>
-                              <span className="sum">0</span>
-                            </li>
-                          </ul>
                         </div>
-                      </div>
-                      {/* <!-- /Rating --> */}
+                        {/* <!-- /Rating --> */}
 
-                      {/* <!-- Reviews --> */}
-                      <div className="col-md-6">
-                        <div id="reviews">
-                          <ul className="reviews">
-                            <li>
-                              <div className="review-heading">
-                                <h5 className="name">John</h5>
-                                <p className="date">27 DEC 2018, 8:0 PM</p>
-                                <div className="review-rating">
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star-o empty"></i>
-                                </div>
-                              </div>
-                              <div className="review-body">
-                                <p>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipisicing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua
-                                </p>
-                              </div>
-                            </li>
-                            <li>
-                              <div className="review-heading">
-                                <h5 className="name">John</h5>
-                                <p className="date">27 DEC 2018, 8:0 PM</p>
-                                <div className="review-rating">
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star-o empty"></i>
-                                </div>
-                              </div>
-                              <div className="review-body">
-                                <p>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipisicing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua
-                                </p>
-                              </div>
-                            </li>
-                            <li>
-                              <div className="review-heading">
-                                <h5 className="name">John</h5>
-                                <p className="date">27 DEC 2018, 8:0 PM</p>
-                                <div className="review-rating">
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star"></i>
-                                  <i className="fa fa-star-o empty"></i>
-                                </div>
-                              </div>
-                              <div className="review-body">
-                                <p>
-                                  Lorem ipsum dolor sit amet, consectetur
-                                  adipisicing elit, sed do eiusmod tempor
-                                  incididunt ut labore et dolore magna aliqua
-                                </p>
-                              </div>
-                            </li>
-                          </ul>
-                          <ul className="reviews-pagination">
-                            <li className="active">1</li>
-                            <li>
-                              <a href="#">2</a>
-                            </li>
-                            <li>
-                              <a href="#">3</a>
-                            </li>
-                            <li>
-                              <a href="#">4</a>
-                            </li>
-                            <li>
-                              <a href="#">
-                                <i className="fa fa-angle-right"></i>
-                              </a>
-                            </li>
-                          </ul>
+                        {/* <!-- Reviews --> */}
+                        <div className="col-md-6">
+                          <div id="reviews">
+                            <ul className="reviews">
+                              {review.map((element) => {
+                                const date = new Date(element.updatedAt);
+                                const formattedDate = date
+                                  .toISOString()
+                                  .split("T")[0];
+                                return (
+                                  <li>
+                                    <div className="review-heading">
+                                      <h5 className="name">
+                                        {element.account.username}
+                                      </h5>
+                                      <p className="date">{formattedDate}</p>
+                                      <div className="review-rating">
+                                        <i
+                                          className={
+                                            element.review_skor >= 1
+                                              ? "fa fa-star"
+                                              : "fa fa-star-o empty"
+                                          }
+                                        ></i>
+                                        <i
+                                          className={
+                                            element.review_skor >= 2
+                                              ? "fa fa-star"
+                                              : "fa fa-star-o empty"
+                                          }
+                                        ></i>
+                                        <i
+                                          className={
+                                            element.review_skor >= 3
+                                              ? "fa fa-star"
+                                              : "fa fa-star-o empty"
+                                          }
+                                        ></i>
+                                        <i
+                                          className={
+                                            element.review_skor >= 4
+                                              ? "fa fa-star"
+                                              : "fa fa-star-o empty"
+                                          }
+                                        ></i>
+                                        <i
+                                          className={
+                                            element.review_skor >= 5
+                                              ? "fa fa-star"
+                                              : "fa fa-star-o empty"
+                                          }
+                                        ></i>
+                                      </div>
+                                    </div>
+                                    <div className="review-body">
+                                      <p>{element.review_text}</p>
+                                    </div>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                            <ul className="reviews-pagination">
+                              <li className="active">1</li>
+                              <li>
+                                <a href="#">2</a>
+                              </li>
+                              <li>
+                                <a href="#">3</a>
+                              </li>
+                              <li>
+                                <a href="#">4</a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-angle-right"></i>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                      </div>
-                      {/* <!-- /Reviews --> */}
+                        {/* <!-- /Reviews --> */}
 
-                      {/* <!-- Review Form --> */}
-                      <div className="col-md-3">
-                        <div id="review-form">
-                          <form className="review-form">
-                            <input
-                              className="input"
-                              type="text"
-                              placeholder="Your Name"
-                            />
-                            <input
-                              className="input"
-                              type="email"
-                              placeholder="Your Email"
-                            />
-                            <textarea
-                              className="input"
-                              placeholder="Your Review"
-                            ></textarea>
-                            <div className="input-rating">
-                              <span>Your Rating: </span>
-                              <div className="stars">
-                                <input
-                                  id="star5"
-                                  name="rating"
-                                  value="5"
-                                  type="radio"
-                                />
-                                <label htmlFor="star5"></label>
-                                <input
-                                  id="star4"
-                                  name="rating"
-                                  value="4"
-                                  type="radio"
-                                />
-                                <label htmlFor="star4"></label>
-                                <input
-                                  id="star3"
-                                  name="rating"
-                                  value="3"
-                                  type="radio"
-                                />
-                                <label htmlFor="star3"></label>
-                                <input
-                                  id="star2"
-                                  name="rating"
-                                  value="2"
-                                  type="radio"
-                                />
-                                <label htmlFor="star2"></label>
-                                <input
-                                  id="star1"
-                                  name="rating"
-                                  value="1"
-                                  type="radio"
-                                />
-                                <label htmlFor="star1"></label>
+                        {/* <!-- Review Form --> */}
+                        <div className="col-md-3">
+                          <div id="review-form">
+                            <form className="review-form">
+                              <textarea
+                                onChange={(e) => {
+                                  setReviewText(e.target.value);
+                                }}
+                                className="input"
+                                placeholder="Your Review"
+                              ></textarea>
+                              <div className="input-rating">
+                                <span>Your Rating: </span>
+                                <div
+                                  className="stars"
+                                  onChange={(e) => {
+                                    setReviewScore(e.target.value);
+                                  }}
+                                >
+                                  <input
+                                    id="star5"
+                                    name="rating"
+                                    value="5"
+                                    type="radio"
+                                  />
+                                  <label htmlFor="star5"></label>
+                                  <input
+                                    id="star4"
+                                    name="rating"
+                                    value="4"
+                                    type="radio"
+                                  />
+                                  <label htmlFor="star4"></label>
+                                  <input
+                                    id="star3"
+                                    name="rating"
+                                    value="3"
+                                    type="radio"
+                                  />
+                                  <label htmlFor="star3"></label>
+                                  <input
+                                    id="star2"
+                                    name="rating"
+                                    value="2"
+                                    type="radio"
+                                  />
+                                  <label htmlFor="star2"></label>
+                                  <input
+                                    id="star1"
+                                    name="rating"
+                                    value="1"
+                                    type="radio"
+                                  />
+                                  <label htmlFor="star1"></label>
+                                </div>
                               </div>
-                            </div>
-                            <button className="primary-btn">Submit</button>
-                          </form>
+                              <button
+                                className="primary-btn"
+                                onClick={() => {
+                                  addReview(reviewText, reviewScore, id).then(
+                                    () => {
+                                      refresh();
+                                    }
+                                  );
+                                }}
+                              >
+                                Submit
+                              </button>
+                            </form>
+                          </div>
                         </div>
+                        {/* <!-- /Review Form --> */}
                       </div>
-                      {/* <!-- /Review Form --> */}
                     </div>
-                  </div>
-                  {/* <!-- /tab3  --> */}
+                  )}
                 </div>
                 {/* <!-- /product tab content  --> */}
               </div>

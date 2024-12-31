@@ -6,7 +6,6 @@ import "../../assets/css/slick.css";
 import "../../assets/css/style.css";
 import "../../assets/css/index.css";
 import logo from "../../assets/images/logo.png";
-import product01 from "../../assets/images/product01.png";
 import { useEffect, useState } from "react";
 import { deleteCart, getCart } from "../../controller/cartController";
 import { generatePaymentUrl } from "../../controller/paymentController";
@@ -48,6 +47,7 @@ export const Header = ({ refreshChart }) => {
     setGrossPayment(total);
   }, [cartItem]);
 
+  console.log(cartItem);
   return (
     <>
       {/* <!-- HEADER --> */}
@@ -133,13 +133,13 @@ export const Header = ({ refreshChart }) => {
               <div className="col-md-3 clearfix">
                 <div className="header-ctn">
                   {/* <!-- Wishlist --> */}
-                  <div>
+                  {/* <div>
                     <a href="#">
                       <i className="fa fa-heart-o"></i>
                       <span>Your Wishlist</span>
                       <div className="qty">2</div>
                     </a>
-                  </div>
+                  </div> */}
                   {/* <!-- /Wishlist --> */}
 
                   {/* <!-- Cart --> */}
@@ -166,11 +166,10 @@ export const Header = ({ refreshChart }) => {
                     >
                       <div className="cart-list">
                         {cartItem.map((element, index) => {
-                          checkoutItem.push({
-                            product_id: element.product_id,
-                            quantity: element.quantity,
-                          });
-                          console.log(element);
+                          // checkoutItem.push({
+                          //   product_id: element.product_id,
+                          //   quantity: element.quantity,
+                          // });
                           return (
                             <div className="product-widget" key={index}>
                               <div className="product-img">

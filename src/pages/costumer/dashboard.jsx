@@ -4,22 +4,12 @@ import Row from "react-bootstrap/Row";
 import { Header } from "../components/header";
 import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
-import Carousel from "react-bootstrap/Carousel";
 import "../../assets/fonts/fontawesome-webfont.ttf";
 import "../../assets/fonts/FontAwesome.otf";
 import "../../assets/fonts/slick.ttf";
 import "../../assets/css/style.css";
 
 // Bisa dihapus
-import product01 from "../../assets/images/product01.png";
-import product02 from "../../assets/images/product02.png";
-import product03 from "../../assets/images/product03.png";
-import product04 from "../../assets/images/product04.png";
-import product05 from "../../assets/images/product05.png";
-import product06 from "../../assets/images/product06.png";
-import product07 from "../../assets/images/product07.png";
-import product08 from "../../assets/images/product08.png";
-import product09 from "../../assets/images/product09.png";
 import shop01 from "../../assets/images/shop01.png";
 import shop02 from "../../assets/images/shop02.png";
 import shop03 from "../../assets/images/shop03.png";
@@ -289,18 +279,10 @@ export const Dashboard = () => {
                           </h4>
                           <div className="product-rating"></div>
                           <div className="product-btns">
-                            <button className="add-to-wishlist">
+                            {/* <button className="add-to-wishlist">
                               <i className="fa fa-heart-o"></i>
                               <span className="tooltipp">add to wishlist</span>
-                            </button>
-                            <button className="add-to-compare">
-                              <i className="fa fa-exchange"></i>
-                              <span className="tooltipp">add to compare</span>
-                            </button>
-                            <button className="quick-view">
-                              <i className="fa fa-eye"></i>
-                              <span className="tooltipp">quick view</span>
-                            </button>
+                            </button> */}
                           </div>
                         </div>
                         <div className="add-to-cart">

@@ -2219,19 +2219,6 @@ textarea.input {
   border-bottom-right-radius: 5px;
 }
 
-#root > div > div > div > div > div:nth-child(5) > button.active {
-  width: 100%;
-  color: white;
-  transition-duration: 0.3s;
-}
-
-/* #root > div > div > div > div > div:nth-child(5) {
-  width: 100%;
-  display: flex;
-  border: 1px solid #e0dada;
-  border-radius: 5px;
-} */
-
 /*=========================================================
 	14 -> RESPONSIVE
 ===========================================================*/

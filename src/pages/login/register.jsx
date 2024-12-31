@@ -130,12 +130,19 @@ export const Register = () => {
                 }}
               />
             </FormControl>
-            <div>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                border: "1px solid #e0dada",
+                borderRadius: "5px",
+              }}
+            >
               <button
                 className={
                   type == "customer"
-                    ? "type-select-button active"
-                    : "type-select-button"
+                    ? "type-select-button signup-button active"
+                    : "type-select-button signup-button"
                 }
                 onClick={() => {
                   setType("customer");
@@ -146,8 +153,8 @@ export const Register = () => {
               <button
                 className={
                   type == "saler"
-                    ? "type-select-button active"
-                    : "type-select-button"
+                    ? "type-select-button signup-button active"
+                    : "type-select-button signup-button"
                 }
                 onClick={() => {
                   setType("saler");

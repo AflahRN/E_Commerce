@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = "https://a2d4-36-66-160-3.ngrok-free.app";
+const url = "http://10.190.4.131:3000";
 
 export const getReview = async () => {
   const token = Cookies.get("authToken");
@@ -35,6 +35,34 @@ export const sendResponse = async (id, reviewResponse) => {
     );
     if (response.status == 200) {
       console.log(response);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addReview = async (reviewText, reviewSkor, productId) => {
+  const token = Cookies.get("authToken");
+  const accountId = Cookies.get("accountId");
+
+  try {
+    const response = await axios.post(
+      `${url}/review`,
+      {
+        reviewText: reviewText,
+        reviewSkor: reviewSkor,
+        productId: productId,
+        accountId: accountId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status == 200) {
+      console.log("Berhasil kirim review");
     }
   } catch (error) {
     console.error(error);

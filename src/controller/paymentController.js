@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const generatePaymentUrl = async (item, navigate) => {
-  const url = "https://a2d4-36-66-160-3.ngrok-free.app";
+  const url = "http://10.190.4.131:3000";
   const token = Cookies.get("authToken");
   if (token) {
     const response = await axios.post(

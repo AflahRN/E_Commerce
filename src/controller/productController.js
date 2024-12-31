@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const url = "https://a2d4-36-66-160-3.ngrok-free.app";
+const url = "http://10.190.4.131:3000";
 
 export const getProduct = async () => {
   const token = Cookies.get("authToken");
