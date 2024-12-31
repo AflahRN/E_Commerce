@@ -16,7 +16,6 @@ export const Store = () => {
   const [product, setProduct] = useState([]);
   const [refreshCart, setRefreshCart] = useState(false);
   const [category, setCategory] = useState([]);
-  const [filterCategory, setFilterCategory] = useState([]);
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search") || "";
 
@@ -86,132 +85,6 @@ export const Store = () => {
                 </div>
               </div>
               {/* <!-- /aside Widget --> */}
-
-              {/* <!-- aside Widget --> */}
-              <div class="aside">
-                <h3 class="aside-title">Price</h3>
-                <div class="price-filter">
-                  <div id="price-slider"></div>
-                  <div class="input-number price-min">
-                    <input id="price-min" type="number" />
-                    <span class="qty-up">+</span>
-                    <span class="qty-down">-</span>
-                  </div>
-                  <span>-</span>
-                  <div class="input-number price-max">
-                    <input id="price-max" type="number" />
-                    <span class="qty-up">+</span>
-                    <span class="qty-down">-</span>
-                  </div>
-                </div>
-              </div>
-              {/* <!-- /aside Widget --> */}
-
-              {/* <!-- aside Widget --> */}
-              <div class="aside">
-                <h3 class="aside-title">Brand</h3>
-                <div class="checkbox-filter">
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="brand-1" />
-                    <label for="brand-1">
-                      <span></span>
-                      SAMSUNG
-                      <small>(578)</small>
-                    </label>
-                  </div>
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="brand-2" />
-                    <label for="brand-2">
-                      <span></span>
-                      LG
-                      <small>(125)</small>
-                    </label>
-                  </div>
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="brand-3" />
-                    <label for="brand-3">
-                      <span></span>
-                      SONY
-                      <small>(755)</small>
-                    </label>
-                  </div>
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="brand-4" />
-                    <label for="brand-4">
-                      <span></span>
-                      SAMSUNG
-                      <small>(578)</small>
-                    </label>
-                  </div>
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="brand-5" />
-                    <label for="brand-5">
-                      <span></span>
-                      LG
-                      <small>(125)</small>
-                    </label>
-                  </div>
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="brand-6" />
-                    <label for="brand-6">
-                      <span></span>
-                      SONY
-                      <small>(755)</small>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              {/* <!-- /aside Widget --> */}
-
-              {/* <!-- aside Widget --> */}
-              <div class="aside">
-                <h3 class="aside-title">Top selling</h3>
-                <div class="product-widget">
-                  <div class="product-img">
-                    <img src={product01} alt="" />
-                  </div>
-                  <div class="product-body">
-                    <p class="product-category">Category</p>
-                    <h3 class="product-name">
-                      <a href="#">product name goes here</a>
-                    </h3>
-                    <h4 class="product-price">
-                      $980.00 <del class="product-old-price">$990.00</del>
-                    </h4>
-                  </div>
-                </div>
-
-                <div class="product-widget">
-                  <div class="product-img">
-                    <img src={product02} alt="" />
-                  </div>
-                  <div class="product-body">
-                    <p class="product-category">Category</p>
-                    <h3 class="product-name">
-                      <a href="#">product name goes here</a>
-                    </h3>
-                    <h4 class="product-price">
-                      $980.00 <del class="product-old-price">$990.00</del>
-                    </h4>
-                  </div>
-                </div>
-
-                <div class="product-widget">
-                  <div class="product-img">
-                    <img src={product03} alt="" />
-                  </div>
-                  <div class="product-body">
-                    <p class="product-category">Category</p>
-                    <h3 class="product-name">
-                      <a href="#">product name goes here</a>
-                    </h3>
-                    <h4 class="product-price">
-                      $980.00 <del class="product-old-price">$990.00</del>
-                    </h4>
-                  </div>
-                </div>
-              </div>
-              {/* <!-- /aside Widget --> */}
             </div>
             {/* <!-- /ASIDE --> */}
 
@@ -257,12 +130,11 @@ export const Store = () => {
                       {/* <!-- product --> */}
                       <div class="col-md-4 col-xs-6">
                         <div class="product">
-                          <div class="product-img">
-                            <img src={product01} alt="" />
-                            <div class="product-label">
-                              <span class="sale">-30%</span>
-                              <span class="new">NEW</span>
-                            </div>
+                          <div class="product-img h-[280px] grid items-center p-3">
+                            <img
+                              src={`http://localhost:3000/image/${element.product_image}`}
+                              alt=""
+                            />
                           </div>
                           <div class="product-body">
                             <p class="product-category">
@@ -295,14 +167,6 @@ export const Store = () => {
                               <button class="add-to-wishlist">
                                 <i class="fa fa-heart-o"></i>
                                 <span class="tooltipp">add to wishlist</span>
-                              </button>
-                              <button class="add-to-compare">
-                                <i class="fa fa-exchange"></i>
-                                <span class="tooltipp">add to compare</span>
-                              </button>
-                              <button class="quick-view">
-                                <i class="fa fa-eye"></i>
-                                <span class="tooltipp">quick view</span>
                               </button>
                             </div>
                           </div>

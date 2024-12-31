@@ -57,7 +57,7 @@ export const Dashboard = () => {
       <Header refreshChart={refreshCart}></Header>
       <Navbar></Navbar>
       {/* <!-- Products tab & slick --> */}
-      <Carousel
+      {/* <Carousel
         style={{ backgroundColor: "#15161d" }}
         pause="hover"
         interval={5000}
@@ -88,7 +88,7 @@ export const Dashboard = () => {
             </Carousel.Item>
           );
         })}
-      </Carousel>
+      </Carousel> */}
       {/* <!-- Products tab & slick --> */}
       {/* <!-- SECTION --> */}
       <div className="section">
@@ -295,7 +295,7 @@ export const Dashboard = () => {
                     {/* <!-- product --> */}
                     <div className="col-md-3 col-xs-6">
                       <div className="product">
-                        <div className="product-img">
+                        <div className="product-img h-[342px] p-3 grid items-center">
                           <img
                             src={`http://localhost:3000/image/${element.product_image}`}
                             alt=""

@@ -192,10 +192,14 @@ export const Header = ({ refreshChart }) => {
                             product_id: element.product_id,
                             quantity: element.quantity,
                           });
+                          console.log(element);
                           return (
                             <div className="product-widget" key={index}>
                               <div className="product-img">
-                                <img src={product01} alt="" />
+                                <img
+                                  src={`http://localhost:3000/image/${element.product.product_image}`}
+                                  alt=""
+                                />
                               </div>
                               <div className="product-body">
                                 <h3 className="product-name">

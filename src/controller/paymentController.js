@@ -1,6 +1,5 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { redirect } from "react-router-dom";
 
 export const generatePaymentUrl = async (item, navigate) => {
   const url = "http://192.168.1.103:3000";

@@ -16,7 +16,7 @@ export const Login = async (loginData, password, navigate) => {
     if (response.data.type == "customer") {
       navigate("/dashboard");
     } else {
-      navigate("/");
+      navigate("/saler/dashboard");
     }
   }
 };

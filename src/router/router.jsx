@@ -9,6 +9,7 @@ import { Store } from "../pages/costumer/store";
 import { Error404 } from "../pages/error/Error404";
 import { DashboardSaler } from "../pages/saler/dashboardSaler";
 import { ReviewSaler } from "../pages/saler/reviewSaler";
+import { FormProduct } from "../pages/saler/formProduct";
 
 export const Router = () => {
   return (
@@ -28,6 +29,7 @@ export const Router = () => {
         {/* Saler */}
         <Route path="/saler/dashboard" element={<DashboardSaler />} />
         <Route path="/saler/review" element={<ReviewSaler />} />
+        <Route path="/saler/add" element={<FormProduct />} />
         <Route path="*" element={<Error404 />}></Route>
       </Routes>
     </BrowserRouter>

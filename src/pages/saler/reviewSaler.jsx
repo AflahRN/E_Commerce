@@ -1,9 +1,49 @@
+import { useEffect, useState } from "react";
 import "../../assets/css/tailwind.output.css";
-import Product01 from "../../assets/images/product01.png";
 import { SalerHeader } from "../components/salerHeader";
 import { SalerNavbar } from "../components/salerNavbar";
+import Cookies from "js-cookie";
+import { getReview, sendResponse } from "../../controller/reviewController";
+import { getProduct } from "../../controller/productController";
 
 export const ReviewSaler = () => {
+  const [review, setReview] = useState([]);
+  const [product, setProduct] = useState([]);
+  const [productFilter, setProductFilter] = useState([]);
+  const [reviewResponse, setReviewResponse] = useState();
+  const userCredential = Cookies.get();
+
+  const refresh = () => {
+    getProduct()
+      .then((response) =>
+        response.filter((data) => data.account_id == userCredential.accountId)
+      )
+      .then((filter) => setProduct(filter));
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  useEffect(() => {
+    const filterList = [];
+    const productFilter = [];
+    getReview()
+      .then((response) => {
+        response.filter((data) => {
+          product.map((element) => {
+            if (element.product_id == data.product_id) {
+              filterList.push(data);
+              productFilter.push(element);
+            }
+          });
+        });
+      })
+      .then(() => {
+        setReview(filterList);
+        setProductFilter(productFilter);
+      });
+  }, [product]);
   return (
     <>
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -30,59 +70,71 @@ export const ReviewSaler = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                      <tr
-                        className="dark:text-gray-400"
-                        style={{ fontSize: 15, fontWeight: 600 }}
-                      >
-                        <td className="px-4 py-3">
-                          <div className="flex items-center text-sm">
-                            {/* <!-- Avatar with inset shadow --> */}
-                            <div className="relative mr-3 rounded-full md:block w-[8vh]">
-                              <img
-                                className="object-cover w-full h-full rounded-full"
-                                src={Product01}
-                                alt=""
-                                loading="lazy"
-                              />
-                              <div
-                                className="absolute inset-0 rounded-full shadow-inner"
-                                aria-hidden="true"
-                              ></div>
-                            </div>
-                            <div>
-                              <p className="font-semibold text-xl">
-                                Hans Burger
-                              </p>
-                              <p className="text-base text-gray-600 dark:text-gray-400">
-                                10x Developer
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td
-                          className="px-4 py-3 text-lg font-normal"
-                          style={{ maxWidth: "300px", textWrap: "wrap" }}
-                        >
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Architecto quos iusto quia perspiciatis! Modi
-                          porro id adipisci iusto voluptates velit minima magnam
-                          nulla ipsa, harum necessitatibus libero dignissimos
-                          aut officia.
-                        </td>
-                        <td className="px-4 py-3 text-xl text-center">2.5</td>
-                        <td className="px-4 py-3 text-sm">
-                          <textarea
-                            className="border border-gray-300 rounded-lg p-2 w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                            style={{ height: "auto" }}
-                            placeholder="Type your message here..."
-                          ></textarea>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <button className="bg-blue-500 text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200">
-                            Send Response
-                          </button>
-                        </td>
-                      </tr>
+                      {review.map((element, index) => {
+                        return (
+                          <tr
+                            className="dark:text-gray-400"
+                            style={{ fontSize: 15, fontWeight: 600 }}
+                          >
+                            <td className="px-4 py-3">
+                              <div className="flex items-center text-sm">
+                                {/* <!-- Avatar with inset shadow --> */}
+                                <div className="relative mr-3 rounded-full md:block w-[8vh]">
+                                  <img
+                                    className="object-cover w-full h-full rounded-full"
+                                    src={`http://localhost:3000/image/${productFilter[index].product_image}`}
+                                    alt=""
+                                    loading="lazy"
+                                  />
+                                  <div
+                                    className="absolute inset-0 rounded-full shadow-inner"
+                                    aria-hidden="true"
+                                  ></div>
+                                </div>
+                                <div>
+                                  <p className="font-semibold text-xl">
+                                    {productFilter[index].product_name}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-lg lg max-w-[200px] overflow-hidden text-wrap text-ellipsis">
+                              Lorem ipsum, dolor sit amet consectetur
+                              adipisicing elit. Tempora nobis explicabo tenetur
+                              dolorem voluptatibus numquam aliquam, voluptatem
+                              tempore ullam odit aspernatur, eveniet nihil
+                              labore provident perspiciatis autem! Ratione, nemo
+                              officiis.
+                            </td>
+                            <td className="px-4 py-3 text-xl text-center">
+                              {element.review_skor}
+                            </td>
+                            <td className="px-4 py-3 text-sm">
+                              <textarea
+                                className="border border-gray-300 rounded-lg text-lg p-2 w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                style={{ height: "auto" }}
+                                placeholder="Type your message here..."
+                                onChange={(e) => {
+                                  setReviewResponse(e.target.value);
+                                }}
+                              ></textarea>
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <button
+                                onClick={() => {
+                                  sendResponse(
+                                    element.review_id,
+                                    reviewResponse
+                                  );
+                                }}
+                                className="bg-blue-500 text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+                              >
+                                Send Response
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
