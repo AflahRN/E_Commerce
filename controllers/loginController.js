@@ -109,3 +109,7 @@ export const Logout = async (req, res) => {
     console.log(error);
   }
 };
+
+export const ForgetPassword = async (req, res) => {
+  const { password } = req.body;
+};

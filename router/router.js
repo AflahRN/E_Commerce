@@ -17,6 +17,7 @@ import {
 } from "../controllers/productController.js";
 import {
   AddCart,
+  cleanCart,
   DeleteCart,
   ShowCart,
   ShowCartById,
@@ -32,6 +33,7 @@ import {
 import {
   AddReview,
   DeleteReview,
+  ResponseReview,
   reviewResponse,
   ShowReview,
   ShowReviewById,
@@ -67,7 +69,7 @@ router.delete("/category/:id", tokenAuth, DeleteCategory);
 router.get("/product", tokenAuth, ShowProduct);
 router.get("/product/:id", tokenAuth, ShowProductById);
 router.post("/product", tokenAuth, multerConfig, AddProduct);
-router.patch("/product/:id", tokenAuth, UpdateProduct);
+router.patch("/product/:id", tokenAuth, multerConfig, UpdateProduct);
 router.delete("/product/:id", tokenAuth, DeleteProduct);
 
 //Cart
@@ -76,6 +78,7 @@ router.get("/cart/:id", tokenAuth, ShowCartById);
 router.post("/cart", tokenAuth, AddCart);
 router.patch("/cart/:id", tokenAuth, UpdateCart);
 router.delete("/cart/:id", tokenAuth, DeleteCart);
+router.delete("/clean", tokenAuth, cleanCart);
 
 //Wishlist
 router.get("/wishlist", tokenAuth, ShowWishlist);
@@ -90,7 +93,7 @@ router.get("/review/:id", tokenAuth, ShowReviewById);
 router.post("/review", tokenAuth, AddReview);
 router.patch("/review/:id", tokenAuth, UpdateReview);
 router.delete("/review/:id", tokenAuth, DeleteReview);
-router.post("/review/response", tokenAuth, reviewResponse);
+router.patch("/review/response/:id", tokenAuth, ResponseReview);
 
 //Account
 router.get("/account", tokenAuth, ShowAccount);

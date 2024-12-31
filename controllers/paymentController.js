@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { nanoid } from "nanoid";
 import Product from "../models/product.js";
 import Category from "../models/category.js";
+import Transaction from "../models/transaction.js";
+import TransactionDetail from "../models/transaction_details.js";
 
 dotenv.config();
 
@@ -11,18 +13,34 @@ const requestTarget = "/checkout/v1/payment";
 const requestId = `EC-${nanoid(4)}-${nanoid(8)}`;
 const requestTimestamp = new Date().toISOString().slice(0, 19) + "Z";
 export const payment = async (req, res) => {
-  const { item } = req.body;
+  const { item, accountId, grossAmount } = req.body;
 
   let requestItem = {
     order: {
       amount: 0,
       invoice_number: requestId,
       line_item: [],
+      callback_url: "http://localhost:5173/afterpayment",
     },
     payment: {
-      payment_due_date: 60,
+      payment_due_date: 200,
     },
   };
+
+  await Transaction.create({
+    order_id: requestId,
+    gross_amount: grossAmount,
+    account_id: accountId,
+  }).then(async (data) => {
+    item.forEach(async (element) => {
+      console.log(element.quantity);
+      await TransactionDetail.create({
+        transaction_id: data.transaction_id,
+        quantity: element.quantity,
+        product_id: element.product_id,
+      });
+    });
+  });
   for (let i = 0; i < item.length; i++) {
     const response = await Product.findOne({
       where: { product_id: item[i].product_id },
@@ -75,7 +93,6 @@ export const payment = async (req, res) => {
   axios
     .request(config)
     .then((response) => {
-      //   return res.json(response.data);
       return res.json({
         message: response.data.message[0],
         token: response.data.response.payment.token_id,

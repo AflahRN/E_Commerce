@@ -25,10 +25,7 @@ export const ShowTransactionById = async (req, res) => {
 };
 
 export const AddTransaction = async (req, res) => {
-  const { grossAmount, item, accountId } = req.body;
-
-  const orderId = `TRE-${nanoid(4)}-${nanoid(8)}`;
-  const transactionDate = new Date().toISOString();
+  const { grossAmount, item, accountId, orderId } = req.body;
 
   try {
     const isCustomer = await Account.findOne({
@@ -38,7 +35,6 @@ export const AddTransaction = async (req, res) => {
     if (isCustomer) {
       await Transaction.create({
         order_id: orderId,
-        transaction_date: transactionDate,
         gross_amount: grossAmount,
         account_id: accountId,
       }).then(async (response) =>

@@ -6,7 +6,10 @@ export const ShowCart = async (req, res) => {
   try {
     const response = await Cart.findAll({
       include: [
-        { model: Product, attributes: ["product_name", "product_price"] },
+        {
+          model: Product,
+          attributes: ["product_name", "product_price", "product_image"],
+        },
       ],
     });
     res.status(200).json(response);
@@ -91,10 +94,19 @@ export const DeleteCart = async (req, res) => {
       await Cart.destroy({
         where: { cart_id: id },
       });
-      res.status(200).json({ msg: "Data berhasil dikirim" });
+      res.status(200).json({ msg: "Data berhasil dihapus" });
     } else {
       res.json({ msg: "data tidak tersedia" });
     }
+  } catch (error) {
+    res.json({ msg: Error });
+  }
+};
+
+export const cleanCart = async (req, res) => {
+  try {
+    await Cart.truncate();
+    res.status(200).json({ msg: "Data berhasil dihapus" });
   } catch (error) {
     res.json({ msg: Error });
   }

@@ -10,10 +10,9 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const pathURI = path.join(__dirname, "public", "post", "PR-lmXA-18S3HNjw.png");
-console.log(pathURI);
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use("/image", express.static("public/post"));
 app.use(router);

@@ -11,8 +11,9 @@ const Transaction = db.define("transactions", {
   order_id: {
     type: DataTypes.STRING,
   },
-  transaction_date: {
-    type: DataTypes.DATEONLY,
+  status: {
+    type: DataTypes.STRING,
+    defaultValue: "Process",
   },
   gross_amount: DataTypes.INTEGER,
 });

@@ -106,36 +106,35 @@ export const UpdateProduct = async (req, res) => {
     categoryId,
   } = req.body;
   const file = req.file;
-  if (file["size"] >= 100000) {
-    res.json({
-      status: "Error",
-      message: "Maximal image size 100kb",
-    });
-  } else {
-    try {
-      const productImage = fs.readFileSync(file.path);
-      const isExist = await Product.findOne({ where: { product_id: id } });
-      if (isExist) {
-        await Product.update(
-          {
-            product_name: productName,
-            product_description: productDescription,
-            product_price: productPrice,
-            product_stock: productStock,
-            product_image: productImage,
-            category_id: categoryId,
-          },
-          {
-            where: { product_id: id },
+  const responseData = {
+    product_name: productName,
+    product_description: productDescription,
+    product_price: productPrice,
+    product_stock: productStock,
+    category_id: categoryId,
+  };
+  try {
+    const isExist = await Product.findOne({ where: { product_id: id } });
+    if (isExist) {
+      if (file) {
+        responseData["product_image"] = file.filename;
+        fs.unlink(`public/post/${isExist.product_image}`, (err) => {
+          if (err) {
+            console.error(`Error deleting file: ${err}`);
+            return;
           }
-        );
-        res.status(200).json({ msg: "Data berhasil diupdate" });
-      } else {
-        res.json({ msg: "data tidak tersedia" });
+          console.log("File deleted successfully");
+        });
       }
-    } catch (error) {
-      res.json({ msg: Error });
+      await Product.update(responseData, {
+        where: { product_id: id },
+      });
+      res.status(200).json({ msg: "Data berhasil diupdate" });
+    } else {
+      res.json({ msg: "data tidak tersedia" });
     }
+  } catch (error) {
+    res.json({ msg: Error });
   }
 };
 
