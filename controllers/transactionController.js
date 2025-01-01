@@ -27,57 +27,6 @@ export const ShowTransaction = async (req, res) => {
   }
 };
 
-export const ShowTransactionById = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const response = await Transaction.findOne({
-      where: { transaction_id: id },
-    });
-    res.status(200).json(response);
-  } catch (error) {
-    res.json({ msg: Error });
-  }
-};
-
-export const AddTransaction = async (req, res) => {
-  const { grossAmount, item, accountId, orderId, orderDetail } = req.body;
-
-  try {
-    const isCustomer = await Account.findOne({
-      where: { account_id: accountId },
-    }).then((element) => element.type == "customer");
-
-    if (isCustomer) {
-      await Transaction.create({
-        order_id: orderId,
-        gross_amount: grossAmount,
-        account_id: accountId,
-        address: orderDetail.address,
-        city: orderDetail.city,
-        country: orderDetail.country,
-        zipCode: orderDetail.zipCode,
-        telphone: orderDetail.telphone,
-        notes: orderDetail.notes,
-      }).then(async (response) =>
-        item.forEach(async (element) => {
-          await TransactionDetail.create({
-            transaction_id: response.transaction_id,
-            quantity: element["quantity"],
-            product_id: element["productId"],
-          });
-        })
-      );
-      res.status(200).json({ msg: "Data berhasil dikirim" });
-    } else {
-      res.json({
-        msg: "Hanya akun customer yang diperbolehkan melakukan action ini",
-      });
-    }
-  } catch (error) {
-    res.json({ msg: Error });
-  }
-};
-
 export const UpdateStatusTransaction = async (req, res) => {
   const { id, status } = req.body;
   try {
@@ -94,25 +43,6 @@ export const UpdateStatusTransaction = async (req, res) => {
       res.status(200).json({ msg: "Data berhasil diupdate" });
     } else {
       res.json({ msg: "data tidak tersedia" });
-    }
-  } catch (error) {
-    res.json({ msg: Error });
-  }
-};
-
-export const DeleteTransaction = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const isExist = await Transaction.findOne({
-      where: { transaction_id: id },
-    });
-    if (isExist) {
-      await Transaction.destroy({
-        where: { transaction_id: id },
-      });
-      res.status(200).json({ msg: "Data berhasil dihapus" });
-    } else {
-      res.json({ msg: "Data tidak tersedia" });
     }
   } catch (error) {
     res.json({ msg: Error });

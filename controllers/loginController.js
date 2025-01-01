@@ -54,31 +54,12 @@ export const Login = async (req, res) => {
         });
       }
     } else {
-      res.send("Email atau username salah");
+      res
+        .status(401)
+        .json({ status: "Error", message: "Email atau username salah" });
     }
   } catch (error) {
     res.json({ msg: Error });
-  }
-};
-
-export const Logout = async (req, res) => {
-  const { id } = req.body;
-  try {
-    res.clearCookie("refreshToken");
-    await Account.update(
-      {
-        refresh_token: null,
-        access_token: null,
-      },
-      {
-        where: {
-          account_id: id,
-        },
-      }
-    );
-    res.json({ message: "Berhasil Logout" });
-  } catch (error) {
-    console.log(error);
   }
 };
 
