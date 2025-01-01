@@ -61,7 +61,6 @@ export const DashboardSaler = () => {
                         <th className="px-4 py-3">Deskripsi</th>
                         <th className="px-4 py-3">Harga</th>
                         <th className="px-4 py-3">Stok</th>
-                        <th className="px-4 py-3">Terjual</th>
                         <th className="px-4 py-3">Actions</th>
                       </tr>
                     </thead>
@@ -107,11 +106,6 @@ export const DashboardSaler = () => {
                             <td className="px-4 py-3 text-xl">
                               {Intl.NumberFormat("id-ID").format(
                                 element.product_stock
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-xl">
-                              {Intl.NumberFormat("id-ID").format(
-                                element.product_sold
                               )}
                             </td>
                             <td className="px-4 py-3">

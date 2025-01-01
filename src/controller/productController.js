@@ -57,7 +57,7 @@ export const AddProduct = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response);
+    console.log({ status: "success", message: "Data berhasil dikirim" });
   } catch (error) {
     console.error(error);
   }

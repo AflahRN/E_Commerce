@@ -15,9 +15,12 @@ import forgotPassword from "../../assets/images/forgot-password.png";
 import IconifyIcon from "../components/IconifyIcon";
 import logo from "../../assets/logo/elegant-logo.png";
 import { useNavigate } from "react-router-dom";
+import { ChangePassword } from "../../controller/loginController";
 
 export const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState();
+  const [loginData, setLoginData] = useState();
   const navigate = useNavigate();
   return (
     <div
@@ -46,6 +49,33 @@ export const ForgotPassword = () => {
             </Typography>
             <FormControl variant="standard" fullWidth>
               <TextField
+                placeholder="Enter Email"
+                id="email"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                        edge="end"
+                        sx={{
+                          color: "text.secondary",
+                        }}
+                      >
+                        <IconifyIcon
+                          icon="ic:baseline-email"
+                          width={"20px"}
+                          height={"20px"}
+                        />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                className="mt-4"
                 placeholder="Enter new password"
                 id="email"
                 type={showPassword ? "text" : "password"}
@@ -88,6 +118,7 @@ export const ForgotPassword = () => {
               variant="body2"
               color="text.secondary"
               onClick={() => {
+                ChangePassword(password, loginData);
                 navigate("/");
               }}
             >

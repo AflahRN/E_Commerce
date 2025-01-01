@@ -36,12 +36,12 @@ export const Register = async (username, email, passsword, type, navigate) => {
   }
 };
 
-export const ChangePassword = async (password, cPassword) => {
-  const token = Cookies.get("accountId");
-  if (password == cPassword) {
+export const ChangePassword = async (password, loginData) => {
+  if (password) {
     try {
-      const response = await axios.patch(`${url}/forgetPassword/${accountId}`, {
+      const response = await axios.patch(`${url}/forgetPassword}`, {
         password: password,
+        loginData: loginData,
       });
       if (response.status == 200) {
         console.log("Berhasil ganti password");
