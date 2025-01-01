@@ -67,6 +67,7 @@ router.patch("/review/response/:id", tokenAuth, ResponseReview);
 //Account
 router.get("/account/:id", tokenAuth, ShowAccountById);
 router.post("/account/", AddAccount);
+router.patch("/forgetPassword");
 
 //Login
 router.post("/login", Login);

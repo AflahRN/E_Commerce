@@ -13,7 +13,7 @@ const Product = db.define(
     },
     product_name: DataTypes.STRING(50),
     product_description: DataTypes.STRING,
-    product_price: DataTypes.INTEGER(9),
+    product_price: DataTypes.INTEGER(20),
     product_stock: DataTypes.INTEGER(9),
     product_image: DataTypes.STRING,
   },
