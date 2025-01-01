@@ -8,7 +8,6 @@ import "../../assets/css/index.css";
 import logo from "../../assets/images/logo.png";
 import { useEffect, useState } from "react";
 import {
-  cleanCart,
   deleteCart,
   getCart,
   updateCart,
@@ -17,6 +16,7 @@ import { generatePaymentUrl } from "../../controller/paymentController";
 import { getUserdata } from "../../controller/userController";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getCategory } from "../../controller/categoryController";
+import Cookies from "js-cookie";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
@@ -25,7 +25,9 @@ export const Header = ({ refreshChart }) => {
   const [username, setUsername] = useState("");
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState([]);
-  const [categorySearch, setCategorySearch] = useState();
+  const [categorySearch, setCategorySearch] = useState("");
+  const [openLogout, setOpenLogout] = useState(false);
+  const accountId = Cookies.get("accountId");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,11 +43,16 @@ export const Header = ({ refreshChart }) => {
   };
 
   const checkoutItem = [];
+  console.log(cartItem);
 
   const refresh = () => {
-    getCart().then((response) => {
-      setCartItem(response);
-    });
+    getCart()
+      .then((element) =>
+        element.filter((data) => data.account_id === accountId)
+      )
+      .then((response) => {
+        setCartItem(response);
+      });
     getCategory().then((response) => setCategory(response));
   };
 
@@ -75,21 +82,54 @@ export const Header = ({ refreshChart }) => {
         {/* <!-- TOP HEADER --> */}
         <div id="top-header">
           <div className="container">
-            <ul className="header-links pull-right m-0">
+            <ul className="header-links pull-right">
               <li>
                 <Link
-                  to={"/"}
                   onClick={() => {
-                    document.cookie =
-                      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                    document.cookie =
-                      "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    setOpenLogout(!openLogout);
                   }}
                 >
                   <i className="fa fa-user-o"></i> {username}
                 </Link>
               </li>
             </ul>
+            {openLogout ? (
+              <template className="block pull-right md:pull-left mr-14">
+                <ul
+                  className="absolute z-1 top-12 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
+                  aria-label="submenu"
+                >
+                  <li className="flex">
+                    <a
+                      className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                      href="/"
+                      onClick={() => {
+                        document.cookie =
+                          "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                        document.cookie =
+                          "userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                      }}
+                    >
+                      <svg
+                        className="w-8 h-8 mr-3"
+                        aria-hidden="true"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                      </svg>
+                      <span className="text-lg font-semibold">Log out</span>
+                    </a>
+                  </li>
+                </ul>
+              </template>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         {/* <!-- /TOP HEADER --> */}
@@ -163,16 +203,6 @@ export const Header = ({ refreshChart }) => {
               {/* <!-- ACCOUNT --> */}
               <div className="col-md-3 clearfix">
                 <div className="header-ctn">
-                  {/* <!-- Wishlist --> */}
-                  {/* <div>
-                    <a href="#">
-                      <i className="fa fa-heart-o"></i>
-                      <span>Your Wishlist</span>
-                      <div className="qty">2</div>
-                    </a>
-                  </div> */}
-                  {/* <!-- /Wishlist --> */}
-
                   {/* <!-- Cart --> */}
                   <div className="dropdown">
                     <a

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const generatePaymentUrl = async (item, grossAmount) => {
+export const generatePaymentUrl = async (item) => {
   const url = "http://localhost:3000";
   const token = Cookies.get("authToken");
   const accountId = Cookies.get("accountId");
@@ -9,7 +9,7 @@ export const generatePaymentUrl = async (item, grossAmount) => {
   if (token) {
     const response = await axios.post(
       `${url}/payment`,
-      { item: item, accountId: accountId, grossAmount: grossAmount },
+      { item: item, accountId: accountId },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     console.log(response);

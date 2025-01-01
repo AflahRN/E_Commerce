@@ -3,7 +3,6 @@ import "../../assets/fonts/FontAwesome.otf";
 import "../../assets/fonts/slick.ttf";
 import "../../assets/css/style.css";
 import Row from "react-bootstrap/Row";
-import shop03 from "../../assets/images/shop03.png";
 import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io";
 import { useState, useEffect } from "react";
 import { Header } from "../components/header";
@@ -13,6 +12,11 @@ import { getProduct } from "../../controller/productController";
 import { Link, useNavigate } from "react-router-dom";
 import { addCart } from "../../controller/cartController";
 import { getCategory } from "../../controller/categoryController";
+import Carousel from "react-bootstrap/Carousel";
+
+import shop03 from "../../assets/images/shop03.png";
+import banner1 from "../../assets/images/banner-1.png";
+import banner2 from "../../assets/images/banner-2.jpg";
 
 export const Dashboard = () => {
   const [topSellingPage, setTopSellingPage] = useState(1);
@@ -103,53 +107,21 @@ export const Dashboard = () => {
         {/* <!-- /container --> */}
       </div>
       {/* <!-- /SECTION --> */}
-      {/* <!-- HOT DEAL SECTION --> */}
-      <div id="hot-deal" className="section">
-        {/* <!-- container --> */}
-        <div className="container">
-          {/* <!-- row --> */}
-          <div className="row">
-            <div className="col-md-12">
-              <div className="hot-deal">
-                <ul className="hot-deal-countdown">
-                  <li>
-                    <div>
-                      <h3>02</h3>
-                      <span>Days</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <h3>10</h3>
-                      <span>Hours</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <h3>34</h3>
-                      <span>Mins</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <h3>60</h3>
-                      <span>Secs</span>
-                    </div>
-                  </li>
-                </ul>
-                <h2 className="text-uppercase">hot deal this week</h2>
-                <p>New Collection Up to 50% OFF</p>
-                <a className="primary-btn cta-btn" href="/store">
-                  Shop now
-                </a>
-              </div>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
+      {/* Promotion Banner */}
+      <div className="w-[80vw] flex justify-self-center">
+        <Carousel className="bg-blue-200 h-min ">
+          <Carousel.Item>
+            <img src={banner1} alt="" />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src={banner2} alt="" />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src={banner2} alt="" />
+          </Carousel.Item>
+        </Carousel>
       </div>
-      {/* <!-- /HOT DEAL SECTION --> */}
+      {/* Promotion Banner */}
       {/* <!-- SECTION --> */}
       <div className="section">
         {/* <!-- container --> */}
@@ -162,7 +134,7 @@ export const Dashboard = () => {
                 <h3 className="title">Top selling</h3>
                 <div className="section-nav">
                   <ul className="section-tab-nav tab-nav">
-                    {category.map((element) => {
+                    {category.map((element, index) => {
                       return (
                         <li
                           className={`${
@@ -170,6 +142,7 @@ export const Dashboard = () => {
                               ? "active"
                               : ""
                           } cursor-pointer`}
+                          key={index}
                         >
                           <a
                             data-toggle="tab"
