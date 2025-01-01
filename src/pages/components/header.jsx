@@ -12,7 +12,6 @@ import {
   getCart,
   updateCart,
 } from "../../controller/cartController";
-import { generatePaymentUrl } from "../../controller/paymentController";
 import { getUserdata } from "../../controller/userController";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getCategory } from "../../controller/categoryController";
@@ -177,10 +176,6 @@ export const Header = ({ refreshChart }) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
                           handleNavigate();
-                          // navigate({
-                          //   pathname: "/store",
-                          //   search: `?search=${searchText}`,
-                          // });
                         }
                       }}
                     />
@@ -364,7 +359,7 @@ export const Header = ({ refreshChart }) => {
                       <div className="cart-btns" style={{ cursor: "pointer" }}>
                         <a
                           onClick={() => {
-                            generatePaymentUrl(checkoutItem, grossPayment);
+                            navigate("/checkout");
                           }}
                         >
                           Checkout <i className="fa fa-arrow-circle-right"></i>

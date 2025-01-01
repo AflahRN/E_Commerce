@@ -3,25 +3,22 @@ import "../../assets/css/tailwind.output.css";
 import { SalerHeader } from "../components/salerHeader";
 import { SalerNavbar } from "../components/salerNavbar";
 import Cookies from "js-cookie";
-import { getReview, sendResponse } from "../../controller/reviewController";
+import {
+  getReview,
+  removeResponse,
+  sendResponse,
+} from "../../controller/reviewController";
 import { getProduct } from "../../controller/productController";
+import { Modal } from "../components/modal";
 
 export const ReviewSaler = () => {
   const [review, setReview] = useState([]);
   const [product, setProduct] = useState([]);
   const [productFilter, setProductFilter] = useState([]);
   const [reviewResponse, setReviewResponse] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const [reviewId, setReviewId] = useState("");
   const userCredential = Cookies.get();
-
-  const [types, setTypes] = useState(review.map(() => "exist")); // Default to "exist" for each review
-
-  const handleButtonClick = (index) => {
-    setTypes((prevTypes) => {
-      const newTypes = [...prevTypes];
-      newTypes[index] = newTypes[index] === "exist" ? "nothing" : "exist"; // Toggle between "exist" and "nothing"
-      return newTypes;
-    });
-  };
 
   const refresh = () => {
     getProduct()
@@ -81,7 +78,6 @@ export const ReviewSaler = () => {
                     </thead>
                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                       {review.map((element, index) => {
-                        let type = "exist";
                         return (
                           <tr
                             className="dark:text-gray-400"
@@ -115,43 +111,132 @@ export const ReviewSaler = () => {
                             <td className="px-4 py-3 text-xl text-center">
                               {element.review_skor}
                             </td>
-                            {types[index] == "nothing" ? (
-                              <td className="px-4 py-3 text-sm">
-                                <textarea
-                                  className="border border-gray-300 rounded-lg text-lg p-2 w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                  style={{ height: "auto" }}
-                                  placeholder="Type your message here..."
-                                  onChange={(e) => {
-                                    setReviewResponse(e.target.value);
-                                  }}
-                                ></textarea>
-                              </td>
-                            ) : (
-                              <td className="px-4 py-3 text-lg lg max-w-[200px] overflow-hidden text-wrap text-ellipsis">
-                                {element.review_response}
-                              </td>
-                            )}
+
+                            {/* <td className="px-4 py-3 text-sm">
+                              <textarea
+                                className="border border-gray-300 rounded-lg text-lg p-2 w-full h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                style={{ height: "auto" }}
+                                placeholder="Type your message here..."
+                                onChange={(e) => {
+                                  setReviewResponse(e.target.value);
+                                }}
+                              ></textarea>
+                            </td> */}
+
+                            <td className="px-4 py-3 text-lg lg max-w-[200px] overflow-hidden text-wrap text-ellipsis">
+                              {element.review_response}
+                            </td>
 
                             <td className="px-4 py-3 text-center">
-                              <button
-                                onClick={(e) => {
-                                  {
-                                    types[index] == "nothing"
-                                      ? sendResponse(
-                                          element.review_id,
-                                          reviewResponse
-                                        ).then(() => {
-                                          refresh();
-                                        })
-                                      : handleButtonClick(index);
-                                  }
-                                }}
-                                className="bg-[#7e3af2] text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
-                              >
-                                {types[index] == "nothing"
-                                  ? "Send Response"
-                                  : "Edit Response"}
-                              </button>
+                              {element.review_response ? (
+                                <>
+                                  <button
+                                    onClick={() => {
+                                      setOpenModal("edit");
+                                      setReviewId(element.review_id);
+                                      setReviewResponse(
+                                        element.review_response
+                                      );
+                                    }}
+                                    className="bg-[#7e3af2] text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+                                  >
+                                    <i className="fa fa-edit"></i>
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      removeResponse(element.review_id).then(
+                                        () => refresh()
+                                      );
+                                    }}
+                                    className="bg-[#7e3af2] text-xl ml-2 text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+                                  >
+                                    <i className="fa fa-trash"></i>
+                                  </button>
+                                  <Modal
+                                    title={"Edit Response"}
+                                    isOpen={openModal == "edit"}
+                                    onClose={() => setOpenModal("")}
+                                    content={
+                                      <>
+                                        <div className="mb-4">
+                                          <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                                            Edit Response
+                                          </h3>
+                                          <textarea
+                                            value={reviewResponse}
+                                            onChange={(e) => {
+                                              setReviewResponse(e.target.value);
+                                            }}
+                                            className="w-full h-32 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Tulis response Anda di sini..."
+                                          />
+                                        </div>
+                                        <button
+                                          onClick={() => {
+                                            sendResponse(
+                                              reviewId,
+                                              reviewResponse
+                                            ).then(() => {
+                                              setOpenModal("");
+                                              refresh();
+                                            });
+                                          }}
+                                          className=" px-4 py-2 bg-blue-500 text-white font-normal rounded-lg hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+                                        >
+                                          Kirim Response
+                                        </button>
+                                      </>
+                                    }
+                                  ></Modal>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => {
+                                      setOpenModal("add");
+                                      setReviewId(element.review_id);
+                                    }}
+                                    className="bg-[#7e3af2] text-xl text-white font-normal py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+                                  >
+                                    <i className="fa fa-add"></i>
+                                  </button>
+                                  <Modal
+                                    title={"Tambah Response"}
+                                    isOpen={openModal == "add"}
+                                    onClose={() => setOpenModal("")}
+                                    content={
+                                      <>
+                                        <div className="mb-4">
+                                          <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                                            Tambah Response
+                                          </h3>
+                                          <textarea
+                                            onChange={(e) => {
+                                              setReviewResponse(e.target.value);
+                                            }}
+                                            className="w-full h-32 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Tulis response Anda di sini..."
+                                          />
+                                        </div>
+                                        <button
+                                          onClick={() => {
+                                            sendResponse(
+                                              reviewId,
+                                              reviewResponse
+                                            ).then(() => {
+                                              setOpenModal("");
+                                              refresh();
+                                            });
+                                          }}
+                                          className=" px-4 py-2 bg-blue-500 text-white font-normal rounded-lg hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+                                        >
+                                          Kirim Response
+                                        </button>
+                                      </>
+                                    }
+                                  ></Modal>
+                                </>
+                              )}
                             </td>
                           </tr>
                         );

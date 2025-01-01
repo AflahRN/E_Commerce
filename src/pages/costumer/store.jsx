@@ -10,7 +10,6 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { addCart } from "../../controller/cartController";
-import { Breadcrumb } from "../components/breadcrumb";
 import { getCategory } from "../../controller/categoryController";
 
 export const Store = () => {
@@ -55,7 +54,6 @@ export const Store = () => {
     <>
       <Header refreshChart={refreshCart} />
       <Navbar />
-      <Breadcrumb path={["All Categories", search]} />
 
       {/* <!-- SECTION --> */}
       <div className="section">
@@ -69,6 +67,26 @@ export const Store = () => {
               <div className="aside">
                 <h3 className="aside-title">Categories</h3>
                 <div className="checkbox-filter">
+                  <div className="input-checkbox">
+                    <input
+                      type="radio"
+                      name="category"
+                      value="allCategory"
+                      id="allCategory"
+                      onChange={() => {
+                        navigate({
+                          pathname: "/store",
+                          search: "?category=",
+                        });
+                        refresh();
+                      }}
+                    />
+                    <label htmlFor={"allCategory"}>
+                      <span></span>
+                      All Categories
+                      <small> ({product.length})</small>
+                    </label>
+                  </div>
                   {category.map((element, index) => {
                     return (
                       <div className="input-checkbox" key={index}>
@@ -79,10 +97,6 @@ export const Store = () => {
                           id={element.category_id}
                           onChange={(e) => {
                             handleNavigate(e.target.value);
-                            // navigate({
-                            //   pathname: "/store",
-                            //   search: `?category=${e.target.value}`,
-                            // });
                             refresh();
                           }}
                         />
@@ -112,38 +126,6 @@ export const Store = () => {
 
             {/* <!-- STORE --> */}
             <div id="store" className="col-md-9">
-              {/* <!-- store top filter --> */}
-              <div className="store-filter clearfix">
-                <div className="store-sort">
-                  <label>
-                    Sort By:
-                    <select className="input-select">
-                      <option value="0">Popular</option>
-                      <option value="1">Position</option>
-                    </select>
-                  </label>
-
-                  <label>
-                    Show:
-                    <select className="input-select">
-                      <option value="0">20</option>
-                      <option value="1">50</option>
-                    </select>
-                  </label>
-                </div>
-                <ul className="store-grid">
-                  <li className="active">
-                    <i className="fa fa-th"></i>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-th-list"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              {/* <!-- /store top filter --> */}
-
               {/* <!-- store products --> */}
               <div className="row">
                 {product.map((element, index) => {
@@ -202,29 +184,6 @@ export const Store = () => {
                 })}
               </div>
               {/* <!-- /store products --> */}
-
-              {/* <!-- store bottom filter --> */}
-              <div className="store-filter clearfix">
-                <span className="store-qty">Showing 20-100 products</span>
-                <ul className="store-pagination">
-                  <li className="active">1</li>
-                  <li>
-                    <a href="#">2</a>
-                  </li>
-                  <li>
-                    <a href="#">3</a>
-                  </li>
-                  <li>
-                    <a href="#">4</a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-angle-right"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              {/* <!-- /store bottom filter --> */}
             </div>
             {/* <!-- /STORE --> */}
           </div>
@@ -233,58 +192,6 @@ export const Store = () => {
         {/* <!-- /container --> */}
       </div>
       {/* <!-- /SECTION --> */}
-
-      {/* <!-- NEWSLETTER --> */}
-      <div id="newsletter" className="section">
-        {/* <!-- container --> */}
-        <div className="container">
-          {/* <!-- row --> */}
-          <div className="row">
-            <div className="col-md-12">
-              <div className="newsletter">
-                <p>
-                  Sign Up for the <strong>NEWSLETTER</strong>
-                </p>
-                <form>
-                  <input
-                    className="input"
-                    type="email"
-                    placeholder="Enter Your Email"
-                  />
-                  <button className="newsletter-btn">
-                    <i className="fa fa-envelope"></i> Subscribe
-                  </button>
-                </form>
-                <ul className="newsletter-follow">
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-twitter"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-instagram"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-pinterest"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </div>
-      {/* <!-- /NEWSLETTER --> */}
 
       <Footer />
     </>

@@ -41,6 +41,29 @@ export const sendResponse = async (id, reviewResponse) => {
   }
 };
 
+export const removeResponse = async (id) => {
+  const token = Cookies.get("authToken");
+
+  try {
+    const response = await axios.patch(
+      `${url}/review/response/${id}`,
+      {
+        reviewResponse: "",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.status == 200) {
+      console.log(response);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const addReview = async (reviewText, reviewSkor, productId) => {
   const token = Cookies.get("authToken");
   const accountId = Cookies.get("accountId");

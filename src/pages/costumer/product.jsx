@@ -6,12 +6,10 @@ import { Footer } from "../components/footer";
 import "../../assets/fonts/fontawesome-webfont.ttf";
 import "../../assets/fonts/FontAwesome.otf";
 import "../../assets/fonts/slick.ttf";
-import product01 from "../../assets/images/product01.png";
 import { Link, useParams } from "react-router-dom";
 import { getProduct, getProductById } from "../../controller/productController";
 import { useEffect, useState } from "react";
 import { addCart } from "../../controller/cartController";
-import { Breadcrumb } from "../components/breadcrumb";
 import { addReview, getReview } from "../../controller/reviewController";
 
 export const Product = () => {
@@ -57,13 +55,6 @@ export const Product = () => {
     <>
       <Header refreshChart={refreshCart} />
       <Navbar />
-      <Breadcrumb
-        path={[
-          "All Category",
-          product.category?.category_name,
-          product.product_name,
-        ]}
-      />
 
       {/* <!-- SECTION --> */}
       <div className="section">

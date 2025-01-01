@@ -1,33 +1,51 @@
-import { Header } from "../../components/header";
-import { Navbar } from "../../components/navbar";
-import { Footer } from "../../components/footer";
+import { Header } from "../components/header";
+import { Navbar } from "../components/navbar";
+import { Footer } from "../components/footer";
+import { generatePaymentUrl } from "../../controller/paymentController";
+import { useEffect, useState } from "react";
+import { getCart } from "../../controller/cartController";
+import Cookies from "js-cookie";
 
 export const Checkout = () => {
+  const [cartItem, setCartItem] = useState([]);
+  const [address, setAdress] = useState();
+  const [city, setCity] = useState();
+  const [country, setCountry] = useState();
+  const [zipCode, setZipCode] = useState();
+  const [telPhone, setTelphone] = useState();
+  const [notes, setNotes] = useState();
+
+  const accountId = Cookies.get("accountId");
+
+  const refreshData = () => {
+    getCart()
+      .then((element) =>
+        element.filter((data) => data.account_id === accountId)
+      )
+      .then((response) => {
+        setCartItem(response);
+      });
+  };
+
+  useEffect(() => {
+    refreshData();
+  }, []);
+
+  let requestItem = [];
+  let grossAmount = 0;
+
+  cartItem.forEach((element) => {
+    grossAmount += element.product.product_price * element.quantity;
+    requestItem.push({
+      product_id: element.product_id,
+      quantity: element.quantity,
+    });
+  });
+
   return (
     <>
       <Header />
       <Navbar />
-      {/* <!-- BREADCRUMB --> */}
-      <div id="breadcrumb" class="section">
-        {/* <!-- container --> */}
-        <div class="container">
-          {/* <!-- row --> */}
-          <div class="row">
-            <div class="col-md-12">
-              <h3 class="breadcrumb-header">Checkout</h3>
-              <ul class="breadcrumb-tree">
-                <li>
-                  <a href="#">Home</a>
-                </li>
-                <li class="active">Checkout</li>
-              </ul>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </div>
-      {/* <!-- /BREADCRUMB --> */}
 
       {/* <!-- SECTION --> */}
       <div class="section">
@@ -43,34 +61,14 @@ export const Checkout = () => {
                 </div>
                 <div class="form-group">
                   <input
-                    class="input"
-                    type="text"
-                    name="first-name"
-                    placeholder="First Name"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    class="input"
-                    type="text"
-                    name="last-name"
-                    placeholder="Last Name"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
-                    class="input"
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                  />
-                </div>
-                <div class="form-group">
-                  <input
+                    required
                     class="input"
                     type="text"
                     name="address"
                     placeholder="Address"
+                    onChange={(e) => {
+                      setAdress(e.target.value);
+                    }}
                   />
                 </div>
                 <div class="form-group">
@@ -79,6 +77,9 @@ export const Checkout = () => {
                     type="text"
                     name="city"
                     placeholder="City"
+                    onChange={(e) => {
+                      setCity(e.target.value);
+                    }}
                   />
                 </div>
                 <div class="form-group">
@@ -87,6 +88,9 @@ export const Checkout = () => {
                     type="text"
                     name="country"
                     placeholder="Country"
+                    onChange={(e) => {
+                      setCountry(e.target.value);
+                    }}
                   />
                 </div>
                 <div class="form-group">
@@ -95,6 +99,9 @@ export const Checkout = () => {
                     type="text"
                     name="zip-code"
                     placeholder="ZIP Code"
+                    onChange={(e) => {
+                      setZipCode(e.target.value);
+                    }}
                   />
                 </div>
                 <div class="form-group">
@@ -103,116 +110,23 @@ export const Checkout = () => {
                     type="tel"
                     name="tel"
                     placeholder="Telephone"
+                    onChange={(e) => {
+                      setTelphone(e.target.value);
+                    }}
                   />
-                </div>
-                <div class="form-group">
-                  <div class="input-checkbox">
-                    <input type="checkbox" id="create-account" />
-                    <label for="create-account">
-                      <span></span>
-                      Create Account?
-                    </label>
-                    <div class="caption">
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt.
-                      </p>
-                      <input
-                        class="input"
-                        type="password"
-                        name="password"
-                        placeholder="Enter Your Password"
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
               {/* <!-- /Billing Details --> */}
 
-              {/* <!-- Shiping Details --> */}
-              <div class="shiping-details">
-                <div class="section-title">
-                  <h3 class="title">Shiping address</h3>
-                </div>
-                <div class="input-checkbox">
-                  <input type="checkbox" id="shiping-address" />
-                  <label for="shiping-address">
-                    <span></span>
-                    Ship to a diffrent address?
-                  </label>
-                  <div class="caption">
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="text"
-                        name="first-name"
-                        placeholder="First Name"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="text"
-                        name="last-name"
-                        placeholder="Last Name"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="text"
-                        name="address"
-                        placeholder="Address"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="text"
-                        name="city"
-                        placeholder="City"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="text"
-                        name="country"
-                        placeholder="Country"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="text"
-                        name="zip-code"
-                        placeholder="ZIP Code"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        class="input"
-                        type="tel"
-                        name="tel"
-                        placeholder="Telephone"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* <!-- /Shiping Details --> */}
-
               {/* <!-- Order notes --> */}
               <div class="order-notes">
-                <textarea class="input" placeholder="Order Notes"></textarea>
+                <textarea
+                  class="input"
+                  placeholder="Order Notes"
+                  onChange={(e) => {
+                    setNotes(e.target.value);
+                  }}
+                ></textarea>
               </div>
               {/* <!-- /Order notes --> */}
             </div>
@@ -232,83 +146,47 @@ export const Checkout = () => {
                   </div>
                 </div>
                 <div class="order-products">
-                  <div class="order-col">
-                    <div>1x Product Name Goes Here</div>
-                    <div>$980.00</div>
-                  </div>
-                  <div class="order-col">
-                    <div>2x Product Name Goes Here</div>
-                    <div>$980.00</div>
-                  </div>
-                </div>
-                <div class="order-col">
-                  <div>Shiping</div>
-                  <div>
-                    <strong>FREE</strong>
-                  </div>
+                  {cartItem.map((element) => {
+                    return (
+                      <div class="order-col">
+                        <div>
+                          {element.quantity}x {element.product.product_name}
+                        </div>
+                        <div>
+                          Rp{" "}
+                          {Intl.NumberFormat("id-ID").format(
+                            element.quantity * element.product.product_price
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div class="order-col">
                   <div>
                     <strong>TOTAL</strong>
                   </div>
                   <div>
-                    <strong class="order-total">$2940.00</strong>
+                    <strong class="order-total">
+                      Rp {Intl.NumberFormat("id-ID").format(grossAmount)}
+                    </strong>
                   </div>
                 </div>
               </div>
-              <div class="payment-method">
-                <div class="input-radio">
-                  <input type="radio" name="payment" id="payment-1" />
-                  <label for="payment-1">
-                    <span></span>
-                    Direct Bank Transfer
-                  </label>
-                  <div class="caption">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
-                  </div>
-                </div>
-                <div class="input-radio">
-                  <input type="radio" name="payment" id="payment-2" />
-                  <label for="payment-2">
-                    <span></span>
-                    Cheque Payment
-                  </label>
-                  <div class="caption">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
-                  </div>
-                </div>
-                <div class="input-radio">
-                  <input type="radio" name="payment" id="payment-3" />
-                  <label for="payment-3">
-                    <span></span>
-                    Paypal System
-                  </label>
-                  <div class="caption">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="input-checkbox">
-                <input type="checkbox" id="terms" />
-                <label for="terms">
-                  <span></span>
-                  I've read and accept the <a href="#">terms & conditions</a>
-                </label>
-              </div>
-              <a href="#" class="primary-btn order-submit">
-                Place order
+              <a
+                onClick={() => {
+                  generatePaymentUrl(requestItem, {
+                    address: address,
+                    city: city,
+                    country: country,
+                    zipCode: zipCode,
+                    telphone: telPhone,
+                    notes: notes,
+                  });
+                }}
+                class="primary-btn order-submit cursor-pointer"
+              >
+                Order
               </a>
             </div>
             {/* <!-- /Order Details --> */}
@@ -318,58 +196,6 @@ export const Checkout = () => {
         {/* <!-- /container --> */}
       </div>
       {/* <!-- /SECTION --> */}
-
-      {/* <!-- NEWSLETTER --> */}
-      <div id="newsletter" class="section">
-        {/* <!-- container --> */}
-        <div class="container">
-          {/* <!-- row --> */}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="newsletter">
-                <p>
-                  Sign Up for the <strong>NEWSLETTER</strong>
-                </p>
-                <form>
-                  <input
-                    class="input"
-                    type="email"
-                    placeholder="Enter Your Email"
-                  />
-                  <button class="newsletter-btn">
-                    <i class="fa fa-envelope"></i> Subscribe
-                  </button>
-                </form>
-                <ul class="newsletter-follow">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-twitter"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-instagram"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-pinterest"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </div>
-      {/* <!-- /NEWSLETTER --> */}
 
       <Footer />
     </>

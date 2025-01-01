@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Breadcrumb = ({ path }) => {
   const [pathList, setPathList] = useState([]);
@@ -7,6 +8,8 @@ export const Breadcrumb = ({ path }) => {
       setPathList(path);
     }
   }, [path]);
+
+  const navigate = useNavigate();
   return (
     <>
       {/* <!-- BREADCRUMB --> */}
@@ -19,6 +22,15 @@ export const Breadcrumb = ({ path }) => {
               <ul className="breadcrumb-tree">
                 <li>
                   <a href="/dashboard">Home</a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate({ pathname: "/store", search: "" });
+                    }}
+                  >
+                    Home
+                  </a>
                 </li>
                 {pathList.map((element, index) => {
                   return (
