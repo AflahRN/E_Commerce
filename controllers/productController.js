@@ -58,7 +58,7 @@ export const AddProduct = async (req, res) => {
         .status(200)
         .json({ status: "Success", message: "Data berhasil dikirim" });
     } else {
-      res.json({
+      res.status(401).json({
         status: "Error",
         message: "Hanya akun saler yang diperbolehkan melakukan action ini",
       });
@@ -150,7 +150,7 @@ export const DeleteProduct = async (req, res) => {
       await Product.destroy({
         where: { product_id: id },
       });
-      res.status(200).json({ msg: "Data berhasil dikirim" });
+      res.status(200).json({ msg: "Data berhasil dihapus" });
     } else {
       res.json({ msg: "data tidak tersedia" });
     }
