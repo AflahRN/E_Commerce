@@ -84,6 +84,7 @@ export const editProduct = async (
   try {
     const response = await axios.patch(`${url}/product/${id}`, formData, {
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     });
