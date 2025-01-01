@@ -1,9 +1,6 @@
-import { nanoid } from "nanoid";
 import Transaction from "../models/transaction.js";
 import TransactionDetail from "../models/transaction_details.js";
 import Account from "../models/account.js";
-import Product from "../models/product.js";
-import { where } from "sequelize";
 
 export const ShowTransaction = async (req, res) => {
   try {
@@ -102,29 +99,6 @@ export const UpdateStatusTransaction = async (req, res) => {
     res.json({ msg: Error });
   }
 };
-// export const UpdateTransaction = async (req, res) => {
-//   const { id } = req.params;
-//   const { product_id, quantity } = req.body;
-//   try {
-//     const request = {
-//       product_id: product_id,
-//       quantity: quantity,
-//     };
-//     const isExist = await Transaction.findOne({
-//       where: { transaction_id: id },
-//     });
-//     if (isExist) {
-//       await Transaction.update(request, {
-//         where: { transaction_id: id },
-//       });
-//       res.status(200).json({ msg: "Data berhasil diupdate" });
-//     } else {
-//       res.json({ msg: "data tidak tersedia" });
-//     }
-//   } catch (error) {
-//     res.json({ msg: Error });
-//   }
-// };
 
 export const DeleteTransaction = async (req, res) => {
   const { id } = req.params;

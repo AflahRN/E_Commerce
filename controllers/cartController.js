@@ -1,6 +1,5 @@
 import Account from "../models/account.js";
 import Cart from "../models/cart.js";
-import Category from "../models/category.js";
 import Product from "../models/product.js";
 
 export const ShowCart = async (req, res) => {

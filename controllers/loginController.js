@@ -2,7 +2,7 @@ import Account from "../models/account.js";
 import bcrpyt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { json, Sequelize } from "sequelize";
+import { Sequelize } from "sequelize";
 
 dotenv.config();
 

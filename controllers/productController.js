@@ -1,4 +1,3 @@
-import express from "express";
 import multer from "multer";
 import Account from "../models/account.js";
 import Category from "../models/category.js";
