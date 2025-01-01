@@ -2,15 +2,12 @@ import { Header } from "../components/header";
 import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
 import { Modal } from "../components/modal";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import product01 from "../../assets/images/product01.png";
 import { getTransaction } from "../../controller/transactionController";
 import Cookies from "js-cookie";
 import { getProductById } from "../../controller/productController";
 
 export const Transaction = () => {
-  const navigate = useNavigate();
   const accountId = Cookies.get("accountId");
   const [detailOpen, setDetailOpen] = useState(false);
   const [transaction, setTransaction] = useState([]);
@@ -129,7 +126,7 @@ export const Transaction = () => {
                               key={index}
                             >
                               <img
-                                src={product01}
+                                src={`http://localhost:3000/image/${data.product?.product_image}`}
                                 alt="Product"
                                 className="w-16 h-16 object-cover rounded"
                               />

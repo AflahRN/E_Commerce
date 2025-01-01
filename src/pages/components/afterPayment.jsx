@@ -16,7 +16,7 @@ export const AfterPayment = () => {
       updateStatusTransaction(orderId, "Success").then(() => {
         document.cookie =
           "orderId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        // navigate("/dashboard");
+        navigate("/dashboard");
       });
     });
   }, []);
