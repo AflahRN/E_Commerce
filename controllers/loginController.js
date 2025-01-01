@@ -61,34 +61,6 @@ export const Login = async (req, res) => {
   }
 };
 
-// Refresh access token
-export const Refresh = async (req, res) => {
-  if (req.cookies?.refreshToken) {
-    const refreshToken = req.cookies.refreshToken;
-
-    jwt.verify(refreshToken, process.env.SECRET_KEY, async (err, decoded) => {
-      if (err) {
-        return res.status(406).json({ message: "Unauthorized" });
-      } else {
-        const accessToken = jwt.sign(
-          {
-            userId: decoded.id,
-            username: decoded.username,
-            email: decoded.email,
-          },
-          process.env.SECRET_KEY,
-          { expiresIn: "60s" },
-          await Account.update(
-            { access_token: accessToken },
-            { where: { account_id: id } }
-          )
-        );
-        return res.json({ token: accessToken });
-      }
-    });
-  }
-};
-
 export const Logout = async (req, res) => {
   const { id } = req.body;
   try {

@@ -30,8 +30,6 @@ export const ShowProductById = async (req, res) => {
   }
 };
 
-export const ShowProductImage = async (path) => {};
-
 export const AddProduct = async (req, res) => {
   const {
     productName,
