@@ -20,13 +20,14 @@ import Cookies from "js-cookie";
 
 export const Header = ({ refreshChart }) => {
   const [cartDropdownActive, setCartDropdownActive] = useState(false);
+  const [openLogout, setOpenLogout] = useState(false);
+  const [notifDropdownActive, setNotifDropdownActive] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [grossPayment, setGrossPayment] = useState(0);
   const [username, setUsername] = useState("");
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState([]);
   const [categorySearch, setCategorySearch] = useState("");
-  const [openLogout, setOpenLogout] = useState(false);
   const accountId = Cookies.get("accountId");
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,7 +44,6 @@ export const Header = ({ refreshChart }) => {
   };
 
   const checkoutItem = [];
-  console.log(cartItem);
 
   const refresh = () => {
     getCart()
@@ -201,8 +201,60 @@ export const Header = ({ refreshChart }) => {
               {/* <!-- /SEARCH BAR --> */}
 
               {/* <!-- ACCOUNT --> */}
+              {/* Notification */}
               <div className="col-md-3 clearfix">
                 <div className="header-ctn">
+                  <div className="dropdown">
+                    <a
+                      className="dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-expanded="true"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setNotifDropdownActive(!notifDropdownActive);
+                      }}
+                    >
+                      <i className="fa fa-bell"></i>
+                      <span>Notification</span>
+                      <div className="qty">{cartItem.length}</div>
+                    </a>
+                    <div
+                      className={
+                        notifDropdownActive
+                          ? "cart-dropdown cart-dropdown-open"
+                          : "cart-dropdown"
+                      }
+                    >
+                      <div className="cart-list h-[40vh]">
+                        <div className="product-widget">
+                          <div className="product-body border-bottom pb-4 px-0">
+                            <h3>
+                              <a href="#" className="font-extrabold">
+                                Transaksi kamu berhasil
+                              </a>
+                            </h3>
+                            <h4 className="mt-3">
+                              Transaksi dengan order-id TN-124-052-123 berhasil.
+                              Pesanan akan segera diproses oleh penjual
+                            </h4>
+                          </div>
+                          <div className="product-body border-bottom py-4 px-0">
+                            <h3>
+                              <a href="#" className="font-extrabold">
+                                Transaksi kamu berhasil
+                              </a>
+                            </h3>
+                            <h4 className="mt-3">
+                              Transaksi dengan order-id TN-124-052-123 berhasil.
+                              Pesanan akan segera diproses oleh penjual
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Notification */}
+
                   {/* <!-- Cart --> */}
                   <div className="dropdown">
                     <a

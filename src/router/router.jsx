@@ -11,6 +11,7 @@ import { DashboardSaler } from "../pages/saler/dashboardSaler";
 import { ReviewSaler } from "../pages/saler/reviewSaler";
 import { FormProduct } from "../pages/saler/formProduct";
 import { AfterPayment } from "../pages/components/afterPayment";
+import { Transaction } from "../pages/costumer/transaction";
 
 export const Router = () => {
   return (
@@ -26,12 +27,15 @@ export const Router = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/store" element={<Store />} />
+        <Route path="/transaction" element={<Transaction />} />
         <Route path="/afterpayment" element={<AfterPayment />} />
 
         {/* Saler */}
         <Route path="/saler/dashboard" element={<DashboardSaler />} />
         <Route path="/saler/review" element={<ReviewSaler />} />
         <Route path="/saler/form" element={<FormProduct />} />
+
+        {/* Error */}
         <Route path="*" element={<Error404 />}></Route>
       </Routes>
     </BrowserRouter>

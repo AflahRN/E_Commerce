@@ -7,11 +7,8 @@ import "../../assets/fonts/fontawesome-webfont.ttf";
 import "../../assets/fonts/FontAwesome.otf";
 import "../../assets/fonts/slick.ttf";
 import product01 from "../../assets/images/product01.png";
-import product02 from "../../assets/images/product02.png";
-import product03 from "../../assets/images/product03.png";
-import product04 from "../../assets/images/product04.png";
-import { useParams } from "react-router-dom";
-import { getProductById } from "../../controller/productController";
+import { Link, useParams } from "react-router-dom";
+import { getProduct, getProductById } from "../../controller/productController";
 import { useEffect, useState } from "react";
 import { addCart } from "../../controller/cartController";
 import { Breadcrumb } from "../components/breadcrumb";
@@ -20,6 +17,7 @@ import { addReview, getReview } from "../../controller/reviewController";
 export const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
+  const [productList, setProductList] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [refreshCart, setRefreshCart] = useState(false);
   const [review, setReview] = useState([]);
@@ -41,8 +39,19 @@ export const Product = () => {
 
   useEffect(() => {
     refresh();
-  }, []);
-  console.log(review);
+  }, [id]);
+
+  useEffect(() => {
+    getProduct()
+      .then((response) =>
+        response.filter(
+          (element) =>
+            element.category_id.includes(product.category_id) &&
+            element.product_id != product.product_id
+        )
+      )
+      .then((filter) => setProductList(filter));
+  }, [product]);
 
   return (
     <>
@@ -74,7 +83,7 @@ export const Product = () => {
             <div className="col-md-5">
               <div className="product-details">
                 <h2 className="product-name">{product.product_name}</h2>
-                <div>
+                <div className="flex">
                   <div className="product-rating">
                     <i className="fa fa-star"></i>
                     <i className="fa fa-star"></i>
@@ -82,9 +91,7 @@ export const Product = () => {
                     <i className="fa fa-star"></i>
                     <i className="fa fa-star-o"></i>
                   </div>
-                  <a className="review-link" href="#">
-                    {review.length} Review(s) | Add your review
-                  </a>
+                  <p className="review-link">{review.length} Review(s)</p>
                 </div>
                 <div>
                   <h3 className="product-price">
@@ -165,7 +172,7 @@ export const Product = () => {
               <div id="product-tab">
                 {/* <!-- product tab nav --> */}
                 <ul className="tab-nav">
-                  <li className="active">
+                  <li className={tabContent ? "active" : ""}>
                     <a
                       data-toggle="tab"
                       className="cursor-pointer"
@@ -176,7 +183,7 @@ export const Product = () => {
                       Description
                     </a>
                   </li>
-                  <li>
+                  <li className={tabContent ? "" : "active"}>
                     <a
                       data-toggle="tab"
                       href="#tab2"
@@ -533,163 +540,57 @@ export const Product = () => {
             </div>
 
             {/* <!-- product --> */}
-            <div className="col-md-3 col-xs-6">
-              <div className="product">
-                <div className="product-img">
-                  <img src={product01} alt="" />
-                  <div className="product-label">
-                    <span className="sale">-30%</span>
+            {productList.map((element, index) => {
+              return index < 4 ? (
+                <div className="col-md-3 col-xs-6" key={index}>
+                  <div className="product">
+                    <div className="product-img h-[342px] p-3 grid items-center">
+                      <img
+                        src={`http://localhost:3000/image/${element.product_image}`}
+                        alt=""
+                      />
+                    </div>
+                    <div className="product-body">
+                      <p className="product-category">
+                        {element.category.category_name}
+                      </p>
+                      <h3 className="product-name">
+                        <Link
+                          to={`/product/${element.product_id}`}
+                          onClick={() => {
+                            refresh();
+                            window.scrollTo({ top: 0 });
+                          }}
+                        >
+                          {element.product_name}
+                        </Link>
+                      </h3>
+                      <h4 className="product-price">
+                        Rp{" "}
+                        {Intl.NumberFormat("id-ID", {}).format(
+                          element.product_price
+                        )}
+                      </h4>
+                      <div className="product-rating"></div>
+                    </div>
+                    <div className="add-to-cart">
+                      <button
+                        className="add-to-cart-btn"
+                        onClick={() => {
+                          addCart(element.product_id, 1).then(() => {
+                            setRefreshCart(!refreshCart);
+                          });
+                        }}
+                      >
+                        <i className="fa fa-shopping-cart"></i> add to cart
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div className="product-body">
-                  <p className="product-category">Category</p>
-                  <h3 className="product-name">
-                    <a href="#">product name goes here</a>
-                  </h3>
-                  <h4 className="product-price">
-                    $980.00 <del className="product-old-price">$990.00</del>
-                  </h4>
-                  <div className="product-rating"></div>
-                  <div className="product-btns">
-                    <button className="add-to-wishlist">
-                      <i className="fa fa-heart-o"></i>
-                      <span className="tooltipp">add to wishlist</span>
-                    </button>
-                    <button className="quick-view">
-                      <i className="fa fa-eye"></i>
-                      <span className="tooltipp">quick view</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="add-to-cart">
-                  <button className="add-to-cart-btn">
-                    <i className="fa fa-shopping-cart"></i> add to cart
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- /product --> */}
-
-            {/* <!-- product --> */}
-            <div className="col-md-3 col-xs-6">
-              <div className="product">
-                <div className="product-img">
-                  <img src={product02} alt="" />
-                  <div className="product-label">
-                    <span className="new">NEW</span>
-                  </div>
-                </div>
-                <div className="product-body">
-                  <p className="product-category">Category</p>
-                  <h3 className="product-name">
-                    <a href="#">product name goes here</a>
-                  </h3>
-                  <h4 className="product-price">
-                    $980.00 <del className="product-old-price">$990.00</del>
-                  </h4>
-                  <div className="product-rating">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
-                  <div className="product-btns">
-                    <button className="add-to-wishlist">
-                      <i className="fa fa-heart-o"></i>
-                      <span className="tooltipp">add to wishlist</span>
-                    </button>
-                    <button className="quick-view">
-                      <i className="fa fa-eye"></i>
-                      <span className="tooltipp">quick view</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="add-to-cart">
-                  <button className="add-to-cart-btn">
-                    <i className="fa fa-shopping-cart"></i> add to cart
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- /product --> */}
-
-            <div className="clearfix visible-sm visible-xs"></div>
-
-            {/* <!-- product --> */}
-            <div className="col-md-3 col-xs-6">
-              <div className="product">
-                <div className="product-img">
-                  <img src={product03} alt="" />
-                </div>
-                <div className="product-body">
-                  <p className="product-category">Category</p>
-                  <h3 className="product-name">
-                    <a href="#">product name goes here</a>
-                  </h3>
-                  <h4 className="product-price">
-                    $980.00 <del className="product-old-price">$990.00</del>
-                  </h4>
-                  <div className="product-rating">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star-o"></i>
-                  </div>
-                  <div className="product-btns">
-                    <button className="add-to-wishlist">
-                      <i className="fa fa-heart-o"></i>
-                      <span className="tooltipp">add to wishlist</span>
-                    </button>
-                    <button className="quick-view">
-                      <i className="fa fa-eye"></i>
-                      <span className="tooltipp">quick view</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="add-to-cart">
-                  <button className="add-to-cart-btn">
-                    <i className="fa fa-shopping-cart"></i> add to cart
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- /product --> */}
-
-            {/* <!-- product --> */}
-            <div className="col-md-3 col-xs-6">
-              <div className="product">
-                <div className="product-img">
-                  <img src={product04} alt="" />
-                </div>
-                <div className="product-body">
-                  <p className="product-category">Category</p>
-                  <h3 className="product-name">
-                    <a href="#">product name goes here</a>
-                  </h3>
-                  <h4 className="product-price">
-                    $980.00 <del className="product-old-price">$990.00</del>
-                  </h4>
-                  <div className="product-rating"></div>
-                  <div className="product-btns">
-                    <button className="add-to-wishlist">
-                      <i className="fa fa-heart-o"></i>
-                      <span className="tooltipp">add to wishlist</span>
-                    </button>
-                    <button className="quick-view">
-                      <i className="fa fa-eye"></i>
-                      <span className="tooltipp">quick view</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="add-to-cart">
-                  <button className="add-to-cart-btn">
-                    <i className="fa fa-shopping-cart"></i> add to cart
-                  </button>
-                </div>
-              </div>
-            </div>
+              ) : (
+                <></>
+              );
+            })}
             {/* <!-- /product --> */}
           </div>
           {/* <!-- /row --> */}
@@ -697,57 +598,6 @@ export const Product = () => {
         {/* <!-- /container --> */}
       </div>
       {/* <!-- /Section --> */}
-      {/* <!-- NEWSLETTER --> */}
-      <div id="newsletter" className="section">
-        {/* <!-- container --> */}
-        <div className="container">
-          {/* <!-- row --> */}
-          <div className="row">
-            <div className="col-md-12">
-              <div className="newsletter">
-                <p>
-                  Sign Up for the <strong>NEWSLETTER</strong>
-                </p>
-                <form>
-                  <input
-                    className="input"
-                    type="email"
-                    placeholder="Enter Your Email"
-                  />
-                  <button className="newsletter-btn">
-                    <i className="fa fa-envelope"></i> Subscribe
-                  </button>
-                </form>
-                <ul className="newsletter-follow">
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-twitter"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-instagram"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-pinterest"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          {/* <!-- /row --> */}
-        </div>
-        {/* <!-- /container --> */}
-      </div>
-      {/* <!-- /NEWSLETTER --> */}
 
       <Footer />
     </>
