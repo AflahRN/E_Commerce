@@ -16,6 +16,12 @@ const Transaction = db.define("transactions", {
     defaultValue: "Process",
   },
   gross_amount: DataTypes.INTEGER,
+  address: DataTypes.STRING,
+  city: DataTypes.STRING,
+  country: DataTypes.STRING,
+  zipCode: DataTypes.STRING,
+  telphone: DataTypes.STRING,
+  notes: DataTypes.TEXT,
 });
 
 Transaction.belongsTo(Account, {

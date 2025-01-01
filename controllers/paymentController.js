@@ -10,10 +10,11 @@ import TransactionDetail from "../models/transaction_details.js";
 dotenv.config();
 
 const requestTarget = "/checkout/v1/payment";
-const requestId = `EC-${nanoid(4)}-${nanoid(8)}`;
-const requestTimestamp = new Date().toISOString().slice(0, 19) + "Z";
+
 export const payment = async (req, res) => {
-  const { item, accountId, grossAmount } = req.body;
+  const { item, accountId, orderDetail } = req.body;
+  const requestId = `EC-${nanoid(4)}-${nanoid(8)}`;
+  const requestTimestamp = new Date().toISOString().slice(0, 19) + "Z";
 
   let requestItem = {
     order: {
@@ -23,24 +24,10 @@ export const payment = async (req, res) => {
       callback_url: "http://localhost:5173/afterpayment",
     },
     payment: {
-      payment_due_date: 200,
+      payment_due_date: 60,
     },
   };
 
-  await Transaction.create({
-    order_id: requestId,
-    gross_amount: grossAmount,
-    account_id: accountId,
-  }).then(async (data) => {
-    item.forEach(async (element) => {
-      console.log(element.quantity);
-      await TransactionDetail.create({
-        transaction_id: data.transaction_id,
-        quantity: element.quantity,
-        product_id: element.product_id,
-      });
-    });
-  });
   for (let i = 0; i < item.length; i++) {
     const response = await Product.findOne({
       where: { product_id: item[i].product_id },
@@ -55,6 +42,33 @@ export const payment = async (req, res) => {
     });
     requestItem.order.amount +=
       response.dataValues.product_price * item[i].quantity;
+  }
+
+  try {
+    await Transaction.create({
+      order_id: requestId,
+      gross_amount: requestItem.order.amount,
+      account_id: accountId,
+      address: orderDetail.address,
+      city: orderDetail.city,
+      country: orderDetail.country,
+      zipCode: orderDetail.zipCode,
+      telphone: orderDetail.telphone,
+      notes: orderDetail.notes,
+    }).then(async (data) => {
+      item.forEach(async (element) => {
+        await TransactionDetail.create({
+          transaction_id: data.transaction_id,
+          quantity: element.quantity,
+          product_id: element.product_id,
+        });
+      });
+    });
+  } catch (error) {
+    return res.json({
+      status: "Error",
+      message: "Gagal mengirim data ke transaksi",
+    });
   }
 
   const generateDigest = (item) => {
@@ -97,6 +111,7 @@ export const payment = async (req, res) => {
         message: response.data.message[0],
         token: response.data.response.payment.token_id,
         redirect_url: response.data.response.payment.url,
+        order_id: requestId,
       });
     })
     .catch((error) => {

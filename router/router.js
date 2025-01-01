@@ -52,6 +52,7 @@ import {
   DeleteTransaction,
   ShowTransaction,
   ShowTransactionById,
+  UpdateStatusTransaction,
 } from "../controllers/transactionController.js";
 import { checkPayment, payment } from "../controllers/paymentController.js";
 import { tokenAuth } from "../middleware/tokenAuth.js";
@@ -114,7 +115,7 @@ router.get("/cookie", async (req, res) => {
 router.get("/transaction", tokenAuth, ShowTransaction);
 router.get("/transaction/:id", tokenAuth, ShowTransactionById);
 router.post("/transaction", tokenAuth, AddTransaction);
-// router.patch("/transaction/:id", UpdateTransaction);
+router.patch("/transaction/status", tokenAuth, UpdateStatusTransaction);
 router.delete("/transaction/:id", tokenAuth, DeleteTransaction);
 
 // Payment (Sementara)

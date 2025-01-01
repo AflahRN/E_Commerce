@@ -2,11 +2,29 @@ import { nanoid } from "nanoid";
 import Transaction from "../models/transaction.js";
 import TransactionDetail from "../models/transaction_details.js";
 import Account from "../models/account.js";
+import Product from "../models/product.js";
+import { where } from "sequelize";
 
 export const ShowTransaction = async (req, res) => {
   try {
-    const response = await Transaction.findAll();
-    res.status(200).json(response);
+    const transaction = await Transaction.findAll();
+    let response = [];
+    if (transaction) {
+      response = await Promise.all(
+        transaction.map(async (element) => {
+          const transactionDetails = await TransactionDetail.findAll({
+            where: { transaction_id: element.transaction_id },
+          });
+          return {
+            transaction: element,
+            details: transactionDetails,
+          };
+        })
+      );
+    }
+    res.status(200).json({
+      response,
+    });
   } catch (error) {
     res.json({ msg: Error });
   }
@@ -25,7 +43,7 @@ export const ShowTransactionById = async (req, res) => {
 };
 
 export const AddTransaction = async (req, res) => {
-  const { grossAmount, item, accountId, orderId } = req.body;
+  const { grossAmount, item, accountId, orderId, orderDetail } = req.body;
 
   try {
     const isCustomer = await Account.findOne({
@@ -37,6 +55,12 @@ export const AddTransaction = async (req, res) => {
         order_id: orderId,
         gross_amount: grossAmount,
         account_id: accountId,
+        address: orderDetail.address,
+        city: orderDetail.city,
+        country: orderDetail.country,
+        zipCode: orderDetail.zipCode,
+        telphone: orderDetail.telphone,
+        notes: orderDetail.notes,
       }).then(async (response) =>
         item.forEach(async (element) => {
           await TransactionDetail.create({
@@ -57,6 +81,27 @@ export const AddTransaction = async (req, res) => {
   }
 };
 
+export const UpdateStatusTransaction = async (req, res) => {
+  const { id, status } = req.body;
+  try {
+    const request = {
+      status: status,
+    };
+    const isExist = await Transaction.findOne({
+      where: { order_id: id },
+    });
+    if (isExist) {
+      await Transaction.update(request, {
+        where: { order_id: id },
+      });
+      res.status(200).json({ msg: "Data berhasil diupdate" });
+    } else {
+      res.json({ msg: "data tidak tersedia" });
+    }
+  } catch (error) {
+    res.json({ msg: Error });
+  }
+};
 // export const UpdateTransaction = async (req, res) => {
 //   const { id } = req.params;
 //   const { product_id, quantity } = req.body;
