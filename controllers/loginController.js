@@ -64,15 +64,16 @@ export const Login = async (req, res) => {
 };
 
 export const ForgetPassword = async (req, res) => {
-  const { password } = req.body;
-  const { id } = req.params;
+  const { loginData, password } = req.body;
 
   await Account.update(
     {
       password: password,
     },
     {
-      where: { account_id: id },
+      where: {
+        [Sequelize.Op.or]: [{ username: loginData }, { email: loginData }],
+      },
     }
   );
 

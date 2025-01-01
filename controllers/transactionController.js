@@ -1,6 +1,5 @@
 import Transaction from "../models/transaction.js";
 import TransactionDetail from "../models/transaction_details.js";
-import Account from "../models/account.js";
 
 export const ShowTransaction = async (req, res) => {
   try {
