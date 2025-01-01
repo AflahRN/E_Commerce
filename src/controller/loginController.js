@@ -37,9 +37,10 @@ export const Register = async (username, email, passsword, type, navigate) => {
 };
 
 export const ChangePassword = async (password, cPassword) => {
+  const token = Cookies.get("accountId");
   if (password == cPassword) {
     try {
-      const response = await axios.patch(`${url}/forgetPassword`, {
+      const response = await axios.patch(`${url}/forgetPassword/${accountId}`, {
         password: password,
       });
       if (response.status == 200) {
