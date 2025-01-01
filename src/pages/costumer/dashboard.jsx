@@ -14,6 +14,8 @@ import { addCart } from "../../controller/cartController";
 import { getCategory } from "../../controller/categoryController";
 import Carousel from "react-bootstrap/Carousel";
 
+import shop01 from "../../assets/images/shop01.png";
+import shop02 from "../../assets/images/shop02.png";
 import shop03 from "../../assets/images/shop03.png";
 import banner1 from "../../assets/images/banner-1.png";
 import banner2 from "../../assets/images/banner-2.jpg";
@@ -76,7 +78,10 @@ export const Dashboard = () => {
                 <div className="col-md-4 col-xs-6" key={index}>
                   <div className="shop">
                     <div className="shop-img">
-                      <img src={shop03} alt="" />
+                      <img
+                        src={index == 1 ? shop01 : index == 2 ? shop02 : shop03}
+                        alt=""
+                      />
                     </div>
                     <div className="shop-body">
                       <h3>
