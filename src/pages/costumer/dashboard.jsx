@@ -79,6 +79,7 @@ export const Dashboard = () => {
                   <div className="shop">
                     <div className="shop-img">
                       <img
+                        className="h-[300px]"
                         src={index == 1 ? shop01 : index == 2 ? shop02 : shop03}
                         alt=""
                       />
