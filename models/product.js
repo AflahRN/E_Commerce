@@ -16,10 +16,6 @@ const Product = db.define(
     product_price: DataTypes.INTEGER(9),
     product_stock: DataTypes.INTEGER(9),
     product_image: DataTypes.STRING,
-    product_sold: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
   },
   {
     freezeTableName: true,
