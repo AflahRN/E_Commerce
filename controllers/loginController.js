@@ -65,4 +65,18 @@ export const Login = async (req, res) => {
 
 export const ForgetPassword = async (req, res) => {
   const { password } = req.body;
+  const { id } = req.params;
+
+  await Account.update(
+    {
+      password: password,
+    },
+    {
+      where: { account_id: id },
+    }
+  );
+
+  res
+    .status(200)
+    .json({ status: "Success", message: "Berhasil update password" });
 };
