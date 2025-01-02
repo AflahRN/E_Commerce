@@ -51,6 +51,9 @@ export const ForgotPassword = () => {
               <TextField
                 placeholder="Enter Email"
                 id="email"
+                onChange={(e) => {
+                  setLoginData(e.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -77,8 +80,11 @@ export const ForgotPassword = () => {
               <TextField
                 className="mt-4"
                 placeholder="Enter new password"
-                id="email"
+                id="password"
                 type={showPassword ? "text" : "password"}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -118,8 +124,9 @@ export const ForgotPassword = () => {
               variant="body2"
               color="text.secondary"
               onClick={() => {
-                ChangePassword(password, loginData);
-                navigate("/");
+                ChangePassword(password, loginData).then(() => {
+                  navigate("/");
+                });
               }}
             >
               Back to{" "}

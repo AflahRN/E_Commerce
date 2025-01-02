@@ -31,24 +31,26 @@ export const Footer = () => {
               <div className="col-md-3 col-xs-6">
                 <div className="footer">
                   <h3 className="footer-title">About Us</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut.
+                  <p className="mb-3">
+                    E-Commerce Tugas Besar Telkom University Purwokerto
                   </p>
                   <ul className="footer-links">
                     <li>
-                      <a href="#">
-                        <i className="fa fa-map-marker"></i>1734 Stonecoal Road
+                      <a>
+                        <i className="fa fa-map-marker"></i>Jl. DI Panjaitan
+                        No.128, Karangreja, Purwokerto Kidul, Kec. Purwokerto
+                        Sel., Kabupaten Banyumas, Jawa Tengah 53147
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a>
                         <i className="fa fa-phone"></i>+021-95-51-84
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <i className="fa fa-envelope-o"></i>email@email.com
+                      <a>
+                        <i className="fa fa-envelope-o"></i>
+                        email@student.telkomuniversity.ac.id
                       </a>
                     </li>
                   </ul>
@@ -113,13 +115,7 @@ export const Footer = () => {
                 </ul>
                 <span className="copyright">
                   {/* <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> */}
-                  Copyright &copy;
-                  <script>document.write(new Date().getFullYear());</script> All
-                  rights reserved | This template is made with{" "}
-                  <i className="fa fa-heart-o" aria-hidden="true"></i> by{" "}
-                  <a href="https://colorlib.com" target="_blank">
-                    Colorlib
-                  </a>
+                  Copyright &copy; All rights reserved
                   {/* <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> */}
                 </span>
               </div>

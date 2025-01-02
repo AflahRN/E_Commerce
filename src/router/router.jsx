@@ -12,6 +12,7 @@ import { ReviewSaler } from "../pages/saler/reviewSaler";
 import { FormProduct } from "../pages/saler/formProduct";
 import { AfterPayment } from "../pages/components/afterPayment";
 import { Transaction } from "../pages/costumer/transaction";
+import { Nyoba } from "../pages/login/nyoba";
 
 export const Router = () => {
   return (
@@ -37,6 +38,8 @@ export const Router = () => {
 
         {/* Error */}
         <Route path="*" element={<Error404 />}></Route>
+
+        <Route path="/kuncimotor" element={<Nyoba />} />
       </Routes>
     </BrowserRouter>
   );

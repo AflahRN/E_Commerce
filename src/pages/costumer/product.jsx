@@ -20,6 +20,7 @@ export const Product = () => {
   const [refreshCart, setRefreshCart] = useState(false);
   const [review, setReview] = useState([]);
   const [tabContent, setTabContent] = useState(true);
+  const [totalReview, setTotalReview] = useState(0);
 
   // Review data
   const [reviewText, setReviewText] = useState();
@@ -50,6 +51,12 @@ export const Product = () => {
       )
       .then((filter) => setProductList(filter));
   }, [product]);
+
+  useEffect(() => {
+    let total = 0;
+    review.map((element) => (total += element.review_skor));
+    setTotalReview(total);
+  }, [review]);
 
   return (
     <>
@@ -211,13 +218,47 @@ export const Product = () => {
                         <div className="col-md-3">
                           <div id="rating">
                             <div className="rating-avg">
-                              <span>4.5</span>
+                              <span className="">
+                                {parseFloat(
+                                  totalReview / review.length
+                                ).toFixed(1)}
+                              </span>
                               <div className="rating-stars">
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star"></i>
-                                <i className="fa fa-star-o"></i>
+                                <i
+                                  className={
+                                    totalReview / review.length >= 1
+                                      ? "fa fa-star"
+                                      : "fa fa-star-o"
+                                  }
+                                ></i>
+                                <i
+                                  className={
+                                    totalReview / review.length >= 2
+                                      ? "fa fa-star"
+                                      : "fa fa-star-o"
+                                  }
+                                ></i>
+                                <i
+                                  className={
+                                    totalReview / review.length >= 3
+                                      ? "fa fa-star"
+                                      : "fa fa-star-o"
+                                  }
+                                ></i>
+                                <i
+                                  className={
+                                    totalReview / review.length >= 4
+                                      ? "fa fa-star"
+                                      : "fa fa-star-o"
+                                  }
+                                ></i>
+                                <i
+                                  className={
+                                    totalReview / review.length >= 5
+                                      ? "fa fa-star"
+                                      : "fa fa-star-o"
+                                  }
+                                ></i>
                               </div>
                             </div>
                             <ul className="rating">
