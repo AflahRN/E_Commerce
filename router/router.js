@@ -28,7 +28,7 @@ import {
   AddAccount,
   ShowAccountById,
 } from "../controllers/accountController.js";
-import { Login } from "../controllers/loginController.js";
+import { ForgetPassword, Login } from "../controllers/loginController.js";
 import {
   ShowTransaction,
   UpdateStatusTransaction,
@@ -67,7 +67,7 @@ router.patch("/review/response/:id", tokenAuth, ResponseReview);
 //Account
 router.get("/account/:id", tokenAuth, ShowAccountById);
 router.post("/account/", AddAccount);
-router.patch("/forgetPassword");
+router.patch("/forgetPassword", ForgetPassword);
 
 //Login
 router.post("/login", Login);

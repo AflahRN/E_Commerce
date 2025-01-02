@@ -63,21 +63,30 @@ export const Login = async (req, res) => {
   }
 };
 
+const hashPassword = (password) => {
+  const saltRound = 5;
+  return bcrpyt.hashSync(password, saltRound);
+};
+
 export const ForgetPassword = async (req, res) => {
   const { loginData, password } = req.body;
 
-  await Account.update(
-    {
-      password: password,
-    },
-    {
-      where: {
-        [Sequelize.Op.or]: [{ username: loginData }, { email: loginData }],
+  try {
+    await Account.update(
+      {
+        password: hashPassword(password),
       },
-    }
-  );
+      {
+        where: {
+          [Sequelize.Op.or]: [{ username: loginData }, { email: loginData }],
+        },
+      }
+    );
 
-  res
-    .status(200)
-    .json({ status: "Success", message: "Berhasil update password" });
+    res
+      .status(200)
+      .json({ status: "Success", message: "Berhasil update password" });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error });
+  }
 };
